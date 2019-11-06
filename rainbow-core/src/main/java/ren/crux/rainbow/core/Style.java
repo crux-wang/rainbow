@@ -1,6 +1,6 @@
 package ren.crux.rainbow.core;
 
-public enum APIType {
+public enum Style {
     restful,
     restful_variant
 }

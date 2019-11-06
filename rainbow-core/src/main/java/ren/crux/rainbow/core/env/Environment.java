@@ -1,4 +1,4 @@
-package ren.crux.rainbow.core.entry;
+package ren.crux.rainbow.core.env;
 
 import com.google.common.base.MoreObjects;
 import lombok.Data;
@@ -9,20 +9,13 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Entry extends Describable {
-
-    private Entry superEntry;
-    private List<Tuple> field;
-    private List<Link> link;
-    private List<Link> inlineLink;
+public class Environment extends Describable {
+    private List<Variable> variables;
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("superEntry", superEntry)
-                .add("field", field)
-                .add("link", link)
-                .add("inlineLink", inlineLink)
+                .add("variables", variables)
                 .add("name", name)
                 .add("qualifiedName", qualifiedName)
                 .add("description", description)

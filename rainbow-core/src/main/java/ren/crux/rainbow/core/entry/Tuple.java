@@ -9,18 +9,22 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Entry extends Describable {
+public class Tuple extends Describable {
 
-    private Entry superEntry;
-    private List<Tuple> field;
+    private String value;
+    private String type;
+    private String key;
+    private String src;
     private List<Link> link;
     private List<Link> inlineLink;
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("superEntry", superEntry)
-                .add("field", field)
+                .add("value", value)
+                .add("type", type)
+                .add("key", key)
+                .add("src", src)
                 .add("link", link)
                 .add("inlineLink", inlineLink)
                 .add("name", name)
