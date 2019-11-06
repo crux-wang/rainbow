@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.RootDoc;
+import ren.crux.rainbow.core.docs.JavaDocReader;
 import ren.crux.rainbow.core.entry.Entry;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.parser.EntryParser;
@@ -18,26 +19,24 @@ import java.util.List;
 public class JavaDocMain {
 
     public static void main(String[] args) {
-        // 文件路径
-        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-core/src/main/java/";
-        // 类名
-        final String className = "";
-        // 执行参数
-        final String[] executeParams = JavaDocReader.getExecuteParams(true, path, className);
-
-        // 读取文档
-        String javaDcoData = JavaDocReader.readDoc(new JavaDocReader.CallBack() {
+        final String path = "D:\\workspace\\github\\rainbow\\rainbow-core\\src\\main\\java\\";
+        final String packageName = "ren.crux.rainbow.core.test";
+        String javaDcoData = JavaDocReader.readDoc(path, packageName, new JavaDocReader.CallBack() {
             @Override
-            public String callback(String path, String className, RootDoc rootDoc, ClassDoc[] classDocs) {
+            public String call(String path, String packageName, RootDoc rootDoc) {
+                if (rootDoc == null) {
+                    return null;
+                }
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
                 List<Entry> entries = new LinkedList<>();
+                Context context = new Context(rootDoc);
+                ClassDoc[] classDocs = rootDoc.classes();
                 if (classDocs != null) {
                     FieldParser fieldParser = new FieldParser();
                     for (ClassDoc classDoc : classDocs) {
-                        Context context = new Context(classDoc);
                         EntryParser entryParser = new EntryParser();
                         Entry parse = entryParser.parse(context, classDoc);
                         entries.add(parse);
@@ -47,18 +46,16 @@ public class JavaDocMain {
                 try {
                     return objectMapper.writeValueAsString(entries);
                 } catch (JsonProcessingException e) {
-                    this.error(e);
+                    this.onError(e);
                     return null;
                 }
             }
 
             @Override
-            public void error(Exception e) {
+            public void onError(Exception e) {
                 e.printStackTrace();
             }
-        }, path, className, executeParams);
-
-        // 打印文档信息
+        });
         System.out.println(javaDcoData);
     }
 }

@@ -17,12 +17,10 @@ public class EntryParser implements Parser<ClassDoc, Entry> {
 
     @Override
     public Entry parse(Context context, ClassDoc source) {
-        System.out.println("parse entry : " + source.qualifiedName());
         Optional<Entry> optional = context.getEntry(source.qualifiedName());
         if (optional.isPresent()) {
             return optional.get();
         }
-        System.out.println("source.qualifiedName() : " + source.qualifiedName());
         Entry entry = new Entry();
         entry.setName(source.name());
         entry.setQualifiedName(source.qualifiedName());
@@ -32,8 +30,8 @@ public class EntryParser implements Parser<ClassDoc, Entry> {
         entry.setField(context.parse(source.fields()));
         context.logEntry(entry);
         if (!StringUtils.equals(source.superclassType().qualifiedTypeName(), OBJECT_TYPE_NAME)) {
-            System.out.println("source.superclassType() = " + source.superclassType());
-            entry.setSuperEntry(parse(context, source.superclass()));
+            Entry superEntry = parse(context, source.superclass());
+            entry.addSupperEntryRef(context.getRef(superEntry));
         }
         return entry;
     }
