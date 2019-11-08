@@ -2,11 +2,9 @@ package ren.crux.rainbow.core.parser;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.FieldDoc;
-import com.sun.javadoc.RootDoc;
-import com.sun.javadoc.Tag;
+import com.sun.javadoc.*;
 import lombok.NonNull;
+import org.springframework.web.bind.annotation.*;
 import ren.crux.rainbow.core.entry.Entry;
 import ren.crux.rainbow.core.entry.Link;
 import ren.crux.rainbow.core.entry.Tuple;
@@ -22,6 +20,14 @@ public class Context {
     private final FieldParser fieldParser = new FieldParser();
     private final TagParser tagParser = new TagParser();
     private final Cache<String, Link> refCache = CacheBuilder.newBuilder().build();
+    private final Set<Class> requestAnnotation = new HashSet<>(Arrays.asList(
+            RequestMapping.class,
+            GetMapping.class,
+            PostMapping.class,
+            PutMapping.class,
+            DeleteMapping.class,
+            PatchMapping.class));
+
 
     public Context(@NonNull RootDoc rootDoc) {
         this.rootDoc = rootDoc;
@@ -78,5 +84,9 @@ public class Context {
 
     public Optional<ClassDoc> findClass(String className) {
         return Optional.ofNullable(classDoc).map(cd -> cd.findClass(className));
+    }
+
+    public boolean isRequest(MethodDoc methodDoc) {
+        Arrays.stream(methodDoc.annotations()).anyMatch(a -> a.annotationType().requestAnnotation.contains())
     }
 }

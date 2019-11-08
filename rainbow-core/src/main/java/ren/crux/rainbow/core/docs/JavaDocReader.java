@@ -1,22 +1,24 @@
 package ren.crux.rainbow.core.docs;
 
 import com.sun.javadoc.RootDoc;
+import org.apache.commons.lang3.ArrayUtils;
+import ren.crux.rainbow.core.model.Document;
 
 public class JavaDocReader {
 
     private static RootDoc mRoot;
 
-    private static String read(String path, String packageName, CallBack callBack) {
+    private static Document read(String path, String[] packageNames, CallBack callBack) {
         if (callBack != null) {
-            return callBack.call(path, packageName, mRoot);
+            return callBack.call(path, packageNames, mRoot);
         }
         return null;
     }
 
-    public static String readDoc(String path, String packageName, String[] executeParams, CallBack callBack) {
+    public static Document readDoc(String path, String[] packageNames, String[] executeParams, CallBack callBack) {
         try {
             com.sun.tools.javadoc.Main.execute(executeParams);
-            return read(path, packageName, callBack);
+            return read(path, packageNames, callBack);
         } catch (Exception e) {
             if (callBack != null) {
                 callBack.onError(e);
@@ -25,19 +27,18 @@ public class JavaDocReader {
         return null;
     }
 
-    public static String readDoc(String path, String packageName, CallBack callBack) {
-        return readDoc(path, packageName, new String[]{
+    public static Document readDoc(String path, String[] packageNames, CallBack callBack) {
+        return readDoc(path, packageNames, ArrayUtils.addAll(new String[]{
                 "-private", "-doclet", Doclet.class.getName(),
                 "-encoding", "utf-8",
                 "-sourcepath",
                 path,
-                "-subpackages",
-                packageName}, callBack);
+                "-subpackages"}, packageNames), callBack);
     }
 
     public interface CallBack {
 
-        String call(String path, String packageName, RootDoc rootDoc);
+        Document call(String path, String[] packageNames, RootDoc rootDoc);
 
         void onError(Exception e);
 
