@@ -13,6 +13,9 @@
         <module>ranbow-request</module>
         <module>ranbow-entry</module>
         <module>ranbow-demo</module>
+        <module>rainbow-entry</module>
+        <module>rainbow-request</module>
+        <module>rainbow-test</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

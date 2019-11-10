@@ -1,7 +1,7 @@
 package ren.crux.rainbow.core.reader;
 
 import com.sun.javadoc.RootDoc;
-import ren.crux.rainbow.core.old.model.Document;
+import ren.crux.rainbow.core.model.Document;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public interface JavaDocReader {
             return true;
         }
 
-        static RootDoc getRootDoc() {
+        public static RootDoc getRootDoc() {
             return Objects.requireNonNull(rootDoc);
         }
     }

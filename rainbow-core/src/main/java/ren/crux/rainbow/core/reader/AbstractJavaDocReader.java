@@ -3,7 +3,12 @@ package ren.crux.rainbow.core.reader;
 import com.sun.javadoc.RootDoc;
 import com.sun.tools.javadoc.Main;
 import org.apache.commons.lang3.ArrayUtils;
-import ren.crux.rainbow.core.old.model.Document;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import ren.crux.rainbow.core.model.Document;
+import ren.crux.rainbow.core.parser.Context;
+import ren.crux.rainbow.core.parser.RootDocParser;
+import ren.crux.rainbow.core.parser.impl.ContextImpl;
+import ren.crux.rainbow.core.parser.impl.RootParser;
 
 import java.util.Optional;
 
@@ -31,6 +36,26 @@ public abstract class AbstractJavaDocReader implements JavaDocReader {
         }
     }
 
-    protected abstract Optional<Document> read0(String path, String[] packageNames, RootDoc rootDoc);
+    protected Optional<Document> read0(String path, String[] packageNames, RootDoc rootDoc) {
+        return Optional.ofNullable(rootDocParser().parse(newContext(), rootDoc));
+    }
+
+    protected Context newContext() {
+        return new ContextImpl(getRootDoc());
+    }
+
+    protected RootDocParser rootDocParser() {
+        return new RootParser();
+    }
+
+    /**
+     * 获取根文档
+     *
+     * @return 根文档
+     */
+    @NonNull
+    protected RootDoc getRootDoc() {
+        return Doclet.getRootDoc();
+    }
 
 }

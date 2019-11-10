@@ -15,10 +15,10 @@ import java.util.List;
 @Data
 public class Entry extends Describe {
 
-    private List<Link> superLink;
-    private List<Tuple> field;
-    private List<Link> link;
-    private List<Link> inlineLink;
+    private List<Link> superLink = new LinkedList<>();
+    private List<Tuple> field = new LinkedList<>();
+    private List<Link> link = new LinkedList<>();
+    private List<Link> inlineLink = new LinkedList<>();
 
     public void addSupperEntryLink(Link superLink) {
         if (this.superLink == null) {
