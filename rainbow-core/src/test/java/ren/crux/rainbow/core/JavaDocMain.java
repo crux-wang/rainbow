@@ -7,17 +7,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.RootDoc;
-import ren.crux.rainbow.core.docs.JavaDocReader;
-import ren.crux.rainbow.core.entry.Entry;
-import ren.crux.rainbow.core.model.Document;
+import ren.crux.rainbow.core.old.model.Document;
+import ren.crux.rainbow.core.old.parser.ClassParser;
 import ren.crux.rainbow.core.parser.Context;
-import ren.crux.rainbow.core.parser.EntryParser;
+import ren.crux.rainbow.core.reader.JavaDocReader;
 
 public class JavaDocMain {
 
     public static void main(String[] args) throws JsonProcessingException {
         final String path = "D:\\workspace\\github\\rainbow\\rainbow-core\\src\\main\\java\\";
-        final String[] packageNames = new String[]{"ren.crux.rainbow.core.test", "xxx"};
+        final String[] packageNames = new String[]{"ren.crux.rainbow.core.old.test", "xxx"};
 
         Document document = JavaDocReader.readDoc(path, packageNames, new JavaDocReader.CallBack() {
             @Override
@@ -26,14 +25,13 @@ public class JavaDocMain {
                 if (rootDoc == null) {
                     return document;
                 }
-
                 Context context = new Context(rootDoc);
                 ClassDoc[] classDocs = rootDoc.classes();
+                ClassParser classParser = new ClassParser();
                 if (classDocs != null) {
                     for (ClassDoc classDoc : classDocs) {
-                        EntryParser entryParser = new EntryParser();
-                        Entry parse = entryParser.parse(context, classDoc);
-                        document.getEntries().add(parse);
+                        Document page = classParser.parse(context, classDoc);
+                        document.merge(page);
                     }
                 }
                 return document;
