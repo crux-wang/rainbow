@@ -37,7 +37,7 @@ public abstract class AbstractJavaDocReader implements JavaDocReader {
     }
 
     protected Optional<Document> read0(String path, String[] packageNames, RootDoc rootDoc) {
-        return Optional.ofNullable(rootDocParser().parse(newContext(), rootDoc));
+        return rootDocParser().parse(newContext(), rootDoc);
     }
 
     protected Context newContext() {

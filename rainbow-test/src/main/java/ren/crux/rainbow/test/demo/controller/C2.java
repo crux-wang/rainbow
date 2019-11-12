@@ -1,21 +1,21 @@
-package ren.crux.rainbow.demo.controller;
+package ren.crux.rainbow.test.demo.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ren.crux.rainbow.demo.model.E1;
-import ren.crux.rainbow.demo.model.E2;
-import ren.crux.rainbow.demo.model.E3;
+import ren.crux.rainbow.test.demo.model.E1;
+import ren.crux.rainbow.test.demo.model.E2;
+import ren.crux.rainbow.test.demo.model.E3;
 
 /**
- * C1
- * xxxx {@link E2} ax
+ * C2
+ * xxxx {@link E3} ax
  * xxx
  *
  * @author wangzhihui
  * @see E1
  */
 @RestController
-@RequestMapping("/c1")
-public class C1 {
+@RequestMapping(path = {"/c2", "/c3"}, method = {RequestMethod.POST, RequestMethod.GET})
+public class C2 {
 
     /**
      * e1
@@ -39,7 +39,7 @@ public class C1 {
      * @return qweqw
      */
     @GetMapping("/e2")
-    public E2 e2(@RequestParam String rs, @RequestHeader String h, String s, int i) {
+    public E2 e2(@RequestParam String rs, @RequestHeader String h, String s) {
         return new E2();
     }
 

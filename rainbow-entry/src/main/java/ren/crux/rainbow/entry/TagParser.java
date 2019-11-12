@@ -22,7 +22,7 @@ public class TagParser implements TagDocParser {
      * @return 解析后的产物
      */
     @Override
-    public Link parse(Context context, Tag source) {
+    public Optional<Link> parse(Context context, Tag source) {
         Link link = new Link();
         String targetName = source.text();
         if (StringUtils.equals("@see", source.kind())) {
@@ -37,12 +37,12 @@ public class TagParser implements TagDocParser {
                 link.setUnknown(true);
             }
         } else {
-            if (!StringUtils.equals("Text", source.name())) {
-                link.setTarget(targetName);
+            if (StringUtils.equals("Text", source.name())) {
+                return Optional.empty();
             }
         }
         link.setTag(source.name());
         link.setName(targetName);
-        return link;
+        return Optional.of(link);
     }
 }

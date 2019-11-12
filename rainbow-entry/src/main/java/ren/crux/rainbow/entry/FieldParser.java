@@ -6,12 +6,14 @@ import ren.crux.rainbow.core.model.Tuple;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.parser.FieldDocParser;
 
+import java.util.Optional;
+
 /**
  * @author wangzhihui
  */
 public class FieldParser implements FieldDocParser {
     @Override
-    public Tuple parse(Context context, FieldDoc source) {
+    public Optional<Tuple> parse(Context context, FieldDoc source) {
         Tuple tuple = new Tuple();
         tuple.setName(source.name());
         tuple.setQualifiedName(source.qualifiedName());
@@ -20,12 +22,12 @@ public class FieldParser implements FieldDocParser {
         tuple.setDescription(source.getRawCommentText());
         context.getTagDocParser().ifPresent(p -> {
             for (Tag tag : source.tags()) {
-                tuple.addLink(p.parse(context, tag));
+                p.parse(context, tag).ifPresent(tuple::addLink);
             }
             for (Tag tag : source.inlineTags()) {
-                tuple.addInlineLink(p.parse(context, tag));
+                p.parse(context, tag).ifPresent(tuple::addInlineLink);
             }
         });
-        return tuple;
+        return Optional.of(tuple);
     }
 }

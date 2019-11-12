@@ -11,6 +11,9 @@ public class EntrySupportContext extends ContextImpl {
 
     public EntrySupportContext(RootDoc rootDoc) {
         super(rootDoc);
+        setEntryDocParser(new EntryParser());
+        setFieldDocParser(new FieldParser());
+        setTagDocParser(new TagParser());
     }
 
     /**

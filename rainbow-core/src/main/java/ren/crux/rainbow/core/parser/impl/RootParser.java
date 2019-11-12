@@ -7,6 +7,8 @@ import ren.crux.rainbow.core.model.Document;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.parser.RootDocParser;
 
+import java.util.Optional;
+
 /**
  * @author wangzhihui
  */
@@ -20,25 +22,21 @@ public class RootParser implements RootDocParser {
      * @return 解析后的产物
      */
     @Override
-    public Document parse(Context context, RootDoc source) {
+    public Optional<Document> parse(Context context, RootDoc source) {
         Document document = new Document();
         ClassDoc[] classes = source.classes();
         log.debug("parser classes : {}", classes.length);
         for (ClassDoc classDoc : classes) {
             if (context.isRestController(classDoc)) {
                 log.debug("parser RestController");
-                context.getRestControllerParser().ifPresent(p -> {
-                    document.addItem(p.parse(context, classDoc));
-                });
+                context.getRestControllerParser().flatMap(p -> p.parse(context, classDoc)).ifPresent(document::addItem);
             } else if (context.isEntry(classDoc)) {
                 log.debug("parser Entry");
-                context.getEntryDocParser().ifPresent(p -> {
-                    document.addEntry(p.parse(context, classDoc));
-                });
+                context.getEntryDocParser().flatMap(p -> p.parse(context, classDoc)).ifPresent(document::addEntry);
             } else {
                 log.warn("ignored parser : {}", classDoc);
             }
         }
-        return document;
+        return Optional.of(document);
     }
 }

@@ -17,8 +17,8 @@ import ren.crux.rainbow.entry.EntrySupportContext;
 public class JavaDocMain {
 
     public static void main(String[] args) throws JsonProcessingException {
-        final String path = "D:\\workspace\\github\\rainbow\\rainbow-demo\\src\\main\\java\\";
-        final String[] packageNames = new String[]{"ren.crux.rainbow.demo"};
+        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
+        final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
         JavaDocReader javaDocReader = new DefaultJavaDocReader() {
             @Override
             protected Context newContext() {

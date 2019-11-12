@@ -1,4 +1,4 @@
-package ren.crux.rainbow.demo.model;
+package ren.crux.rainbow.test.demo.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

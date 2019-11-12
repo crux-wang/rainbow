@@ -24,34 +24,38 @@ public class EntryParser implements EntryDocParser {
      * @return 解析后的产物
      */
     @Override
-    public Entry parse(Context context, ClassDoc source) {
+    public Optional<Entry> parse(Context context, ClassDoc source) {
         Optional<Entry> optional = context.getEntry(source.qualifiedName());
         if (optional.isPresent()) {
-            return optional.get();
+            return optional;
+        } else {
+            return parse0(context, source);
         }
+    }
+
+    private Optional<Entry> parse0(Context context, ClassDoc source) {
         Entry entry = new Entry();
         entry.setName(source.name());
         entry.setQualifiedName(source.qualifiedName());
         entry.setDescription(source.getRawCommentText());
         context.getTagDocParser().ifPresent(p -> {
             for (Tag tag : source.tags()) {
-                entry.addLink(p.parse(context, tag));
+                p.parse(context, tag).ifPresent(entry::addLink);
             }
             for (Tag tag : source.inlineTags()) {
-                entry.addInlineLink(p.parse(context, tag));
+                p.parse(context, tag).ifPresent(entry::addInlineLink);
             }
         });
         context.getFieldDocParser().ifPresent(p -> {
             FieldDoc[] fields = source.fields();
             for (FieldDoc field : fields) {
-                entry.addField(p.parse(context, field));
+                p.parse(context, field).ifPresent(entry::addField);
             }
         });
         context.logEntry(entry);
         if (!StringUtils.equals(source.superclassType().qualifiedTypeName(), OBJECT_TYPE_NAME)) {
-            Entry superEntry = parse(context, source.superclass());
-            entry.addSupperEntryLink(context.getLink(superEntry));
+            parse(context, source.superclass()).ifPresent(superEntry -> entry.addSupperEntryLink(context.getLink(superEntry)));
         }
-        return entry;
+        return Optional.of(entry);
     }
 }

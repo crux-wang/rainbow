@@ -1,5 +1,7 @@
 package ren.crux.rainbow.core.parser;
 
+import java.util.Optional;
+
 /**
  * 解析器
  *
@@ -14,6 +16,6 @@ public interface JavaDocParser<S, T> {
      * @param source  解析源
      * @return 解析后的产物
      */
-    T parse(Context context, S source);
+    Optional<T> parse(Context context, S source);
 
 }

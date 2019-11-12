@@ -47,6 +47,11 @@
                 <artifactId>rainbow-request</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ren.crux</groupId>
+                <artifactId>rainbow-demo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
