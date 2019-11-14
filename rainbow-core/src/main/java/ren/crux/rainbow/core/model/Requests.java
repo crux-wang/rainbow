@@ -1,6 +1,5 @@
 package ren.crux.rainbow.core.model;
 
-import com.google.common.base.MoreObjects;
 import lombok.Data;
 import ren.crux.rainbow.core.tuple.Mergeable;
 
@@ -15,15 +14,8 @@ public class Requests implements Mergeable<Requests> {
 
     private List<Request> requests = new LinkedList<>();
 
-    public void addRequest(Request request) {
+    public void add(Request request) {
         requests.add(request);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("requests", requests)
-                .toString();
     }
 
     @Override

@@ -10,9 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>rainbow-core</module>
-        <module>ranbow-request</module>
-        <module>ranbow-entry</module>
-        <module>ranbow-demo</module>
         <module>rainbow-entry</module>
         <module>rainbow-request</module>
         <module>rainbow-test</module>

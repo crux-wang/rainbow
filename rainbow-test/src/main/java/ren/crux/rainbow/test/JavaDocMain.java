@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ren.crux.rainbow.core.model.Document;
-import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.reader.JavaDocReader;
 import ren.crux.rainbow.core.reader.impl.DefaultJavaDocReader;
-import ren.crux.rainbow.entry.EntrySupportContext;
 
 /**
  * @author wangzhihui
@@ -17,13 +15,14 @@ import ren.crux.rainbow.entry.EntrySupportContext;
 public class JavaDocMain {
 
     public static void main(String[] args) throws JsonProcessingException {
-        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
+//        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
+        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
         JavaDocReader javaDocReader = new DefaultJavaDocReader() {
-            @Override
-            protected Context newContext() {
-                return new EntrySupportContext(getRootDoc());
-            }
+//            @Override
+//            protected Context newContext() {
+//                return new EntrySupportContext(getRootDoc());
+//            }
         };
         Document document = javaDocReader.read(path, packageNames).orElse(null);
         ObjectMapper objectMapper = new ObjectMapper();

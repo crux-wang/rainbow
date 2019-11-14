@@ -17,15 +17,6 @@ public interface Describable {
     }
 
     /**
-     * 获取限定名称
-     *
-     * @return 限定名称
-     */
-    default String getQualifiedName() {
-        return null;
-    }
-
-    /**
      * 获取描述
      *
      * @return 描述

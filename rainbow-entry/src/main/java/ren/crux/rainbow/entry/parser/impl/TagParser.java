@@ -1,11 +1,11 @@
-package ren.crux.rainbow.entry;
+package ren.crux.rainbow.entry.parser.impl;
 
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.Link;
 import ren.crux.rainbow.core.parser.Context;
-import ren.crux.rainbow.core.parser.TagDocParser;
+import ren.crux.rainbow.entry.parser.TagDocParser;
 
 import java.util.Optional;
 
@@ -13,7 +13,6 @@ import java.util.Optional;
  * @author wangzhihui
  */
 public class TagParser implements TagDocParser {
-
     /**
      * 解析
      *

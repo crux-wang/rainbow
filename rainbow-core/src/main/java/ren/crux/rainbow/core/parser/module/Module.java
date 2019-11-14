@@ -23,19 +23,4 @@ public interface Module extends ContextConfigurer {
      */
     String name();
 
-    /**
-     * 特性
-     */
-    enum Feature {
-        /**
-         * 实体
-         */
-        entry,
-        /**
-         * 请求
-         */
-        request,
-        ;
-    }
-
 }

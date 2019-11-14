@@ -5,5 +5,4 @@ package ren.crux.rainbow.core.utils;
  */
 public class ParserUtils {
 
-//    public static
 }

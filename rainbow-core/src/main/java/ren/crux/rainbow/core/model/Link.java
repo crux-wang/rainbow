@@ -11,6 +11,6 @@ public class Link {
     private String tag;
     private String name;
     private String target;
-    private Boolean unknown;
+    private boolean unknown;
 
 }

@@ -16,9 +16,7 @@ import java.util.List;
 public class Entry extends Describe {
 
     private List<Link> superLink = new LinkedList<>();
-    private List<Tuple> field = new LinkedList<>();
-    private List<Link> link = new LinkedList<>();
-    private List<Link> inlineLink = new LinkedList<>();
+    private List<Field> field = new LinkedList<>();
 
     public void addSupperEntryLink(Link superLink) {
         if (this.superLink == null) {
@@ -27,7 +25,7 @@ public class Entry extends Describe {
         this.superLink.add(superLink);
     }
 
-    public void addField(Tuple field) {
+    public void addField(Field field) {
         if (this.field == null) {
             this.field = new LinkedList<>();
         }

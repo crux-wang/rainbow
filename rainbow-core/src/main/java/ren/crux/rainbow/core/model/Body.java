@@ -14,9 +14,9 @@ public class Body {
     private String mode;
     private String row;
     private Link entryLink;
-    private List<Tuple> formdata = new LinkedList<>();
-    private List<Tuple> urlencoded = new LinkedList<>();
-    private Tuple file;
+    private List<Field> formdata = new LinkedList<>();
+    private List<Field> urlencoded = new LinkedList<>();
+    private Field file;
 
     @Override
     public String toString() {

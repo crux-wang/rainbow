@@ -1,4 +1,4 @@
-package ren.crux.rainbow.core.parser;
+package ren.crux.rainbow.request.parser;
 
 import ren.crux.rainbow.core.model.RequestItem;
 

@@ -7,8 +7,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import ren.crux.rainbow.core.model.Document;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.parser.RootDocParser;
-import ren.crux.rainbow.core.parser.impl.ContextImpl;
-import ren.crux.rainbow.core.parser.impl.RootParser;
+import ren.crux.rainbow.core.parser.impl.DefaultRootDocParser;
 
 import java.util.Optional;
 
@@ -37,15 +36,15 @@ public abstract class AbstractJavaDocReader implements JavaDocReader {
     }
 
     protected Optional<Document> read0(String path, String[] packageNames, RootDoc rootDoc) {
-        return rootDocParser().parse(newContext(), rootDoc);
+        return getRootDocParser().parse(getContext(), rootDoc);
     }
 
-    protected Context newContext() {
+    protected Context getContext() {
         return new ContextImpl(getRootDoc());
     }
 
-    protected RootDocParser rootDocParser() {
-        return new RootParser();
+    protected RootDocParser getRootDocParser() {
+        return new DefaultRootDocParser();
     }
 
     /**
