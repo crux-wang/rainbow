@@ -1,7 +1,6 @@
 package ren.crux.rainbow.core.reader;
 
 import com.sun.javadoc.RootDoc;
-import ren.crux.rainbow.core.model.Document;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -9,16 +8,16 @@ import java.util.Optional;
 /**
  * @author wangzhihui
  */
-public interface JavaDocReader {
+public interface JavaDocReader<T> {
 
     /**
      * 读取
      *
      * @param path         源文件路径
      * @param packageNames 包名列表
-     * @return 文档
+     * @return T
      */
-    Optional<Document> read(String path, String[] packageNames);
+    Optional<T> read(String path, String[] packageNames);
 
     public static class Doclet {
 

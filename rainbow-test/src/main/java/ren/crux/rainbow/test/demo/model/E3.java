@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * E1
+ * E3
  * <p>
  * xxx
  *
@@ -15,9 +15,9 @@ import lombok.EqualsAndHashCode;
 public class E3 extends E2 {
 
     /**
-     * string f1
+     * string f2
      */
-    private String f1;
+    private String f2;
     /**
      * <code>E2</code> e2 {@link String} and {@linkplain E2}
      * {@linkplain E2 e2asdas asdasd}

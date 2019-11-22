@@ -3,21 +3,16 @@ package ren.crux.rainbow.core.reader;
 import com.sun.javadoc.RootDoc;
 import com.sun.tools.javadoc.Main;
 import org.apache.commons.lang3.ArrayUtils;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import ren.crux.rainbow.core.model.Document;
-import ren.crux.rainbow.core.parser.Context;
-import ren.crux.rainbow.core.parser.RootDocParser;
-import ren.crux.rainbow.core.parser.impl.DefaultRootDocParser;
 
 import java.util.Optional;
 
 /**
  * @author wangzhihui
  */
-public abstract class AbstractJavaDocReader implements JavaDocReader {
+public abstract class AbstractJavaDocReader<T> implements JavaDocReader<T> {
 
     @Override
-    public Optional<Document> read(String path, String[] packageNames) {
+    public Optional<T> read(String path, String[] packageNames) {
         return execute(path, packageNames, ArrayUtils.addAll(new String[]{
                 "-private", "-doclet", Doclet.class.getName(),
                 "-encoding", "utf-8",
@@ -26,7 +21,7 @@ public abstract class AbstractJavaDocReader implements JavaDocReader {
                 "-subpackages"}, packageNames));
     }
 
-    protected Optional<Document> execute(String path, String[] packageNames, String[] args) {
+    private Optional<T> execute(String path, String[] packageNames, String[] args) {
         try {
             Main.execute(args);
             return read0(path, packageNames, Doclet.getRootDoc());
@@ -35,26 +30,6 @@ public abstract class AbstractJavaDocReader implements JavaDocReader {
         }
     }
 
-    protected Optional<Document> read0(String path, String[] packageNames, RootDoc rootDoc) {
-        return getRootDocParser().parse(getContext(), rootDoc);
-    }
-
-    protected Context getContext() {
-        return new ContextImpl(getRootDoc());
-    }
-
-    protected RootDocParser getRootDocParser() {
-        return new DefaultRootDocParser();
-    }
-
-    /**
-     * 获取根文档
-     *
-     * @return 根文档
-     */
-    @NonNull
-    protected RootDoc getRootDoc() {
-        return Doclet.getRootDoc();
-    }
+    protected abstract Optional<T> read0(String path, String[] packageNames, RootDoc rootDoc);
 
 }
