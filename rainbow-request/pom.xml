@@ -14,10 +14,6 @@
     <dependencies>
         <dependency>
             <groupId>ren.crux</groupId>
-            <artifactId>rainbow-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ren.crux</groupId>
             <artifactId>rainbow-entry</artifactId>
         </dependency>
         <dependency>
