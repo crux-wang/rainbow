@@ -8,7 +8,7 @@ import java.util.List;
 public class Request {
 
     private String desc;
-    private String path;
+    private String[] path;
     private String[] methods;
     private List<RequestParam> requestParams;
     private List<RequestParam> PathVariables;

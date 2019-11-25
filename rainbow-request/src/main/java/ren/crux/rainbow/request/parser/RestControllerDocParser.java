@@ -15,6 +15,6 @@ public interface RestControllerDocParser extends ClassDocParser<RequestGroup> {
 
     @Override
     default boolean support(@NonNull Context context, @NonNull ClassDoc source) {
-        return Arrays.stream(source.annotations()).anyMatch(a -> REST_CONTROlLER_TYPE.equals(a.annotationType().typeName()));
+        return Arrays.stream(source.annotations()).anyMatch(a -> REST_CONTROlLER_TYPE.equals(a.annotationType().qualifiedName()));
     }
 }

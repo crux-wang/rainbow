@@ -41,7 +41,7 @@ public class EntryParser implements EntryDocParser {
 
     @Override
     public Optional<Entry> parse(@NonNull Context context, @NonNull ClassDoc source) {
-        System.out.println("parse : " + source.name());
+        System.out.println("parse entry : " + source.name());
         List<FieldDoc> fieldDocs = DocHelper.getAllFieldDoc(source);
         List<Field> fields = fieldParser.parse(context, fieldDocs.toArray(new FieldDoc[0]));
         if (!fields.isEmpty()) {

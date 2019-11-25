@@ -10,7 +10,7 @@ public class RequestGroup {
 
     private String name;
     private Description desc;
-    private String path;
+    private String[] path;
     private List<Request> requests;
 
 }

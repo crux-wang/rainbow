@@ -36,7 +36,7 @@ public class DocHelper {
             return false;
         }
         ClassDoc cd = classDoc;
-        while (!StringUtils.equals(Context.OBJECT_TYPE_NAME, cd.typeName())) {
+        while (cd != null && !StringUtils.equals(Context.OBJECT_TYPE_NAME, cd.typeName())) {
             FieldDoc[] fields = cd.fields();
             if (fields.length > 0) {
                 return true;

@@ -3,6 +3,7 @@ package ren.crux.rainbow.request;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.RootDoc;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.parser.RootDocParser;
 import ren.crux.rainbow.entry.parser.EntryDocParser;
@@ -13,6 +14,7 @@ import ren.crux.rainbow.request.parser.impl.RestControllerParser;
 
 import java.util.Optional;
 
+@Slf4j
 public class RootParser implements RootDocParser<RequestGroups> {
 
     private final EntryDocParser entryDocParser;
@@ -38,7 +40,7 @@ public class RootParser implements RootDocParser<RequestGroups> {
             } else if (entryDocParser.support(context, classDoc)) {
                 entryDocParser.parse(context, classDoc).ifPresent(groups::addEntry);
             } else {
-                System.out.println("ignored");
+                log.warn("ignored : {}", classDoc);
             }
         }
         return Optional.of(groups);
