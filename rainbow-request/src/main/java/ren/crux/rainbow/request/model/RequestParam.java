@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class RequestParam {
 
+    private RequestParamType paramType;
     private String type;
     private String name;
     private boolean required;

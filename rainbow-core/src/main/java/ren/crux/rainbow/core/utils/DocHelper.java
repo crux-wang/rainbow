@@ -1,5 +1,6 @@
 package ren.crux.rainbow.core.utils;
 
+import com.sun.javadoc.AnnotationValue;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,16 @@ public class DocHelper {
             cd = cd.superclass();
         }
         return false;
+    }
+
+    public static Object getValue(AnnotationValue value) {
+        if (value.value() instanceof AnnotationValue[]) {
+            return Arrays.stream(((AnnotationValue[]) value.value())).map(AnnotationValue::value).toArray();
+        } else if (value.value() instanceof AnnotationValue) {
+            return ((AnnotationValue) value.value()).value();
+        } else {
+            return value.value();
+        }
     }
 
 }

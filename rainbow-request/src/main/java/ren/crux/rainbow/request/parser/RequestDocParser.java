@@ -20,8 +20,7 @@ public interface RequestDocParser extends MethodDocParser<Request> {
             PostMapping.class.getTypeName(),
             DeleteMapping.class.getTypeName(),
             PutMapping.class.getTypeName(),
-            PatchMapping.class.getTypeName(),
-            RequestMapping.class.getTypeName()
+            PatchMapping.class.getTypeName()
     )));
 
     @Override
