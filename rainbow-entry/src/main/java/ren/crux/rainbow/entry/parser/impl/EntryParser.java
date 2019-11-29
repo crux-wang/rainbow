@@ -3,6 +3,7 @@ package ren.crux.rainbow.entry.parser.impl;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.core.utils.DocHelper;
 import ren.crux.rainbow.entry.model.Entry;
@@ -15,6 +16,7 @@ import ren.crux.rainbow.entry.parser.FieldParser;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class EntryParser implements EntryDocParser {
 
     private final FieldParser fieldParser;
@@ -41,7 +43,7 @@ public class EntryParser implements EntryDocParser {
 
     @Override
     public Optional<Entry> parse(@NonNull Context context, @NonNull ClassDoc source) {
-        System.out.println("parse entry : " + source.name());
+        log.debug("parse entry : {}", source.name());
         List<FieldDoc> fieldDocs = DocHelper.getAllFieldDoc(source);
         List<Field> fields = fieldParser.parse(context, fieldDocs.toArray(new FieldDoc[0]));
         if (!fields.isEmpty()) {

@@ -23,7 +23,7 @@ public class AnnotationParser implements AnnotationDocParser {
 
     @Override
     public Optional<Annotation> parse(@NonNull Context context, @NonNull AnnotationDesc source) {
-        log.debug("parse anno : {}", source.annotationType().name());
+        log.debug("parse annotation : {}", source.annotationType().name());
         Annotation annotation = new Annotation();
         annotation.setType(source.annotationType().qualifiedName());
         annotation.setName(source.annotationType().name());
@@ -39,7 +39,6 @@ public class AnnotationParser implements AnnotationDocParser {
         if (attribute != null) {
             annotation.setAttribute(attribute);
         }
-        System.out.println(attribute);
         return Optional.of(annotation);
     }
 }

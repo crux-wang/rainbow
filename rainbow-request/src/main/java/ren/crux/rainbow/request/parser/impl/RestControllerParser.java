@@ -2,6 +2,7 @@ package ren.crux.rainbow.request.parser.impl;
 
 import com.sun.javadoc.ClassDoc;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import ren.crux.rainbow.core.parser.Context;
 import ren.crux.rainbow.entry.parser.DescriptionDocParser;
 import ren.crux.rainbow.entry.parser.impl.DescriptionParser;
@@ -14,6 +15,7 @@ import ren.crux.rainbow.request.utils.RequestHelper;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class RestControllerParser implements RestControllerDocParser {
 
     private final DescriptionDocParser descriptionDocParser;
@@ -31,7 +33,7 @@ public class RestControllerParser implements RestControllerDocParser {
 
     @Override
     public Optional<RequestGroup> parse(@NonNull Context context, @NonNull ClassDoc source) {
-        System.out.println("parse rest controller : " + source.name());
+        log.debug("parse rest controller : {}", source.name());
         RequestGroup group = new RequestGroup();
         group.setName(source.name());
         descriptionDocParser.parse(context, source).ifPresent(group::setDesc);
