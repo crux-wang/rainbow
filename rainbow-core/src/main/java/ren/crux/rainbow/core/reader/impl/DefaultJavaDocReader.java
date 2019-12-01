@@ -1,18 +1,23 @@
 package ren.crux.rainbow.core.reader.impl;
 
-import com.sun.javadoc.RootDoc;
 import ren.crux.rainbow.core.reader.AbstractJavaDocReader;
-
-import java.util.Optional;
+import ren.crux.rainbow.core.reader.ContextConfigurator;
+import ren.crux.rainbow.core.reader.parser.RootDocParser;
 
 /**
+ * 默认 Java 文档阅读器
+ *
+ * @param <T>
  * @author wangzhihui
  */
-public class DefaultJavaDocReader extends AbstractJavaDocReader<RootDoc> {
+public class DefaultJavaDocReader<T> extends AbstractJavaDocReader<T> {
 
-    @Override
-    protected Optional<RootDoc> read0(String path, String[] packageNames, RootDoc rootDoc) {
-        return Optional.of(rootDoc);
+    public DefaultJavaDocReader(RootDocParser<T> rootDocParser) {
+        super(rootDocParser);
+    }
+
+    public DefaultJavaDocReader(RootDocParser<T> rootDocParser, ContextConfigurator contextConfigurator) {
+        super(rootDocParser, contextConfigurator);
     }
 
 }

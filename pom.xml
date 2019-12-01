@@ -10,8 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>rainbow-core</module>
-        <module>rainbow-entry</module>
-        <module>rainbow-request</module>
         <module>rainbow-test</module>
     </modules>
     <properties>
@@ -35,14 +33,9 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>ren.crux</groupId>
-                <artifactId>rainbow-entry</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ren.crux</groupId>
-                <artifactId>rainbow-request</artifactId>
-                <version>${project.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

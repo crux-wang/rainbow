@@ -4,13 +4,16 @@ import com.sun.javadoc.AnnotationValue;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.parser.Context;
+import ren.crux.rainbow.core.reader.parser.Context;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author wangzhihui
+ */
 public class DocHelper {
 
     public static List<FieldDoc> getAllFieldDoc(ClassDoc classDoc) {

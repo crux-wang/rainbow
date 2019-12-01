@@ -13,10 +13,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>ren.crux</groupId>
-            <artifactId>rainbow-request</artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
@@ -28,6 +24,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ren.crux</groupId>
+            <artifactId>rainbow-core</artifactId>
         </dependency>
     </dependencies>
 

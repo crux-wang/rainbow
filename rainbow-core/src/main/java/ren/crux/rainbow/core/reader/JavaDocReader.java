@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
+ * Java 文档读取器
+ *
  * @author wangzhihui
  */
 public interface JavaDocReader<T> {
@@ -28,7 +30,7 @@ public interface JavaDocReader<T> {
             return true;
         }
 
-        public static RootDoc getRootDoc() {
+        static RootDoc getRootDoc() {
             return Objects.requireNonNull(rootDoc);
         }
     }
