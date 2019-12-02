@@ -28,5 +28,13 @@ public class Request {
      * 注解列表
      */
     private List<Annotation> annotations;
+    /**
+     * 响应类型
+     */
+    private String response;
+    /**
+     * 响应类型参数（泛型）
+     */
+    private String[] responseParams;
 
 }

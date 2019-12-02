@@ -6,8 +6,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import ren.crux.rainbow.core.parser.*;
 import ren.crux.rainbow.core.parser.impl.*;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 上下文
@@ -30,6 +32,16 @@ public class Context {
     private RequestMappingDocParser requestMappingDocParser = new SpringWebRequestMappingDocParser();
     private RequestGroupDocParser requestGroupDocParser = new SpringWebRequestGroupDocParser();
     private RequestParameterDocParser requestParameterDocParser = new SpringWebRequestParameterDocParser();
+    private Set<String> types = new HashSet<>();
+
+
+    public void logType(@NonNull String type) {
+        types.add(type);
+    }
+
+    public Set<String> getTypes() {
+        return types;
+    }
 
     private Context(RootDoc rootDoc, String path, String[] packageNames) {
         this.rootDoc = rootDoc;

@@ -30,7 +30,15 @@ public interface JavaDocParser<S, T> {
      * @param source  解析源
      * @return 解析后的产物
      */
-    Optional<T> parse(@NonNull Context context, @NonNull S source);
+    default Optional<T> parse(@NonNull Context context, @NonNull S source) {
+        if (support(context, source)) {
+            return parse0(context, source);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    Optional<T> parse0(@NonNull Context context, @NonNull S source);
 
     /**
      * 批量解析
@@ -40,7 +48,11 @@ public interface JavaDocParser<S, T> {
      * @return 解析后的产物
      */
     default List<T> parse(@NonNull Context context, @NonNull S[] source) {
-        return Arrays.stream(source).map(s -> parse(context, s)).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        return Arrays.stream(source)
+                .map(s -> parse(context, s))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class DefaultDescriptionDocParser implements DescriptionDocParser {
     @Override
-    public Optional<Description> parse(@NonNull Context context, @NonNull ProgramElementDoc source) {
+    public Optional<Description> parse0(@NonNull Context context, @NonNull ProgramElementDoc source) {
         Description desc = new Description();
         desc.setCommentText(source.commentText());
         desc.setInlineRefs(context.getRefDocParser().parse(context, source.inlineTags()));

@@ -42,7 +42,7 @@ public class SpringWebRequestParameterDocParser implements RequestParameterDocPa
      * @return 解析后的产物
      */
     @Override
-    public Optional<RequestParam> parse(@NonNull Context context, @NonNull Parameter source) {
+    public Optional<RequestParam> parse0(@NonNull Context context, @NonNull Parameter source) {
         log.debug("parse parameter : {}", source.name());
         RequestParam requestParam = new RequestParam();
         requestParam.setName(source.name());
@@ -101,6 +101,7 @@ public class SpringWebRequestParameterDocParser implements RequestParameterDocPa
             }
         }
         requestParam.setRequestType(requestType);
+        context.logType(source.type().qualifiedTypeName());
         return Optional.of(requestParam);
     }
 }

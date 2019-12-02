@@ -23,12 +23,13 @@ public class DefaultEntryFieldDocParser implements EntryFieldDocParser {
     }
 
     @Override
-    public Optional<Field> parse(@NonNull Context context, @NonNull FieldDoc source) {
+    public Optional<Field> parse0(@NonNull Context context, @NonNull FieldDoc source) {
         Field field = new Field();
         field.setName(source.name());
         field.setType(source.type().qualifiedTypeName());
         context.getDescriptionDocParser().parse(context, source).ifPresent(field::setDesc);
         field.setAnnotations(context.getAnnotationDocParser().parse(context, source.annotations()));
+        context.logType(source.type().qualifiedTypeName());
         return Optional.of(field);
     }
 }

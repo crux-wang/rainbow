@@ -22,7 +22,7 @@ import java.util.Optional;
 public class DefaultAnnotationDocParser implements AnnotationDocParser {
 
     @Override
-    public Optional<Annotation> parse(@NonNull Context context, @NonNull AnnotationDesc source) {
+    public Optional<Annotation> parse0(@NonNull Context context, @NonNull AnnotationDesc source) {
         Annotation annotation = new Annotation();
         annotation.setType(source.annotationType().qualifiedName());
         annotation.setName(source.annotationType().name());

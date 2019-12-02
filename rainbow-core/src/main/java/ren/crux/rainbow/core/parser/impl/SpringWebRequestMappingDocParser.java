@@ -28,7 +28,7 @@ public class SpringWebRequestMappingDocParser implements RequestMappingDocParser
      */
     @Override
     public boolean support(@NonNull Context context, @NonNull MethodDoc source) {
-        return source.isPublic() && Arrays.stream(source.annotations()).anyMatch(a -> SpringWebRequestHelper.MAPPING_TYPES.contains(a.annotationType().typeName()));
+        return source.isPublic() && Arrays.stream(source.annotations()).anyMatch(a -> SpringWebRequestHelper.MAPPING_TYPES.contains(a.annotationType().qualifiedName()));
     }
 
     /**
@@ -39,7 +39,7 @@ public class SpringWebRequestMappingDocParser implements RequestMappingDocParser
      * @return 解析后的产物
      */
     @Override
-    public Optional<List<RequestMapping>> parse(@NonNull Context context, @NonNull MethodDoc source) {
+    public Optional<List<RequestMapping>> parse0(@NonNull Context context, @NonNull MethodDoc source) {
         List<RequestMapping> allRequestMapping = SpringWebRequestHelper.getAllRequestMapping(source);
         if (CollectionUtils.isEmpty(allRequestMapping)) {
             return Optional.empty();

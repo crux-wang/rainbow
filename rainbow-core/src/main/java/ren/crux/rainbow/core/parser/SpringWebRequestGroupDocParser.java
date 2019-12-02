@@ -40,13 +40,13 @@ public class SpringWebRequestGroupDocParser implements RequestGroupDocParser {
      * @return 解析后的产物
      */
     @Override
-    public Optional<RequestGroup> parse(@NonNull Context context, @NonNull ClassDoc source) {
+    public Optional<RequestGroup> parse0(@NonNull Context context, @NonNull ClassDoc source) {
         log.debug("parse rest controller : {}", source.name());
         RequestGroup group = new RequestGroup();
         group.setName(source.name());
         context.getDescriptionDocParser().parse(context, source).ifPresent(group::setDesc);
         SpringWebRequestHelper.getRequestMappingPath(source).ifPresent(group::setPath);
-        List<Request> requests = context.getRequestDocParser().parse(context, source.methods(true));
+        List<Request> requests = context.getRequestDocParser().parse(context, source.methods());
         group.setRequests(requests);
         return Optional.of(group);
     }

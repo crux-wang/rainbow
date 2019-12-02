@@ -64,7 +64,21 @@ public abstract class AbstractJavaDocReader<T> implements JavaDocReader<T> {
      * @return T
      */
     private Optional<T> read0(String path, String[] packageNames, RootDoc rootDoc) {
-        return rootDocParser.parse(Context.newContext(rootDoc, path, packageNames), rootDoc);
+        return rootDocParser.parse(getContext(path, packageNames, rootDoc), rootDoc);
+    }
+
+    /**
+     * 获取上下文
+     *
+     * @param path         源文件路径
+     * @param packageNames 包名列表
+     * @param rootDoc      根文档
+     * @return 上下文
+     */
+    private Context getContext(String path, String[] packageNames, RootDoc rootDoc) {
+        Context context = Context.newContext(rootDoc, path, packageNames);
+        contextConfigurator.config(context);
+        return context;
     }
 
 }

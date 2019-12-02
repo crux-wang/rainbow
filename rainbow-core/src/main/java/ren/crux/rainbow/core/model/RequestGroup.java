@@ -27,5 +27,4 @@ public class RequestGroup {
      * 请求列表
      */
     private List<Request> requests;
-
 }

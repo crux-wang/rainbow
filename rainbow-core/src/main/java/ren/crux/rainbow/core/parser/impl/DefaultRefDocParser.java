@@ -16,7 +16,7 @@ import java.util.Optional;
 public class DefaultRefDocParser implements RefDocParser {
 
     @Override
-    public Optional<Ref> parse(@NonNull Context context, @NonNull Tag source) {
+    public Optional<Ref> parse0(@NonNull Context context, @NonNull Tag source) {
         if ("Text".equals(source.name())) {
             return Optional.empty();
         }

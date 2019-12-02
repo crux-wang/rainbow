@@ -22,7 +22,7 @@ import java.util.Optional;
 public class DefaultEntryDocParser implements EntryDocParser {
 
     @Override
-    public Optional<Entry> parse(@NonNull Context context, @NonNull ClassDoc source) {
+    public Optional<Entry> parse0(@NonNull Context context, @NonNull ClassDoc source) {
         log.info("parse entry : {}", source.name());
         List<FieldDoc> fieldDocs = DocHelper.getAllFieldDoc(source);
         List<Field> fields = context.getEntryFieldDocParser().parse(context, fieldDocs.toArray(new FieldDoc[0]));
