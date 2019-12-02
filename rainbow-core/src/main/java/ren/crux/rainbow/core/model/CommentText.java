@@ -5,23 +5,22 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 描述
- *
  * @author wangzhihui
  */
 @Data
-public class Description {
+public class CommentText {
+
     /**
      * 注释
      */
-    private String commentText;
+    private String text;
     /**
      * 标签引用
      */
-    private List<Ref> refs;
+    private List<TagRef> tags;
     /**
      * 注释中引用
      */
-    private List<Ref> inlineRefs;
+    private List<TagRef> inlineTags;
 
 }

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.collections4.CollectionUtils;
-import ren.crux.rainbow.core.model.Document;
-import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.core.parser.impl.DefaultRootDocParser;
 import ren.crux.rainbow.core.reader.JavaDocReader;
 import ren.crux.rainbow.core.reader.impl.DefaultJavaDocReader;

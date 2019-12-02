@@ -2,15 +2,12 @@ package ren.crux.rainbow.core.model;
 
 import lombok.Data;
 
-import java.util.Map;
-
 /**
- * 注解
- *
  * @author wangzhihui
  */
 @Data
-public class Annotation {
+public class Describable {
+
     /**
      * 名称
      */
@@ -20,8 +17,8 @@ public class Annotation {
      */
     private String type;
     /**
-     * 属性列表
+     * 注解文字
      */
-    private Map<String, Object> attribute;
+    private CommentText commentText;
 
 }

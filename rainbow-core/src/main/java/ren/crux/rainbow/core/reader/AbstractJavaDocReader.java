@@ -16,17 +16,9 @@ import java.util.Optional;
 public abstract class AbstractJavaDocReader<T> implements JavaDocReader<T> {
 
     protected final RootDocParser<T> rootDocParser;
-    private final ContextConfigurator contextConfigurator;
-
-    protected AbstractJavaDocReader(RootDocParser<T> rootDocParser, ContextConfigurator contextConfigurator) {
-        this.rootDocParser = rootDocParser;
-        this.contextConfigurator = contextConfigurator;
-    }
 
     protected AbstractJavaDocReader(RootDocParser<T> rootDocParser) {
         this.rootDocParser = rootDocParser;
-        this.contextConfigurator = new ContextConfigurator() {
-        };
     }
 
     /**
@@ -76,9 +68,7 @@ public abstract class AbstractJavaDocReader<T> implements JavaDocReader<T> {
      * @return 上下文
      */
     private Context getContext(String path, String[] packageNames, RootDoc rootDoc) {
-        Context context = Context.newContext(rootDoc, path, packageNames);
-        contextConfigurator.config(context);
-        return context;
+        return Context.newContext(rootDoc, path, packageNames);
     }
 
 }
