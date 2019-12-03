@@ -1,7 +1,6 @@
 package ren.crux.rainbow.core.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -10,12 +9,11 @@ import java.util.List;
  *
  * @author wangzhihui
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class ClassDesc extends Describable {
+public class ClassDesc {
 
+    private Describable desc;
     private List<FieldDesc> fields;
-
     private List<MethodDesc> methods;
 
 }

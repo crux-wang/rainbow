@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.commons.collections4.CollectionUtils;
-import ren.crux.rainbow.core.parser.impl.DefaultRootDocParser;
+import ren.crux.rainbow.core.model.ClassDesc;
 import ren.crux.rainbow.core.reader.JavaDocReader;
 import ren.crux.rainbow.core.reader.impl.DefaultJavaDocReader;
+import ren.crux.rainbow.core.reader.impl.DefaultRootDocParser;
 import ren.crux.rainbow.core.reader.parser.RootDocParser;
 
 import java.util.List;
@@ -25,25 +25,14 @@ public class JavaDocMain {
 //        final String path = "/Users/wangzhihui/.m2/repository/org/springframework/data/spring-data-commons/2.1.10.RELEASE/spring-data-commons-2.1.10.RELEASE-sources.jar";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
 //        final String[] packageNames = new String[]{"org.springframework.data.domain"};
-        RootDocParser<Document> rootParser = new DefaultRootDocParser();
-        JavaDocReader<Document> javaDocReader = new DefaultJavaDocReader<>(rootParser);
-        Document document = javaDocReader.read(path, packageNames).orElseThrow(Exception::new);
+        RootDocParser<List<ClassDesc>> rootParser = new DefaultRootDocParser();
+        JavaDocReader<List<ClassDesc>> javaDocReader = new DefaultJavaDocReader(rootParser);
+        List<ClassDesc> classDescList = javaDocReader.read(path, packageNames).orElseThrow(Exception::new);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        System.out.println(objectMapper.writeValueAsString(document));
-        System.out.println("entry size : " + CollectionUtils.size(document.getEntryMap()));
-        List<RequestGroup> requestGroups = document.getRequestGroups();
-        System.out.println("request group size : " + CollectionUtils.size(requestGroups));
-        if (requestGroups != null) {
-            int requestSize = 0;
-            for (RequestGroup requestGroup : requestGroups) {
-                int size = CollectionUtils.size(requestGroup.getRequests());
-                requestSize += size;
-                System.out.println(requestGroup.getName() + " : " + size);
-            }
-            System.out.println("request size : " + requestSize);
-        }
+        System.out.println(objectMapper.writeValueAsString(classDescList));
+        System.out.println("classDescList.size() = " + classDescList.size());
     }
 }

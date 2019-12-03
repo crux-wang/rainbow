@@ -15,30 +15,13 @@ import java.util.stream.Collectors;
 public interface JavaDocParser<S, T> {
 
     /**
-     * 支持条件
-     *
-     * @param context 上下文
-     * @param source  解析源
-     * @return 是否支持
-     */
-    boolean support(@NonNull Context context, @NonNull S source);
-
-    /**
      * 解析
      *
      * @param context 上下文
      * @param source  解析源
      * @return 解析后的产物
      */
-    default Optional<T> parse(@NonNull Context context, @NonNull S source) {
-        if (support(context, source)) {
-            return parse0(context, source);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    Optional<T> parse0(@NonNull Context context, @NonNull S source);
+    Optional<T> parse(@NonNull Context context, @NonNull S source);
 
     /**
      * 批量解析

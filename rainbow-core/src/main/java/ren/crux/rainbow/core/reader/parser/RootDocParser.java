@@ -8,16 +8,5 @@ import com.sun.javadoc.RootDoc;
  * @author wangzhihui
  */
 public interface RootDocParser<T> extends JavaDocParser<RootDoc, T> {
-    /**
-     * 支持条件
-     *
-     * @param context 上下文
-     * @param source  解析源
-     * @return 是否支持
-     */
-    @Override
-    default boolean support(Context context, RootDoc source) {
-        return true;
-    }
 
 }

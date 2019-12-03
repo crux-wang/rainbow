@@ -7,5 +7,5 @@ import com.sun.javadoc.Tag;
  *
  * @author wangzhihui
  */
-public interface TagParser<T> extends CommonJavaDocParser<Tag, T> {
+public interface TagParser<T> extends JavaDocParser<Tag, T> {
 }

@@ -7,6 +7,6 @@ import com.sun.javadoc.AnnotationDesc;
  *
  * @author wangzhihui
  */
-public interface AnnotationDescParser<T> extends CommonJavaDocParser<AnnotationDesc, T> {
+public interface AnnotationDescParser<T> extends JavaDocParser<AnnotationDesc, T> {
 
 }
