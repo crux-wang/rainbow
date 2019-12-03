@@ -22,7 +22,7 @@ public class E2 {
      *
      * @return empty string
      */
-    public String fun1() {
+    private String fun1() {
         return "";
     }
 

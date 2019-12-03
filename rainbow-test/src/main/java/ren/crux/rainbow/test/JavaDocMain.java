@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ren.crux.rainbow.core.model.ClassDesc;
-import ren.crux.rainbow.core.reader.JavaDocReader;
-import ren.crux.rainbow.core.reader.impl.DefaultJavaDocReader;
-import ren.crux.rainbow.core.reader.impl.DefaultRootDocParser;
-import ren.crux.rainbow.core.reader.parser.RootDocParser;
+import ren.crux.rainbow.core.desc.model.ClassDesc;
+import ren.crux.rainbow.core.desc.reader.JavaDocReader;
+import ren.crux.rainbow.core.desc.reader.impl.DefaultJavaDocReader;
+import ren.crux.rainbow.core.desc.reader.impl.DefaultRootDocParser;
+import ren.crux.rainbow.core.desc.reader.parser.RootDocParser;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class JavaDocMain {
 //        final String path = "/Users/wangzhihui/.m2/repository/org/springframework/data/spring-data-commons/2.1.10.RELEASE/spring-data-commons-2.1.10.RELEASE-sources.jar";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
 //        final String[] packageNames = new String[]{"org.springframework.data.domain"};
+//        final String[] packageNames = new String[]{"com.xiaomi.mig3.haoda.common.model"};
         RootDocParser<List<ClassDesc>> rootParser = new DefaultRootDocParser();
         JavaDocReader<List<ClassDesc>> javaDocReader = new DefaultJavaDocReader(rootParser);
         List<ClassDesc> classDescList = javaDocReader.read(path, packageNames).orElseThrow(Exception::new);
