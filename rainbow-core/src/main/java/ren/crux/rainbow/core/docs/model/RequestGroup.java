@@ -1,8 +1,10 @@
 package ren.crux.rainbow.core.docs.model;
 
 import lombok.Data;
+import lombok.NonNull;
 import ren.crux.rainbow.core.desc.model.Describable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,12 +23,16 @@ public class RequestGroup {
      */
     private Describable desc;
     /**
-     * 父路径列表
-     */
-    private String[] path;
-    /**
      * 请求列表
      */
     private List<Request> requests;
+
+
+    public void addRequest(@NonNull Request request) {
+        if (requests == null) {
+            requests = new LinkedList<>();
+        }
+        requests.add(request);
+    }
 
 }

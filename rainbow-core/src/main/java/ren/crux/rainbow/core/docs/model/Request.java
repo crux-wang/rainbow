@@ -9,8 +9,13 @@ import java.util.List;
 public class Request {
 
     private Describable desc;
-    private String path;
-    private RequestMethod method;
+    private String[] path;
+    private RequestMethod[] method;
     private List<RequestParam> params;
+    private String returnType;
+    /**
+     * 实际参数类型（对应泛型类型）
+     */
+    private String[] actualParamTypes;
 
 }

@@ -34,7 +34,7 @@ public class RequestParam {
     /**
      * 默认值
      */
-    private Object defaultValue;
+    private String defaultValue;
     /**
      * 约束
      */

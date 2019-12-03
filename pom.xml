@@ -11,6 +11,7 @@
     <modules>
         <module>rainbow-core</module>
         <module>rainbow-test</module>
+        <module>rainbow-spring-boot-starter</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
