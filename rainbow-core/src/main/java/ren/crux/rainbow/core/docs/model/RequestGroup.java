@@ -2,7 +2,7 @@ package ren.crux.rainbow.core.docs.model;
 
 import lombok.Data;
 import lombok.NonNull;
-import ren.crux.rainbow.core.desc.model.Describable;
+import ren.crux.rainbow.core.desc.model.CommentText;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,9 +19,13 @@ public class RequestGroup {
      */
     private String name;
     /**
-     * 描述
+     * 类型
      */
-    private Describable desc;
+    private String type;
+    /**
+     * 注释
+     */
+    private CommentText commentText;
     /**
      * 请求列表
      */

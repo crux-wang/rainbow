@@ -9,5 +9,16 @@ import lombok.Data;
  */
 @Data
 public class FieldDesc {
-    private Describable desc;
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 类型
+     */
+    private String type;
+    /**
+     * 注释
+     */
+    private CommentText commentText;
 }

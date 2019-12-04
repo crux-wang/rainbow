@@ -7,7 +7,7 @@ import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import ren.crux.rainbow.core.desc.model.ClassDesc;
-import ren.crux.rainbow.core.desc.model.Describable;
+import ren.crux.rainbow.core.desc.model.CommentText;
 import ren.crux.rainbow.core.desc.model.FieldDesc;
 import ren.crux.rainbow.core.desc.model.MethodDesc;
 import ren.crux.rainbow.core.desc.reader.parser.*;
@@ -22,13 +22,15 @@ public class ClassDescParser implements ClassDocParser<ClassDesc> {
 
     private final MethodDocParser<MethodDesc> methodDescParser = MethodDescParser.INSTANCE;
     private final FieldDocParser<FieldDesc> fieldDescParser = FieldDescParser.INSTANCE;
-    private final CommonDocParser<Describable> descriptionDocParser = DescriptionDocParser.INSTANCE;
+    private final CommonDocParser<CommentText> descriptionDocParser = CommentTextParser.INSTANCE;
 
     @Override
     public Optional<ClassDesc> parse(@NonNull Context context, @NonNull ClassDoc source) {
         if (context.getClassDocFilter().doFilter(source)) {
             ClassDesc classDesc = new ClassDesc();
-            descriptionDocParser.parse(context, source).ifPresent(classDesc::setDesc);
+            classDesc.setName(source.name());
+            classDesc.setType(source.qualifiedTypeName());
+            descriptionDocParser.parse(context, source).ifPresent(classDesc::setCommentText);
             List<FieldDoc> fields = DocHelper.getAllFieldDoc(source);
             if (CollectionUtils.isNotEmpty(fields)) {
                 classDesc.setFields(fieldDescParser.parse(context, fields.toArray(new FieldDoc[0])));

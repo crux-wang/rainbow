@@ -1,15 +1,28 @@
 package ren.crux.rainbow.core.docs.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import ren.crux.rainbow.core.desc.model.FieldDesc;
+import ren.crux.rainbow.core.desc.model.CommentText;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class FieldDetail extends FieldDesc {
-
+public class FieldDetail {
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 类型
+     */
+    private String type;
+    /**
+     * 实际参数类型（对应泛型类型）
+     */
+    private String[] actualParamTypes;
+    /**
+     * 注释
+     */
+    private CommentText commentText;
     private List<Constraint> annotations;
 
 }

@@ -11,8 +11,22 @@ import java.util.List;
  */
 @Data
 public class ClassDesc {
-
-    private Describable desc;
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 类型
+     */
+    private String type;
+    /**
+     * 实际参数类型（对应泛型类型）
+     */
+    private String[] actualParamTypes;
+    /**
+     * 注释
+     */
+    private CommentText commentText;
     private List<FieldDesc> fields;
     private List<MethodDesc> methods;
 

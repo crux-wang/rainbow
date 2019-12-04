@@ -2,6 +2,8 @@ package ren.crux.rainbow.runtime.demo.model;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -24,6 +26,15 @@ public class E1 {
      * @see E2
      */
     private E2 e2;
+
+    /**
+     * list desc
+     */
+    private List<E2> list;
+    /**
+     * map desc
+     */
+    private Map<String, E2> map;
 
     /**
      * fun1

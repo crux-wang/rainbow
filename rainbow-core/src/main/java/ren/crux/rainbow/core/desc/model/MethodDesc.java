@@ -11,8 +11,19 @@ import java.util.List;
  */
 @Data
 public class MethodDesc {
-    private Describable desc;
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 类型
+     */
+    private String type;
+    /**
+     * 注释
+     */
+    private CommentText commentText;
     private List<ParameterDesc> parameters;
-    private Describable returnType;
+    private ClassDesc returnType;
 
 }

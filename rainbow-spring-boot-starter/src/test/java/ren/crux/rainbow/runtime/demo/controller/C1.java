@@ -5,6 +5,8 @@ import ren.crux.rainbow.runtime.demo.model.E1;
 import ren.crux.rainbow.runtime.demo.model.E2;
 import ren.crux.rainbow.runtime.demo.model.E3;
 
+import java.util.List;
+
 /**
  * C1
  * xxxx {@link E2} ax
@@ -22,12 +24,12 @@ public class C1 {
      * <p>
      * xxxx
      *
-     * @param e1 xasdasd
+     * @param list xasdasd
      * @return asdasd
      */
     @GetMapping("/e1")
-    public E1 e1(E1 e1) {
-        return e1;
+    public E1 e1(List<E1> list) {
+        return null;
     }
 
     /**

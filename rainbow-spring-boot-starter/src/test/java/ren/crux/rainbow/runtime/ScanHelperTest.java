@@ -1,7 +1,8 @@
 package ren.crux.rainbow.runtime;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,10 @@ public class ScanHelperTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void name() throws JsonProcessingException {
-        System.out.println(objectMapper.writeValueAsString(scanHelper.getAllUrl()));
+    public void name() throws Exception {
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+//        "ren.crux.rainbow.runtime"
+        System.out.println(objectMapper.writeValueAsString(scanHelper.read()));
     }
 }

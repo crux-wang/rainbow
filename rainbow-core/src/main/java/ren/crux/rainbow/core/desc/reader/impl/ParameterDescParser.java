@@ -2,7 +2,6 @@ package ren.crux.rainbow.core.desc.reader.impl;
 
 import com.sun.javadoc.Parameter;
 import lombok.NonNull;
-import ren.crux.rainbow.core.desc.model.Describable;
 import ren.crux.rainbow.core.desc.model.ParameterDesc;
 import ren.crux.rainbow.core.desc.reader.parser.Context;
 import ren.crux.rainbow.core.desc.reader.parser.ParameterParser;
@@ -16,10 +15,8 @@ public class ParameterDescParser implements ParameterParser<ParameterDesc> {
     @Override
     public Optional<ParameterDesc> parse(@NonNull Context context, @NonNull Parameter source) {
         ParameterDesc parameterDesc = new ParameterDesc();
-        Describable desc = new Describable();
-        desc.setName(source.name());
-        desc.setType(source.type().qualifiedTypeName());
-        parameterDesc.setDesc(desc);
+        parameterDesc.setName(source.name());
+        parameterDesc.setType(source.type().qualifiedTypeName());
         return Optional.of(parameterDesc);
     }
 }

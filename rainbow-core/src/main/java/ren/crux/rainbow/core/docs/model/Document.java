@@ -23,6 +23,6 @@ public class Document {
         if (entryMap == null) {
             entryMap = new HashMap<>(16);
         }
-        entryMap.put(entry.getDesc().getType(), entry);
+        entryMap.put(entry.getType(), entry);
     }
 }

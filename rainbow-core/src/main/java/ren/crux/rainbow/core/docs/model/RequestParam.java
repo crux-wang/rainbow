@@ -1,6 +1,7 @@
 package ren.crux.rainbow.core.docs.model;
 
 import lombok.Data;
+import ren.crux.rainbow.core.desc.model.CommentText;
 
 import java.util.List;
 
@@ -39,5 +40,9 @@ public class RequestParam {
      * 约束
      */
     private List<Constraint> constraints;
+    /**
+     * 注释
+     */
+    private CommentText commentText;
 
 }
