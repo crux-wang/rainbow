@@ -22,7 +22,8 @@ public class ScanHelperTest {
     public void name() throws Exception {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-//        "ren.crux.rainbow.runtime"
-        System.out.println(objectMapper.writeValueAsString(scanHelper.read()));
+        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-spring-boot-starter/src/test/java/";
+        final String[] packageNames = new String[]{"ren.crux.rainbow.runtime.demo"};
+        System.out.println(objectMapper.writeValueAsString(scanHelper.read(path, packageNames)));
     }
 }

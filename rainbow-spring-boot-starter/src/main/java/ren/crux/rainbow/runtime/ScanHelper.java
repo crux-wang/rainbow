@@ -1,9 +1,5 @@
 package ren.crux.rainbow.runtime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -102,8 +98,8 @@ public class ScanHelper {
         return document;
     }
 
+
     public Entry process(String entryClassName) {
-        System.out.println("entryClassName = " + entryClassName);
         Entry entry = new Entry();
         entry.setType(entryClassName);
         List<FieldDetail> fields = new LinkedList<>();
@@ -216,23 +212,14 @@ public class ScanHelper {
         return null;
     }
 
-    public Document read() throws Exception {
-        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-spring-boot-starter/src/test/java/";
-        final String[] packageNames = new String[]{"ren.crux.rainbow.runtime.demo"};
+    public Document read(String path, String[] packageNames) throws Exception {
         RootDocParser<List<ClassDesc>> rootParser = new DefaultRootDocParser();
         JavaDocReader<List<ClassDesc>> javaDocReader = new DefaultJavaDocReader(rootParser);
         List<ClassDesc> classDescList = javaDocReader.read(path, packageNames).orElseThrow(Exception::new);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-//        System.out.println(objectMapper.writeValueAsString(classDescList));
-//        System.out.println("classDescList.size() = " + classDescList.size());
         Document document = getRequestGroups(packageNames);
-//        System.out.println(objectMapper.writeValueAsString(document));
-//        System.out.println("~~~~~~");
         return merge(document, classDescList);
     }
+
 
     public Document merge(@NonNull Document document, @NonNull List<ClassDesc> descs) {
         Map<String, ClassDesc> dict = descs.stream().collect(Collectors.toMap(ClassDesc::getType, e -> e));
