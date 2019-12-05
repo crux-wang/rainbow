@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class Constraint {
+public class AnnotationDesc {
 
     /**
      * 名称

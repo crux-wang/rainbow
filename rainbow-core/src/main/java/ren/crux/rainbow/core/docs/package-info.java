@@ -1,1 +1,0 @@
-package ren.crux.rainbow.core.docs;

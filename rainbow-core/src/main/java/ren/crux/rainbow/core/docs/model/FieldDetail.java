@@ -23,6 +23,9 @@ public class FieldDetail {
      * 注释
      */
     private CommentText commentText;
-    private List<Constraint> annotations;
+    /**
+     * 注解列表
+     */
+    private List<AnnotationDesc> annotations;
 
 }

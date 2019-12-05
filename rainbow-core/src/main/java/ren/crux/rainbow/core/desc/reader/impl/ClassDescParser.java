@@ -11,7 +11,7 @@ import ren.crux.rainbow.core.desc.model.CommentText;
 import ren.crux.rainbow.core.desc.model.FieldDesc;
 import ren.crux.rainbow.core.desc.model.MethodDesc;
 import ren.crux.rainbow.core.desc.reader.parser.*;
-import ren.crux.rainbow.core.desc.utils.DocHelper;
+import ren.crux.rainbow.core.desc.utils.DescHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class ClassDescParser implements ClassDocParser<ClassDesc> {
             classDesc.setName(source.name());
             classDesc.setType(source.qualifiedTypeName());
             descriptionDocParser.parse(context, source).ifPresent(classDesc::setCommentText);
-            List<FieldDoc> fields = DocHelper.getAllFieldDoc(source);
+            List<FieldDoc> fields = DescHelper.getAllFieldDoc(source);
             if (CollectionUtils.isNotEmpty(fields)) {
                 classDesc.setFields(fieldDescParser.parse(context, fields.toArray(new FieldDoc[0])));
             }

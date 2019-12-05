@@ -4,7 +4,12 @@ import com.sun.javadoc.AnnotationValue;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 import org.apache.commons.lang3.StringUtils;
+import ren.crux.rainbow.core.desc.model.ClassDesc;
+import ren.crux.rainbow.core.desc.reader.JavaDocReader;
+import ren.crux.rainbow.core.desc.reader.impl.DefaultJavaDocReader;
+import ren.crux.rainbow.core.desc.reader.impl.DefaultRootDocParser;
 import ren.crux.rainbow.core.desc.reader.parser.Context;
+import ren.crux.rainbow.core.desc.reader.parser.RootDocParser;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +19,13 @@ import java.util.List;
 /**
  * @author wangzhihui
  */
-public class DocHelper {
+public class DescHelper {
+
+    public static List<ClassDesc> read(String path, String[] packageNames) {
+        RootDocParser<List<ClassDesc>> rootParser = new DefaultRootDocParser();
+        JavaDocReader<List<ClassDesc>> javaDocReader = new DefaultJavaDocReader(rootParser);
+        return javaDocReader.read(path, packageNames).orElse(Collections.emptyList());
+    }
 
     public static List<FieldDoc> getAllFieldDoc(ClassDoc classDoc) {
         if (!classDoc.isClass()) {

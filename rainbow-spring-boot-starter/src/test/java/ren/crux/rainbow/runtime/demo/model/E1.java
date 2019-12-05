@@ -2,6 +2,7 @@ package ren.crux.rainbow.runtime.demo.model;
 
 import com.google.common.base.MoreObjects;
 
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class E1 {
     /**
      * string f1
      */
+    @NotBlank
     private String f1;
     /**
      * <code>E2</code> e2 {@link String} and {@linkplain E2}
@@ -25,16 +27,22 @@ public class E1 {
      *
      * @see E2
      */
+    @NotNull
     private E2 e2;
 
     /**
      * list desc
      */
+    @NotEmpty
     private List<E2> list;
     /**
      * map desc
      */
     private Map<String, E2> map;
+
+    @Min(5)
+    @Max(10)
+    private int i;
 
     /**
      * fun1

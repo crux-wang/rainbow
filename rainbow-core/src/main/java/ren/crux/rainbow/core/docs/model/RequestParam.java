@@ -37,9 +37,9 @@ public class RequestParam {
      */
     private String defaultValue;
     /**
-     * 约束
+     * 注解列表
      */
-    private List<Constraint> constraints;
+    private List<AnnotationDesc> annotations;
     /**
      * 注释
      */
