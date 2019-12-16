@@ -14,6 +14,9 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author wangzhihui
+ */
 @Slf4j
 public class MergeHelper {
 
