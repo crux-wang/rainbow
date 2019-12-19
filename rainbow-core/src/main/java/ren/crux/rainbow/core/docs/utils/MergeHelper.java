@@ -9,7 +9,6 @@ import ren.crux.rainbow.core.desc.model.MethodDesc;
 import ren.crux.rainbow.core.desc.model.ParameterDesc;
 import ren.crux.rainbow.core.docs.model.*;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +35,7 @@ public class MergeHelper {
     public static Entry process(String entryClassName) {
         Entry entry = new Entry();
         entry.setType(entryClassName);
-        List<FieldDetail> fields = new LinkedList<>();
+        List<EntryField> fields = new LinkedList<>();
         Class<?> cls;
         try {
             cls = Class.forName(entryClassName);
@@ -48,7 +47,7 @@ public class MergeHelper {
                 entry.setName(cls.getSimpleName());
             }
             Field[] declaredFields = cls.getDeclaredFields();
-            List<FieldDetail> tmp = Arrays.stream(declaredFields).map(MergeHelper::process).collect(Collectors.toList());
+            List<EntryField> tmp = Arrays.stream(declaredFields).map(MergeHelper::process).collect(Collectors.toList());
             fields.addAll(tmp);
             cls = cls.getSuperclass();
         } while (!(cls.equals(Object.class)));
@@ -56,30 +55,30 @@ public class MergeHelper {
         return entry;
     }
 
-    public static FieldDetail process(Field field) {
-        FieldDetail fieldDetail = new FieldDetail();
-        fieldDetail.setName(field.getName());
-        fieldDetail.setType(field.getGenericType().getTypeName());
-        fieldDetail.setActualParamTypes(getActualTypeArguments(field.getGenericType()));
-        fieldDetail.setAnnotations(Arrays.stream(field.getAnnotations()).map(MergeHelper::process).collect(Collectors.toList()));
-        return fieldDetail;
+    public static EntryField process(Field field) {
+        EntryField entryField = new EntryField();
+        entryField.setName(field.getName());
+        entryField.setType(field.getGenericType().getTypeName());
+        entryField.setActualParamTypes(getActualTypeArguments(field.getGenericType()));
+        entryField.setAnnotations(Arrays.stream(field.getAnnotations()).map(MergeHelper::process).collect(Collectors.toList()));
+        return entryField;
     }
 
-    public static AnnotationDesc process(Annotation annotation) {
-        Class<? extends Annotation> annotationType = annotation.annotationType();
-        AnnotationDesc annotationDesc = new AnnotationDesc();
-        annotationDesc.setName(annotationType.getSimpleName());
-        annotationDesc.setType(annotationType.getCanonicalName());
+    public static Annotation process(java.lang.annotation.Annotation annotation) {
+        Class<? extends java.lang.annotation.Annotation> annotationType = annotation.annotationType();
+        Annotation annotationDetail = new Annotation();
+        annotationDetail.setName(annotationType.getSimpleName());
+        annotationDetail.setType(annotationType.getCanonicalName());
         InvocationHandler invocationHandler = Proxy.getInvocationHandler(annotation);
         try {
             Field field = invocationHandler.getClass().getDeclaredField("memberValues");
             field.setAccessible(true);
             Map<String, Object> memberValues = (Map<String, Object>) field.get(invocationHandler);
-            annotationDesc.setAttribute(memberValues);
+            annotationDetail.setAttribute(memberValues);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        return annotationDesc;
+        return annotationDetail;
     }
 
 
@@ -137,10 +136,10 @@ public class MergeHelper {
         }
     }
 
-    public static void merge(@NonNull FieldDetail fieldDetail, FieldDesc fieldDesc) {
-        String typeName = StringUtils.substringBefore(fieldDetail.getType(), "<");
+    public static void merge(@NonNull EntryField entryField, FieldDesc fieldDesc) {
+        String typeName = StringUtils.substringBefore(entryField.getType(), "<");
         if (StringUtils.equals(fieldDesc.getType(), typeName)) {
-            fieldDetail.setCommentText(fieldDesc.getCommentText());
+            entryField.setCommentText(fieldDesc.getCommentText());
         } else {
             log.warn("no matching type name : {}", typeName);
         }
@@ -152,13 +151,13 @@ public class MergeHelper {
         }
         entry.setCommentText(classDesc.getCommentText());
         List<FieldDesc> fieldDescs = classDesc.getFields();
-        List<FieldDetail> fieldDetails = entry.getFields();
-        if (fieldDetails != null && fieldDescs != null) {
-            for (int i = 0; i < fieldDetails.size(); i++) {
+        List<EntryField> entryFields = entry.getFields();
+        if (entryFields != null && fieldDescs != null) {
+            for (int i = 0; i < entryFields.size(); i++) {
                 if (i >= fieldDescs.size()) {
                     break;
                 }
-                merge(fieldDetails.get(i), fieldDescs.get(i));
+                merge(entryFields.get(i), fieldDescs.get(i));
             }
         }
     }

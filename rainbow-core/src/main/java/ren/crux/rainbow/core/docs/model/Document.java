@@ -7,9 +7,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 文档
+ */
 @Data
 public class Document {
+    /**
+     * 请求组
+     */
     private List<RequestGroup> requestGroups;
+    /**
+     * 实体映射
+     */
     private Map<String, Entry> entryMap;
 
     public void addRequestGroup(RequestGroup requestGroup) {
@@ -25,4 +34,5 @@ public class Document {
         }
         entryMap.put(entry.getType(), entry);
     }
+
 }

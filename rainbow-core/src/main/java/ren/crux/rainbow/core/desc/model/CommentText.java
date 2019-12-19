@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 注释
+ *
  * @author wangzhihui
  */
 @Data
@@ -17,7 +19,7 @@ import java.util.Optional;
 public class CommentText {
 
     /**
-     * 注释
+     * 注释内容
      */
     private String text;
     /**

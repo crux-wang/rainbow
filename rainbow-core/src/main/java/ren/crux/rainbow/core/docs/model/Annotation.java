@@ -4,8 +4,11 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * 注解描述
+ */
 @Data
-public class AnnotationDesc {
+public class Annotation {
 
     /**
      * 名称

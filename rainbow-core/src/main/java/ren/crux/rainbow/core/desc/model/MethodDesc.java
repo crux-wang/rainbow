@@ -23,7 +23,13 @@ public class MethodDesc {
      * 注释
      */
     private CommentText commentText;
+    /**
+     * 参数描述列表
+     */
     private List<ParameterDesc> parameters;
+    /**
+     * 返回值类型描述
+     */
     private ClassDesc returnType;
 
 }

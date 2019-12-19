@@ -5,6 +5,9 @@ import ren.crux.rainbow.core.desc.model.CommentText;
 
 import java.util.List;
 
+/**
+ * 实体
+ */
 @Data
 public class Entry {
     /**
@@ -23,6 +26,9 @@ public class Entry {
      * 注释
      */
     private CommentText commentText;
-    private List<FieldDetail> fields;
+    /**
+     * 属性列表
+     */
+    private List<EntryField> fields;
 
 }

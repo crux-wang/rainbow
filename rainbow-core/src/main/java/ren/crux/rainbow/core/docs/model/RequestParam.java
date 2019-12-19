@@ -39,7 +39,7 @@ public class RequestParam {
     /**
      * 注解列表
      */
-    private List<AnnotationDesc> annotations;
+    private List<Annotation> annotations;
     /**
      * 注释
      */

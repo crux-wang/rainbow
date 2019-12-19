@@ -27,7 +27,13 @@ public class ClassDesc {
      * 注释
      */
     private CommentText commentText;
+    /**
+     * 属性描述列表
+     */
     private List<FieldDesc> fields;
+    /**
+     * 方法描述列表
+     */
     private List<MethodDesc> methods;
 
 }
