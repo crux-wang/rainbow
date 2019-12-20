@@ -12,6 +12,7 @@
         <module>rainbow-core</module>
         <module>rainbow-test</module>
         <module>rainbow-spring-boot-starter</module>
+        <module>rainbow-javadoc</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,7 +31,17 @@
             </dependency>
             <dependency>
                 <groupId>ren.crux</groupId>
+                <artifactId>rainbow-javadoc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ren.crux</groupId>
                 <artifactId>rainbow-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ren.crux</groupId>
+                <artifactId>rainbow-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

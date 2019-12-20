@@ -13,12 +13,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
+            <groupId>ren.crux</groupId>
+            <artifactId>rainbow-javadoc</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

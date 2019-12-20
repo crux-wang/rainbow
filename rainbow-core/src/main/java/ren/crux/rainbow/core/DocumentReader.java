@@ -1,21 +1,30 @@
 package ren.crux.rainbow.core;
 
-import lombok.Getter;
-import lombok.Setter;
-import ren.crux.rainbow.core.docs.model.Document;
+import ren.crux.rainbow.core.model.Document;
+import ren.crux.rainbow.core.module.Module;
 
 import java.util.Optional;
 
-@Getter
-@Setter
-public class DocumentReader {
+public interface DocumentReader {
 
-    private RequestGroupProvider requestGroupProvider;
-    private CLassDescProvider cLassDescProvider;
+    DocumentReader with(ClassDescProvider classDescProvider);
 
-    public Optional<Document> read(Context context) {
-        return Optional.empty();
-    }
+    DocumentReader with(RequestGroupProvider requestGroupProvider);
 
+    <T extends ClassDescProvider> T cdp(Class<T> tClass);
+
+    <T extends RequestGroupProvider> T rgp(Class<T> tClass);
+
+    ClassDescProvider cdp();
+
+    RequestGroupProvider rgp();
+
+    DocumentReader option(String key, Object value);
+
+    DocumentReader modules(Module... modules);
+
+    DocumentReader useDefaultModule();
+
+    Optional<Document> read();
 
 }
