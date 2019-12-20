@@ -27,6 +27,10 @@ public class RequestGroup {
      */
     private CommentText commentText;
     /**
+     * 路径
+     */
+    private String[] path;
+    /**
      * 请求列表
      */
     private List<Request> requests;

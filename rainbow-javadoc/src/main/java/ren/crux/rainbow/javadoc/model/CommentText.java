@@ -31,6 +31,18 @@ public class CommentText {
      */
     private List<TagRef> inlineTags;
 
+    public String content() {
+        return StringUtils.removeStart(StringUtils.substringAfter(text, "\n"), "<p>");
+    }
+
+    public String firstLine() {
+        return StringUtils.substringBefore(text, "\n");
+    }
+
+    public String inline() {
+        return StringUtils.replaceEach(text, new String[]{"<p>", "\n"}, new String[]{"", ""});
+    }
+
     public CommentText(String text) {
         this.text = text;
     }

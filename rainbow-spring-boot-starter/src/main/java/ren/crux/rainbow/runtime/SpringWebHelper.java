@@ -1,6 +1,7 @@
 package ren.crux.rainbow.runtime;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ren.crux.rainbow.core.model.RequestParam;
@@ -23,6 +24,24 @@ public class SpringWebHelper {
             tmp = value;
         }
         requestParam.setName(tmp);
+    }
+
+    public static String[] getRequestPath(String className) {
+        try {
+            Class<?> clazz = Class.forName(className);
+            RequestMapping requestMapping = clazz.getAnnotation(RequestMapping.class);
+            if (requestMapping != null) {
+                if (ArrayUtils.isNotEmpty(requestMapping.path())) {
+                    return requestMapping.path();
+                }
+                if (ArrayUtils.isNotEmpty(requestMapping.value())) {
+                    return requestMapping.value();
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            log.error("class not found : {}", className, e);
+        }
+        return new String[0];
     }
 
     public static RequestParam process(Parameter parameter) {

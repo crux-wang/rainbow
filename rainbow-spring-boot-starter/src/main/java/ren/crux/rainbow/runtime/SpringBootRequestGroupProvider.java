@@ -67,12 +67,14 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
                 requestGroup = new RequestGroup();
                 requestGroup.setName(method.getDeclaringClass().getSimpleName());
                 requestGroup.setType(className);
+                requestGroup.setPath(SpringWebHelper.getRequestPath(className));
                 groupMap.put(className, requestGroup);
             }
             requestGroup.addRequest(request);
         }
         return new LinkedList<>(groupMap.values());
     }
+
 
     @Override
     public void owner(DocumentReader reader) {
