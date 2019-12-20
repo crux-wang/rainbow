@@ -58,7 +58,7 @@ public class DefaultEntryClassNameFilter implements EntryClassNameFilter {
     public DefaultEntryClassNameFilter useDefault() {
         ends("Util", "Utils", "Helper", "Service", "Controller", "Interceptor");
         starts("java.lang.", "java.util.");
-        match("javax.servlet.http.HttpServletRequest", "javax.servlet.http.HttpServletResponse");
+        match("void", "javax.servlet.http.HttpServletRequest", "javax.servlet.http.HttpServletResponse");
         return this;
     }
 

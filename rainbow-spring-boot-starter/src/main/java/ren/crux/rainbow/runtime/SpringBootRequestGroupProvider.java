@@ -40,7 +40,6 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         request.setName(method.getName());
         request.setType(className + "." + method.getName());
         request.setReturnType(EntryUtils.build(returnType));
-        context.addEntryClassName(request.getType());
         request.setMethod(requestMethods);
         request.setPath(p.getPatterns().toArray(new String[0]));
         Parameter[] parameters = method.getParameters();

@@ -5,6 +5,9 @@ import ren.crux.rainbow.core.module.Module;
 
 import java.util.Optional;
 
+/**
+ * @author wangzhihui
+ */
 public interface DocumentReader {
 
     DocumentReader with(ClassDescProvider classDescProvider);
@@ -20,6 +23,8 @@ public interface DocumentReader {
     RequestGroupProvider rgp();
 
     DocumentReader option(String key, Object value);
+
+    DocumentReader impl(String source, String impl);
 
     DocumentReader modules(Module... modules);
 

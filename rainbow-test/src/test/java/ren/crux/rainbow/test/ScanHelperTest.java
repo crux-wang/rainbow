@@ -27,7 +27,8 @@ public class ScanHelperTest {
     public void name() throws Exception {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
+//        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
+        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
         ClassDescProvider classDescProvider = new DefaultClassDescProvider();
 
@@ -35,6 +36,8 @@ public class ScanHelperTest {
                 .with(classDescProvider)
                 .with(requestGroupProvider)
                 .useDefaultModule()
+                .impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl")
+                .impl("org.springframework.data.domain.Pageable", "org.springframework.data.domain.PageRequest")
                 .cdp()
                 .useDefaultFilter()
                 .source(path)

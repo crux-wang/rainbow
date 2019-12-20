@@ -8,6 +8,7 @@ import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.module.DefaultModule;
 import ren.crux.rainbow.core.module.Module;
 import ren.crux.rainbow.core.module.filter.DefaultEntryClassNameFilter;
+import ren.crux.rainbow.core.module.filter.DefaultEntryFieldFilter;
 import ren.crux.rainbow.core.utils.EntryUtils;
 import ren.crux.rainbow.javadoc.model.ClassDesc;
 import ren.crux.rainbow.javadoc.model.FieldDesc;
@@ -24,6 +25,7 @@ public abstract class AbstractDocumentReader implements DocumentReader {
     protected ClassDescProvider classDescProvider;
     protected RequestGroupProvider requestGroupProvider;
     protected Map<String, Object> options = new HashMap<>();
+    protected Map<String, String> implMap = new HashMap<>();
     protected List<Module> modules = new LinkedList<>();
 
     public static void merge(@NonNull Entry entry, ClassDesc classDesc) {
@@ -71,6 +73,12 @@ public abstract class AbstractDocumentReader implements DocumentReader {
     }
 
     @Override
+    public DocumentReader impl(String source, String impl) {
+        implMap.put(source, impl);
+        return this;
+    }
+
+    @Override
     public DocumentReader modules(Module... modules) {
         if (ArrayUtils.isNotEmpty(modules)) {
             this.modules.addAll(Arrays.asList(modules));
@@ -99,7 +107,6 @@ public abstract class AbstractDocumentReader implements DocumentReader {
         }
         // 初始化
         classDescProvider.setUp(context);
-        ClassDesc classDesc = classDescProvider.all().get("ren.crux.rainbow.test.demo.controller.UserController");
         List<RequestGroup> requestGroups = requestGroupProvider.get(context)
                 .stream()
                 .filter(rg -> modules.stream().allMatch(m -> m.doFilterAndEnhance(context, rg)))
@@ -117,6 +124,7 @@ public abstract class AbstractDocumentReader implements DocumentReader {
                             try {
                                 return Class.forName(cln);
                             } catch (ClassNotFoundException e) {
+                                log.error("class not found : {}", cln, e);
                                 return null;
                             }
                         }
@@ -134,6 +142,8 @@ public abstract class AbstractDocumentReader implements DocumentReader {
 
     public Entry process(Context context, Class<?> cls) {
         Entry entry = new Entry();
+        entry.setInterfaceType(cls.isInterface());
+        entry.setEnumType(cls.isEnum());
         entry.setType(cls.getCanonicalName());
         List<EntryField> fields = new LinkedList<>();
         do {
@@ -149,6 +159,16 @@ public abstract class AbstractDocumentReader implements DocumentReader {
             cls = cls.getSuperclass();
         } while (cls != null && !(cls.equals(Object.class)));
         entry.setFields(fields);
+        if (entry.isInterfaceType()) {
+            String impl = implMap.get(entry.getType());
+            if (impl != null) {
+                try {
+                    entry.setImpl(process(context, Class.forName(impl)));
+                } catch (ClassNotFoundException e) {
+                    log.error("class not found : {}", impl, e);
+                }
+            }
+        }
         return entry;
     }
 
@@ -238,8 +258,9 @@ public abstract class AbstractDocumentReader implements DocumentReader {
 
     @Override
     public DocumentReader useDefaultModule() {
-        Module module = new DefaultModule("default");
-        module.filter(new DefaultEntryClassNameFilter().useDefault());
+        Module module = new DefaultModule("default")
+                .filter(new DefaultEntryClassNameFilter().useDefault())
+                .filter(new DefaultEntryFieldFilter());
         modules(module);
         return this;
     }

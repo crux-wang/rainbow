@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * 实体
+ *
+ * @author wangzhihui
  */
 @Data
 public class Entry {
@@ -22,6 +24,18 @@ public class Entry {
      * 注释
      */
     private CommentText commentText;
+    /**
+     * 是否是接口
+     */
+    private boolean interfaceType;
+    /**
+     * 是否是枚举类
+     */
+    private boolean enumType;
+    /**
+     * 接口实现
+     */
+    private Entry impl;
     /**
      * 属性列表
      */
