@@ -18,7 +18,7 @@ public class JsonReporter implements Reporter<String> {
     public JsonReporter() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         this.objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
     }
 

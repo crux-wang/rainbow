@@ -1,6 +1,7 @@
 package ren.crux.rainbow.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.Annotation;
 import ren.crux.rainbow.core.model.TypeDesc;
 
@@ -33,22 +34,44 @@ public class EntryUtils {
     }
 
     public static TypeDesc build(Field field) {
-        return new TypeDesc(field.getGenericType().getTypeName(), getActualTypeArguments(field.getGenericType()));
+        Type genericType = field.getGenericType();
+        return new TypeDesc(genericType.getTypeName(), getActualTypeDesc(genericType), field.getType().getSimpleName());
     }
 
     public static TypeDesc build(Parameter parameter) {
-        return new TypeDesc(parameter.getParameterizedType().getTypeName(), getActualTypeArguments(parameter.getParameterizedType()));
+        Type parameterizedType = parameter.getParameterizedType();
+        return new TypeDesc(parameterizedType.getTypeName(), getActualTypeDesc(parameterizedType), parameter.getType().getSimpleName());
     }
 
-    public static TypeDesc build(Type type) {
-        return new TypeDesc(type.getTypeName(), getActualTypeArguments(type));
+    public static TypeDesc build(Method method) {
+        Class<?> returnType = method.getReturnType();
+        Type genericReturnType = method.getGenericReturnType();
+        return new TypeDesc(returnType.getTypeName(), getActualTypeDesc(genericReturnType), returnType.getSimpleName(), genericReturnType.getTypeName());
     }
 
-    public static String[] getActualTypeArguments(Type type) {
+    public static TypeDesc[] getActualTypeDesc(Type type) {
+        Type[] actualTypeArguments = getActualTypeArguments(type);
+        if (actualTypeArguments != null) {
+            return Arrays.stream(actualTypeArguments).map(typ -> {
+                TypeDesc typeDesc = new TypeDesc();
+                typeDesc.setName(typ.getTypeName());
+                typeDesc.setActualParamTypes(getActualTypeDesc(typ));
+                if (typeDesc.getActualParamTypes() != null) {
+                    Type rawType = ((ParameterizedType) typ).getRawType();
+                    typeDesc.setType(rawType.getTypeName());
+                    typeDesc.setSimpleName(StringUtils.substringAfterLast(rawType.getTypeName(), "."));
+                }
+                return typeDesc;
+            }).toArray(TypeDesc[]::new);
+        }
+        return null;
+    }
+
+    public static Type[] getActualTypeArguments(Type type) {
         if (type instanceof ParameterizedType) {
             Type[] actualTypeArguments = ((ParameterizedType) (type)).getActualTypeArguments();
             if (actualTypeArguments != null) {
-                return Arrays.stream(actualTypeArguments).map(Type::getTypeName).toArray(String[]::new);
+                return Arrays.stream(actualTypeArguments).toArray(Type[]::new);
             }
         }
         return null;

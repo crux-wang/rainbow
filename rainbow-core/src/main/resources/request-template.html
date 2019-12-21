@@ -1,22 +1,23 @@
 <div class="item">
-    <h5 aria-controls="ren-crux-rainbow-test-demo-controller-ArticleController-1" aria-expanded="false"
+    <h5 aria-controls="request-${type-id}" aria-expanded="false"
         class="card-title"
-        data-toggle="collapse" href="#request-${type}"
+        data-toggle="collapse" href="#request-${type-id}"
         role="button" title="点击查看详情">
         ${method-path-list-template}
-        &nbsp;&nbsp;&nbsp;&nbsp;<small class="comment-text">//&nbsp;${commentText.firstLine}</small></h5>
+    </h5>
     <p class="comment-text">${commentText.content}</p>
-    <div class="collapse multi-collapse" id="request-${type}">
+    <div class="collapse multi-collapse" id="request-${type-id}">
         <div>
-            ${param-list-template}
+            ${request-param-list-template}
         </div>
         <div>
             <h6>RESPONSE</h6>
             <hr>
             <p>
-                <a href="#enrty-${type}" title="${returnType.type}">${returnType.type.name}</a>
-                <small class="comment-text">//&nbsp;${returnCommentText.inline}</small>
+                <a href="#enrty-${returnType.type-id}" title="${returnType.type}">${returnType.simpleName}</a>
+                <small class="comment-text">//&nbsp;${returnCommentText}</small>
             </p>
         </div>
     </div>
 </div>
+<hr>

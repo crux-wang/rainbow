@@ -19,10 +19,11 @@ public class ClassDesc {
      * 类型
      */
     private String type;
+
     /**
      * 实际参数类型（对应泛型类型）
      */
-    private String[] actualParamTypes;
+//    private String[] actualParamTypes;
     /**
      * 注释
      */

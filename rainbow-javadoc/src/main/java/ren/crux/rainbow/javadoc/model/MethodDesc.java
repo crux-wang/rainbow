@@ -28,8 +28,12 @@ public class MethodDesc {
      */
     private List<ParameterDesc> parameters;
     /**
-     * 返回值类型描述
+     * 返回值类型
      */
-    private ClassDesc returnType;
+    private String returnType;
+    /**
+     * 返回值描述
+     */
+    private String returnCommentText;
 
 }

@@ -32,7 +32,10 @@ public class CommentText {
     private List<TagRef> inlineTags;
 
     public String content() {
-        return StringUtils.removeStart(StringUtils.substringAfter(text, "\n"), "<p>");
+        String tmp = StringUtils.trim(StringUtils.substringAfter(text, "\n"));
+        tmp = StringUtils.removeStart(tmp, "<p>");
+        tmp = StringUtils.removeStart(tmp, "\n");
+        return StringUtils.trim(tmp);
     }
 
     public String firstLine() {
@@ -57,5 +60,10 @@ public class CommentText {
             }
         }
         return Optional.empty();
+    }
+
+    public CommentText clearTags() {
+        tags = null;
+        return this;
     }
 }

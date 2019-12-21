@@ -3,7 +3,6 @@ package ren.crux.rainbow.javadoc.reader.impl;
 import com.sun.javadoc.MethodDoc;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.javadoc.model.ClassDesc;
 import ren.crux.rainbow.javadoc.model.CommentText;
 import ren.crux.rainbow.javadoc.model.MethodDesc;
 import ren.crux.rainbow.javadoc.model.ParameterDesc;
@@ -35,12 +34,9 @@ public class MethodDescParser implements MethodDocParser<MethodDesc> {
                         parameterDesc.setCommentText(new CommentText(StringUtils.trimToEmpty(StringUtils.removeStart(tagRef.getText(), parameterDesc.getName()))));
                     });
                 }).collect(Collectors.toList()));
-                ClassDesc returnType = new ClassDesc();
-                returnType.setName(source.returnType().simpleTypeName());
-                returnType.setType(source.returnType().qualifiedTypeName());
-                methodDesc.setReturnType(returnType);
+                methodDesc.setReturnType(source.returnType().qualifiedTypeName());
                 commentText.getTagRef("@return").ifPresent(tagRef -> {
-                    methodDesc.getReturnType().setCommentText(new CommentText(tagRef.getText()));
+                    methodDesc.setReturnCommentText(tagRef.getText());
                 });
                 return methodDesc;
             });

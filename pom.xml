@@ -30,6 +30,11 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
                 <groupId>ren.crux</groupId>
                 <artifactId>rainbow-javadoc</artifactId>
                 <version>${project.version}</version>

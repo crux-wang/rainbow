@@ -16,7 +16,6 @@ import ren.crux.rainbow.core.utils.EntryUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,13 +32,12 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         PatternsRequestCondition p = info.getPatternsCondition();
         Method method = handlerMethod.getMethod();
         String className = method.getDeclaringClass().getName();
-        Type returnType = method.getGenericReturnType();
         RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
         RequestMethod[] requestMethods = methodsCondition.getMethods().stream().map(m -> RequestMethod.valueOf(m.toString())).toArray(RequestMethod[]::new);
         Request request = new Request();
         request.setName(method.getName());
         request.setType(className + "." + method.getName());
-        request.setReturnType(EntryUtils.build(returnType));
+        request.setReturnType(EntryUtils.build(method));
         request.setMethod(requestMethods);
         request.setPath(p.getPatterns().toArray(new String[0]));
         Parameter[] parameters = method.getParameters();

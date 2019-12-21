@@ -186,7 +186,7 @@ public abstract class AbstractDocumentReader implements DocumentReader {
         if (StringUtils.equals(typeName, parameterDesc.getType())) {
             // 添加参数类型
             context.addEntryClassName(typeName);
-            context.addEntryClassName(type.getActualParamTypes());
+            context.addEntryClassName(type);
             if (StringUtils.startsWith(requestParam.getName(), "arg")) {
                 requestParam.setName(parameterDesc.getName());
             }
@@ -201,10 +201,8 @@ public abstract class AbstractDocumentReader implements DocumentReader {
             log.warn("no method desc found! {}", request.getType());
             return;
         }
-        request.setCommentText(methodDesc.getCommentText());
-        ClassDesc returnType = methodDesc.getReturnType();
-        request.setReturnType(new TypeDesc(returnType.getType(), returnType.getActualParamTypes()));
-        request.setReturnCommentText(returnType.getCommentText());
+        request.setCommentText(methodDesc.getCommentText().clearTags());
+        request.setReturnCommentText(methodDesc.getReturnCommentText());
         // 添加返回值类型
         context.addEntryClassName(request.getReturnType());
         List<RequestParam> requestParams = request.getParams();

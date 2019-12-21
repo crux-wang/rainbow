@@ -35,12 +35,12 @@ public class Request {
      */
     private List<RequestParam> params;
     /**
-     * 返回值类型 （全限定名）
+     * 返回值类型
      */
     private TypeDesc returnType;
     /**
      * 返回值注释
      */
-    private CommentText returnCommentText;
+    private String returnCommentText;
 
 }

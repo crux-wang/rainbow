@@ -4,7 +4,10 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.TypeDesc;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class Context {
@@ -30,13 +33,11 @@ public class Context {
     public void addEntryClassName(TypeDesc typeDesc) {
         if (typeDesc != null) {
             addEntryClassName(typeDesc.getType());
-            addEntryClassName(typeDesc.getActualParamTypes());
-        }
-    }
-
-    public void addEntryClassName(String[] classNames) {
-        if (classNames != null) {
-            entryClassNames.addAll(Arrays.asList(classNames));
+            if (typeDesc.getActualParamTypes() != null) {
+                for (TypeDesc actualParamType : typeDesc.getActualParamTypes()) {
+                    addEntryClassName(actualParamType);
+                }
+            }
         }
     }
 }

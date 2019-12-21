@@ -1,8 +1,6 @@
 package ren.crux.rainbow.test;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,11 @@ import ren.crux.rainbow.core.DefaultClassDescProvider;
 import ren.crux.rainbow.core.DefaultDocumentReader;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.model.Document;
+import ren.crux.rainbow.core.report.HtmlReporter;
+import ren.crux.rainbow.core.report.Reporter;
+
+import java.io.File;
+import java.io.IOException;
 
 @SpringBootTest(classes = TestApplication.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,13 +23,9 @@ public class ScanHelperTest {
 
     @Autowired
     private RequestGroupProvider requestGroupProvider;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     public void name() throws Exception {
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 //        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
         final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
@@ -44,7 +43,17 @@ public class ScanHelperTest {
                 .packages(packageNames)
                 .end()
                 .read().orElse(null);
-        System.out.println(objectMapper.writeValueAsString(document));
+
+        Reporter<String> reporter = new HtmlReporter();
+        reporter.report(document).ifPresent(html -> {
+            try {
+                File file = new File("test.html");
+                FileUtils.writeStringToFile(file, html, "utf8");
+//                Desktop.getDesktop().browse(file.toURI());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
 
     }
