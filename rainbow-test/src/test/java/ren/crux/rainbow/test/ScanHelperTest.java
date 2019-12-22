@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ren.crux.rainbow.core.ClassDescProvider;
-import ren.crux.rainbow.core.DefaultClassDescProvider;
+import ren.crux.rainbow.core.AbstractClassDocProvider;
+import ren.crux.rainbow.core.ClassDocProvider;
 import ren.crux.rainbow.core.DefaultDocumentReader;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.model.Document;
@@ -30,10 +30,10 @@ public class ScanHelperTest {
 //        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
         final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
-        ClassDescProvider classDescProvider = new DefaultClassDescProvider();
+        ClassDocProvider classDocProvider = new AbstractClassDocProvider();
 
         Document document = new DefaultDocumentReader()
-                .with(classDescProvider)
+                .with(classDocProvider)
                 .with(requestGroupProvider)
                 .useDefaultModule()
                 .impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl")

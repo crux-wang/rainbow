@@ -1,8 +1,4 @@
-package ren.crux.rainbow.javadoc.reader;
-
-import ren.crux.rainbow.javadoc.reader.parser.Context;
-import ren.crux.rainbow.javadoc.reader.parser.filter.DefaultClassDocFilter;
-import ren.crux.rainbow.javadoc.reader.parser.filter.DefaultMethodDocFilter;
+package ren.crux.rainbow.javadoc.reader.parser.filter;
 
 /**
  * 上下文配置器

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class AbstractDocumentReader implements DocumentReader {
 
-    protected ClassDescProvider classDescProvider;
+    protected ClassDocProvider classDocProvider;
     protected RequestGroupProvider requestGroupProvider;
     protected Map<String, Object> options = new HashMap<>();
     protected Map<String, String> implMap = new HashMap<>();
@@ -50,9 +50,9 @@ public abstract class AbstractDocumentReader implements DocumentReader {
     }
 
     @Override
-    public DocumentReader with(ClassDescProvider classDescProvider) {
-        this.classDescProvider = classDescProvider;
-        this.classDescProvider.owner(this);
+    public DocumentReader with(ClassDocProvider classDocProvider) {
+        this.classDocProvider = classDocProvider;
+        this.classDocProvider.owner(this);
         return this;
     }
 
@@ -99,15 +99,15 @@ public abstract class AbstractDocumentReader implements DocumentReader {
         if (requestGroupProvider == null) {
             return Optional.empty();
         }
-        if (classDescProvider == null) {
-            classDescProvider = ClassDescProvider.EMPTY;
+        if (classDocProvider == null) {
+            classDocProvider = ClassDocProvider.EMPTY;
         }
         // 初始化
-        classDescProvider.setUp(context);
+        classDocProvider.setUp(context);
         List<RequestGroup> requestGroups = requestGroupProvider.get(context)
                 .stream()
                 .filter(rg -> modules.stream().allMatch(m -> m.doFilterAndEnhance(context, rg)))
-                .peek(rg -> classDescProvider.get(context, rg.getType()).ifPresent(cd -> merge(context, rg, cd)))
+                .peek(rg -> classDocProvider.get(context, rg.getType()).ifPresent(cd -> merge(context, rg, cd)))
                 .collect(Collectors.toList());
         if (requestGroups.isEmpty()) {
             return Optional.empty();
@@ -129,7 +129,7 @@ public abstract class AbstractDocumentReader implements DocumentReader {
                 .filter(Objects::nonNull)
                 .filter(cls -> modules.stream().allMatch(m -> m.doFilter(context, cls)))
                 .map(cls -> process(context, cls))
-                .peek(e -> classDescProvider.get(context, e.getType()).ifPresent(cd -> merge(e, cd)))
+                .peek(e -> classDocProvider.get(context, e.getType()).ifPresent(cd -> merge(e, cd)))
                 .peek(e -> modules.forEach(m -> m.enhance(context, e)))
                 .collect(Collectors.toMap(Entry::getType, e -> e));
         document.setEntryMap(entryMap);
@@ -230,8 +230,8 @@ public abstract class AbstractDocumentReader implements DocumentReader {
     }
 
     @Override
-    public ClassDescProvider cdp() {
-        return classDescProvider;
+    public ClassDocProvider cdp() {
+        return classDocProvider;
     }
 
     @Override
@@ -241,8 +241,8 @@ public abstract class AbstractDocumentReader implements DocumentReader {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends ClassDescProvider> T cdp(Class<T> tClass) {
-        return (T) classDescProvider;
+    public <T extends ClassDocProvider> T cdp(Class<T> tClass) {
+        return (T) classDocProvider;
     }
 
     @SuppressWarnings("unchecked")

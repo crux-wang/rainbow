@@ -7,7 +7,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.report.Reporter;
-import ren.crux.rainbow.javadoc.model.CommentText;
 
 import java.io.File;
 import java.util.*;

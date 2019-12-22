@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ren.crux.rainbow.core.ClassDescProvider;
+import ren.crux.rainbow.core.AbstractClassDocProvider;
+import ren.crux.rainbow.core.ClassDocProvider;
 import ren.crux.rainbow.core.Context;
-import ren.crux.rainbow.core.DefaultClassDescProvider;
 import ren.crux.rainbow.javadoc.model.ClassDesc;
 
 import java.util.Map;
@@ -34,11 +34,11 @@ public class JavaDocMain {
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 //        System.out.println(objectMapper.writeValueAsString(classDescList));
 //        System.out.println("classDescList.size() = " + classDescList.size());
-        ClassDescProvider classDescProvider = new DefaultClassDescProvider()
+        ClassDocProvider classDocProvider = new AbstractClassDocProvider()
                 .useDefaultFilter().source(path).packages(packageNames);
         Context context = new Context();
-        classDescProvider.setUp(context);
-        Map<String, ClassDesc> map = classDescProvider.all();
+        classDocProvider.setUp(context);
+        Map<String, ClassDesc> map = classDocProvider.all();
         System.out.println(objectMapper.writeValueAsString(map));
     }
 }

@@ -2,7 +2,6 @@ package ren.crux.rainbow.core.model;
 
 import lombok.Data;
 import lombok.NonNull;
-import ren.crux.rainbow.javadoc.model.CommentText;
 
 import java.util.LinkedList;
 import java.util.List;

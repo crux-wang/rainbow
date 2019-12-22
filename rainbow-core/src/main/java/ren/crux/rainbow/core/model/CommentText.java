@@ -1,4 +1,4 @@
-package ren.crux.rainbow.javadoc.model;
+package ren.crux.rainbow.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
