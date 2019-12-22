@@ -11,8 +11,9 @@ import ren.crux.rainbow.core.DefaultClassDescProvider;
 import ren.crux.rainbow.core.DefaultDocumentReader;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.model.Document;
-import ren.crux.rainbow.core.report.HtmlReporter;
+import ren.crux.rainbow.core.report.JsonReporter;
 import ren.crux.rainbow.core.report.Reporter;
+import ren.crux.rainbow.core.report.html.HtmlReporter;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class ScanHelperTest {
                 .read().orElse(null);
 
         Reporter<String> reporter = new HtmlReporter();
+
         reporter.report(document).ifPresent(html -> {
             try {
                 File file = new File("test.html");
@@ -55,6 +57,7 @@ public class ScanHelperTest {
             }
         });
 
-
+        reporter = new JsonReporter();
+        reporter.report(document).ifPresent(System.out::printf);
     }
 }

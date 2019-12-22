@@ -1,79 +1,15 @@
 <div class="card">
     <div class="card-body">
-        <div class="item" id="${type}">
-            <h5 aria-controls="entry-${type}-detail" aria-expanded="false"
+        <div class="item" id="entry-${type-id}">
+            <h5 aria-controls="entry-${type-id}-detail" aria-expanded="false"
                 class="card-title"
-                data-toggle="collapse" href="#entry-${type}"
+                data-toggle="collapse" href="#entry-${type-id}-detail"
                 role="button" title="点击查看详情">
                 <code>${name}</code></h5>
             <p class="comment-text">${commentText.firstLine}</p>
             <hr>
-            <div class="collapse multi-collapse" id="ren-crux-rainbow-test-demo-model-Article-detail">
-                ${field-list-template}
-                <div>
-                    <p>
-                        <code>*</code>&nbsp;id&nbsp;:&nbsp;
-                        <a href="#" title="java.lang.String">string</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;文章 ID</small>
-                    </p>
-                    <p>
-                        <code>*</code>&nbsp;title&nbsp;:&nbsp;
-                        <a href="#" title="java.lang.String">string</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;标题</small>
-                    </p>
-                    <p>
-                        <code>*</code>&nbsp;content&nbsp;:&nbsp;
-                        <a href="#" title="java.lang.String">string</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;内容</small>
-                    </p>
-                    <p>
-                        <code>*</code>&nbsp;author&nbsp;:&nbsp;
-                        <a href="#ren-crux-rainbow-test-demo-model-Author"
-                           title="ren.crux.rainbow.test.demo.model.Author">Author</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;作者</small>
-                    </p>
-                    <p>
-                        createTime&nbsp;:&nbsp;
-                        <a href="#" title="java.util.Date">Date</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;创建时间</small>
-                    </p>
-                    <p>
-                        <code>*</code>&nbsp;status&nbsp;:&nbsp;
-                        <a href="#" title="ren.crux.rainbow.test.demo.model.ArticleStatus">@ArticleStatus</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;状态</small>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="item" id="ren-crux-rainbow-test-demo-model-Author">
-            <h5 aria-controls="ren-crux-rainbow-test-demo-model-Author-detail" aria-expanded="false"
-                class="card-title"
-                data-toggle="collapse" href="#ren-crux-rainbow-test-demo-model-Author-detail"
-                role="button" title="点击查看详情">
-                <code>Author</code></h5>
-            <p class="comment-text">作者</p>
-            <hr>
-            <div class="collapse multi-collapse" id="ren-crux-rainbow-test-demo-model-Author-detail">
-                <div>
-                    <p>
-                        <code>*</code>&nbsp;id&nbsp;:&nbsp;
-                        <a href="#" title="java.lang.String">string</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;作者 ID</small>
-                    </p>
-                    <p>
-                        <code>*</code>&nbsp;nickName&nbsp;:&nbsp;
-                        <a href="#" title="java.lang.String">string</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <small class="comment-text">//&nbsp;昵称</small>
-                    </p>
-                </div>
+            <div class="collapse multi-collapse" id="entry-${type-id}-detail">
+                ${entry-field-list-template}
             </div>
         </div>
     </div>

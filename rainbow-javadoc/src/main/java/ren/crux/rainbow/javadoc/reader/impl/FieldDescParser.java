@@ -19,13 +19,11 @@ public class FieldDescParser implements FieldDocParser<FieldDesc> {
     @Override
     public Optional<FieldDesc> parse(@NonNull Context context, @NonNull FieldDoc source) {
         if (context.doFilter(source)) {
-            return descriptionDocParser.parse(context, source).map(commentText -> {
-                FieldDesc fieldDesc = new FieldDesc();
-                fieldDesc.setName(source.name());
-                fieldDesc.setType(source.type().qualifiedTypeName());
-                fieldDesc.setCommentText(commentText);
-                return fieldDesc;
-            });
+            FieldDesc fieldDesc = new FieldDesc();
+            fieldDesc.setName(source.name());
+            fieldDesc.setType(source.type().qualifiedTypeName());
+            descriptionDocParser.parse(context, source).ifPresent(fieldDesc::setCommentText);
+            return Optional.of(fieldDesc);
         }
         return Optional.empty();
     }

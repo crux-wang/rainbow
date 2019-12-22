@@ -9,12 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rainbow-javadoc</artifactId>
+    <artifactId>rainbow-common</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>ren.crux</groupId>
-            <artifactId>rainbow-common</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -22,5 +26,4 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
 </project>

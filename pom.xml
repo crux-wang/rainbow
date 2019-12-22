@@ -13,6 +13,7 @@
         <module>rainbow-test</module>
         <module>rainbow-spring-boot-starter</module>
         <module>rainbow-javadoc</module>
+        <module>rainbow-common</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,6 +34,11 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>ren.crux</groupId>
+                <artifactId>rainbow-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ren.crux</groupId>

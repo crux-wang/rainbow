@@ -9,6 +9,7 @@ import ren.crux.rainbow.core.module.DefaultModule;
 import ren.crux.rainbow.core.module.Module;
 import ren.crux.rainbow.core.module.filter.DefaultEntryClassNameFilter;
 import ren.crux.rainbow.core.module.filter.DefaultEntryFieldFilter;
+import ren.crux.rainbow.core.module.filter.DefaultRequestGroupFilter;
 import ren.crux.rainbow.core.utils.EntryUtils;
 import ren.crux.rainbow.javadoc.model.ClassDesc;
 import ren.crux.rainbow.javadoc.model.FieldDesc;
@@ -30,6 +31,7 @@ public abstract class AbstractDocumentReader implements DocumentReader {
 
     public static void merge(@NonNull Entry entry, ClassDesc classDesc) {
         if (classDesc == null) {
+            log.warn("desc not found : {}", entry.getName());
             return;
         }
         entry.setCommentText(classDesc.getCommentText());
@@ -44,12 +46,7 @@ public abstract class AbstractDocumentReader implements DocumentReader {
             log.warn("desc not found : {}", fieldDetail.getName());
             return;
         }
-        String typeName = StringUtils.substringBefore(fieldDetail.getType().getType(), "<");
-        if (StringUtils.equals(fieldDesc.getType(), typeName)) {
-            fieldDetail.setCommentText(fieldDesc.getCommentText());
-        } else {
-            log.warn("no matching type name : {}", typeName);
-        }
+        fieldDetail.setCommentText(fieldDesc.getCommentText());
     }
 
     @Override
@@ -258,7 +255,8 @@ public abstract class AbstractDocumentReader implements DocumentReader {
     public DocumentReader useDefaultModule() {
         Module module = new DefaultModule("default")
                 .filter(new DefaultEntryClassNameFilter().useDefault())
-                .filter(new DefaultEntryFieldFilter());
+                .filter(new DefaultEntryFieldFilter())
+                .filter(new DefaultRequestGroupFilter());
         modules(module);
         return this;
     }

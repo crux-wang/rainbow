@@ -1,4 +1,4 @@
-package ren.crux.rainbow.core.report;
+package ren.crux.rainbow.core.report.html;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -6,17 +6,17 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.*;
+import ren.crux.rainbow.core.report.Reporter;
 import ren.crux.rainbow.javadoc.model.CommentText;
 
 import java.io.File;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
-public class HtmlReporter implements Reporter<String> {
+public class TemplateHtmlReporter implements Reporter<String> {
 
     public static final String DOCUMENT_TEMPLATE = "document-template.html";
     public static final String REQUEST_GROUP_TEMPLATE = "request-group-template.html";
@@ -25,11 +25,20 @@ public class HtmlReporter implements Reporter<String> {
     public static final String METHOD_TEMPLATE = "method-template.html";
     public static final String PATH_TEMPLATE = "path-template.html";
     public static final String REQUEST_PARAM_TEMPLATE = "request-param-template.html";
+    public static final String REQUEST_PARAM_GROUP_TEMPLATE = "request-param-group-template.html";
     public static final String ENTRY_TEMPLATE = "entry-template.html";
     public static final String ENTRY_FIELD_TEMPLATE = "entry-field-template.html";
 
 
-    private Cache<String, String> cache = CacheBuilder.newBuilder().build();
+    protected static Cache<String, String> cache = CacheBuilder.newBuilder().build();
+
+    protected static String getTemplate(String name) {
+        try {
+            return cache.get(name, () -> FileUtils.readFileToString(new File(Objects.requireNonNull(TemplateHtmlReporter.class.getClassLoader().getResource(name)).getFile()), "utf8"));
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public Optional<String> report(Document document) {
@@ -37,20 +46,19 @@ public class HtmlReporter implements Reporter<String> {
             return Optional.empty();
         }
         String template = getTemplate(DOCUMENT_TEMPLATE);
-
         String html = StringUtils.replaceEach(template,
                 new String[]{
                         "${request-group-list-template}",
                         "${entry-list-template}",
                 },
                 new String[]{
-                        report(document.getRequestGroups()),
-                        ""
+                        reportRequestGroups(document.getRequestGroups()),
+                        reportEntries(new LinkedList<>(document.getEntryMap().values()))
                 });
         return Optional.of(html);
     }
 
-    private String report(List<RequestGroup> requestGroups) {
+    private String reportRequestGroups(List<RequestGroup> requestGroups) {
         StringBuilder sb = new StringBuilder();
         for (RequestGroup requestGroup : requestGroups) {
             sb.append(report(requestGroup));
@@ -97,6 +105,7 @@ public class HtmlReporter implements Reporter<String> {
                         "${type.simpleName}",
                         "${type.type}",
                         "${type.type-id}",
+                        "${type.simpleName-id}",
                         "${returnType.name}",
                         "${returnType.simpleName}",
                         "${returnType.type}",
@@ -118,7 +127,6 @@ public class HtmlReporter implements Reporter<String> {
         return defaultString(StringUtils.replace(type, ".", "-"));
     }
 
-
     private String reportRequests(List<Request> requests) {
         StringBuilder result = new StringBuilder();
         for (Request request : requests) {
@@ -137,7 +145,7 @@ public class HtmlReporter implements Reporter<String> {
                         "${method}",
                         "${returnCommentText}",
                         "${method-path-list-template}",
-                        "${request-param-list-template}"
+                        "${request-param-group-list-template}"
                 },
                 new String[]{
                         request.getName(),
@@ -147,10 +155,28 @@ public class HtmlReporter implements Reporter<String> {
                         ArrayUtils.toString(request.getMethod()),
                         request.getReturnCommentText(),
                         report(request.getMethod(), request.getPath()),
-                        reportRequestParams(request.getParams())
+                        reportRequestParamGroups(request.getParams())
                 });
         template = replace(template, commentText);
         return replace(template, returnType);
+    }
+
+    private String reportRequestParamGroups(List<RequestParam> requestParams) {
+        String template = getTemplate(REQUEST_PARAM_GROUP_TEMPLATE);
+        Map<RequestParamType, List<RequestParam>> map = requestParams.stream().collect(Collectors.groupingBy(RequestParam::getParamType));
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<RequestParamType, List<RequestParam>> entry : map.entrySet()) {
+            sb.append(StringUtils.replaceEach(template,
+                    new String[]{
+                            "${paramType}",
+                            "${request-param-list-template}"
+                    },
+                    new String[]{
+                            entry.getKey().name(),
+                            reportRequestParams(entry.getValue())
+                    }));
+        }
+        return sb.toString();
     }
 
     private String reportRequestParams(List<RequestParam> requestParams) {
@@ -216,23 +242,52 @@ public class HtmlReporter implements Reporter<String> {
         return sb.toString();
     }
 
-//    private String reportEntries(List<Entry> entries) {
-//
-//    }
-//
-//    private String report(Entry entry) {
-//
-//    }
-//
-//    private String report(EntryField entryField) {
-//
-//    }
-
-    private String getTemplate(String name) {
-        try {
-            return cache.get(name, () -> FileUtils.readFileToString(new File(Objects.requireNonNull(getClass().getClassLoader().getResource(name)).getFile()), "utf8"));
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+    private String reportEntries(List<Entry> entries) {
+        StringBuilder sb = new StringBuilder();
+        for (Entry entry : entries) {
+            sb.append(report(entry));
         }
+        return sb.toString();
+    }
+
+    private String report(Entry entry) {
+        String template = getTemplate(ENTRY_TEMPLATE);
+        CommentText commentText = entry.getCommentText();
+        template = StringUtils.replaceEach(template,
+                new String[]{
+                        "${name}",
+                        "${type}",
+                        "${type-id}",
+                        "${entry-field-list-template}",
+
+                },
+                new String[]{
+                        entry.getName(),
+                        entry.getType(),
+                        buildId(entry.getType()),
+                        reportEntryFields(entry.getFields())
+                });
+        return replace(template, commentText);
+    }
+
+    private String reportEntryFields(List<EntryField> entryFields) {
+        StringBuilder sb = new StringBuilder();
+        for (EntryField entryField : entryFields) {
+            sb.append(report(entryField));
+        }
+        return sb.toString();
+    }
+
+    private String report(EntryField entryField) {
+        String template = getTemplate(ENTRY_FIELD_TEMPLATE);
+        template = StringUtils.replaceEach(template,
+                new String[]{
+                        "${name}",
+                },
+                new String[]{
+                        entryField.getName(),
+                });
+        template = replace(template, entryField.getCommentText());
+        return replace(template, entryField.getType());
     }
 }

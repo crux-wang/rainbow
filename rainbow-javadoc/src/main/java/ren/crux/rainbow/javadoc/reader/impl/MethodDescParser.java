@@ -24,22 +24,22 @@ public class MethodDescParser implements MethodDocParser<MethodDesc> {
     @Override
     public Optional<MethodDesc> parse(@NonNull Context context, @NonNull MethodDoc source) {
         if (context.doFilter(source)) {
-            return descriptionDocParser.parse(context, source).map(commentText -> {
-                MethodDesc methodDesc = new MethodDesc();
-                methodDesc.setName(source.name());
-                methodDesc.setType(source.qualifiedName());
-                methodDesc.setCommentText(commentText);
-                methodDesc.setParameters(parameterDescParser.parse(context, source.parameters()).stream().peek(parameterDesc -> {
-                    commentText.getTagRef("@param").ifPresent(tagRef -> {
-                        parameterDesc.setCommentText(new CommentText(StringUtils.trimToEmpty(StringUtils.removeStart(tagRef.getText(), parameterDesc.getName()))));
-                    });
-                }).collect(Collectors.toList()));
-                methodDesc.setReturnType(source.returnType().qualifiedTypeName());
-                commentText.getTagRef("@return").ifPresent(tagRef -> {
-                    methodDesc.setReturnCommentText(tagRef.getText());
+            MethodDesc methodDesc = new MethodDesc();
+            methodDesc.setName(source.name());
+            methodDesc.setType(source.qualifiedName());
+            CommentText commentText = descriptionDocParser.parse(context, source).orElseGet(CommentText::new);
+            methodDesc.setCommentText(commentText);
+            methodDesc.setParameters(parameterDescParser.parse(context, source.parameters()).stream().peek(parameterDesc -> {
+                commentText.getTagRef("@param").ifPresent(tagRef -> {
+                    parameterDesc.setCommentText(new CommentText(StringUtils.trimToEmpty(StringUtils.removeStart(tagRef.getText(), parameterDesc.getName()))));
                 });
-                return methodDesc;
+            }).collect(Collectors.toList()));
+            methodDesc.setReturnType(source.returnType().qualifiedTypeName());
+            commentText.getTagRef("@return").ifPresent(tagRef -> {
+                methodDesc.setReturnCommentText(tagRef.getText());
             });
+            return Optional.of(methodDesc);
+
         }
         return Optional.empty();
     }

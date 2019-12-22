@@ -69,6 +69,8 @@ public class DefaultClassDescProvider implements ClassDescProvider {
                 .orElse(Collections.emptyList())
                 .stream()
                 .collect(Collectors.toMap(ClassDesc::getType, c -> c));
+        ClassDesc classDesc = classDescMap.get("ren.crux.rainbow.test.demo.model.User");
+        System.out.println("classDesc = " + classDesc);
     }
 
     @Override

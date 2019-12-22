@@ -9,8 +9,7 @@ public class DefaultFieldDocFilter implements FieldDocFilter {
         if (StringUtils.containsAny(doc.qualifiedName(), "java.lang.Enum.name", "java.lang.Enum.ordinal")) {
             return false;
         }
-        String x = doc.name();
-        if (StringUtils.containsAny(doc.name(), "serialVersionUID")) {
+        if (StringUtils.contains(doc.name(), "serialVersionUID")) {
             return false;
         }
         return true;

@@ -1,4 +1,4 @@
-<div class="item">
+<div>
     <h5 aria-controls="request-${type-id}" aria-expanded="false"
         class="card-title"
         data-toggle="collapse" href="#request-${type-id}"
@@ -6,17 +6,18 @@
         ${method-path-list-template}
     </h5>
     <p class="comment-text">${commentText.content}</p>
-    <div class="collapse multi-collapse" id="request-${type-id}">
+    <div class="collapse multi-collapse item" id="request-${type-id}">
         <div>
-            ${request-param-list-template}
+            ${request-param-group-list-template}
         </div>
         <div>
             <h6>RESPONSE</h6>
             <hr>
-            <p>
-                <a href="#enrty-${returnType.type-id}" title="${returnType.type}">${returnType.simpleName}</a>
+            <div class="ml-4">
+                <a class="text-monospace" href="#enrty-${returnType.type-id}" title="${returnType.type}">${returnType.simpleName}</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <small class="comment-text">//&nbsp;${returnCommentText}</small>
-            </p>
+            </div>
         </div>
     </div>
 </div>
