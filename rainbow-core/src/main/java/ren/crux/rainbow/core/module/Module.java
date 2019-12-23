@@ -1,85 +1,82 @@
 package ren.crux.rainbow.core.module;
 
-import ren.crux.rainbow.core.Context;
-import ren.crux.rainbow.core.model.Entry;
-import ren.crux.rainbow.core.model.EntryField;
-import ren.crux.rainbow.core.model.Request;
-import ren.crux.rainbow.core.model.RequestGroup;
-import ren.crux.rainbow.core.module.enhancer.EntryEnhancer;
-import ren.crux.rainbow.core.module.enhancer.EntryFieldEnhancer;
-import ren.crux.rainbow.core.module.enhancer.RequestEnhancer;
-import ren.crux.rainbow.core.module.enhancer.RequestGroupEnhancer;
-import ren.crux.rainbow.core.module.filter.*;
+import com.sun.javadoc.Doc;
+import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.model.*;
 
-import java.util.stream.Collectors;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Collections;
 
 public interface Module {
 
-    Module filter(EntryFilter filter);
-
-    Module filter(RequestGroupFilter filter);
-
-    Module filter(RequestFilter filter);
-
-    Module filter(EntryFieldFilter filter);
-
-    Module filter(EntryClassNameFilter filter);
-
-    Module filter(EntryClassFilter filter);
-
-    Module enhancer(RequestGroupEnhancer enhancer);
-
-    Module enhancer(RequestEnhancer enhancer);
-
-    Module enhancer(EntryEnhancer enhancer);
-
-    Module enhancer(EntryFieldEnhancer enhancer);
-
-    boolean doFilter(Context context, Class<?> entry);
-
-    boolean doFilter(Context context, String entryClassName);
-
-    boolean doFilter(Context context, RequestGroup requestGroup);
-
-    boolean doFilter(Context context, Request request);
-
-    boolean doFilter(Context context, EntryField entryField);
-
-    void enhance(Context context, RequestGroup requestGroup);
-
-    void enhance(Context context, Request request);
-
-    void enhance(Context context, Entry entry);
-
-    void enhance(Context context, EntryField entryField);
-
-    default boolean doFilterAndEnhance(Context context, RequestGroup requestGroup) {
-        if (doFilter(context, requestGroup)) {
-            enhance(context, requestGroup);
-            requestGroup.setRequests(requestGroup.getRequests().stream().filter(r -> doFilterAndEnhance(context, r)).collect(Collectors.toList()));
-            return true;
-        }
-        return false;
+    /**
+     * 类拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Class<?>, Entry> clazz() {
+        return new CombinationInterceptor<>(Collections.emptyList());
     }
 
-    default boolean doFilterAndEnhance(Context context, Request request) {
-        if (doFilter(context, request)) {
-            enhance(context, request);
-            return true;
-        }
-        return false;
+    /**
+     * 属性拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Field, EntryField> field() {
+        return new CombinationInterceptor<>(Collections.emptyList());
     }
 
-    default boolean doFilterAndEnhance(Context context, EntryField entryField) {
-        if (doFilter(context, entryField)) {
-            enhance(context, entryField);
-            return true;
-        }
-        return false;
+    /**
+     * 方法拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Method, Request> method() {
+        return new CombinationInterceptor<>(Collections.emptyList());
     }
 
-    String getName();
+    /**
+     * 参数拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Parameter, RequestParam> parameter() {
+        return new CombinationInterceptor<>(Collections.emptyList());
+    }
 
+    /**
+     * 注解拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<java.lang.annotation.Annotation, Annotation> annotation() {
+        return new CombinationInterceptor<>(Collections.emptyList());
+    }
+
+    /**
+     * 注释拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Doc, CommentText> commentText() {
+        return new CombinationInterceptor<>(Collections.emptyList());
+    }
+
+    /**
+     * 模块名
+     *
+     * @return 模块名
+     */
+    String name();
+
+    /**
+     * 加载序号
+     *
+     * @return 序号
+     */
     int order();
 
 }

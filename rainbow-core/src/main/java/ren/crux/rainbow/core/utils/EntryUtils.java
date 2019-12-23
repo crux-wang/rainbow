@@ -7,6 +7,8 @@ import ren.crux.rainbow.core.model.TypeDesc;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +16,16 @@ import java.util.Map;
  */
 @Slf4j
 public class EntryUtils {
+
+    public static List<Field> getAllFields(Class<?> cls) {
+        List<Field> fields = new LinkedList<>();
+        while (cls != null && !Object.class.equals(cls)) {
+            Field[] declaredFields = cls.getDeclaredFields();
+            fields.addAll(Arrays.asList(declaredFields));
+            cls = cls.getSuperclass();
+        }
+        return fields;
+    }
 
     @SuppressWarnings("unchecked")
     public static Annotation process(java.lang.annotation.Annotation annotation) {

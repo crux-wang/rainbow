@@ -1,6 +1,7 @@
 package ren.crux.rainbow.test.demo.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ren.crux.rainbow.test.demo.model.SubTest;
 import ren.crux.rainbow.test.demo.model.Test;
 
 /**
@@ -35,4 +36,8 @@ public class TestController {
         return null;
     }
 
+    @GetMapping("/subtest")
+    public SubTest subtest() {
+        return null;
+    }
 }

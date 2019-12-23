@@ -5,13 +5,13 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import ren.crux.rainbow.core.Context;
 import ren.crux.rainbow.core.DocumentReader;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.model.Request;
 import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.core.model.RequestMethod;
 import ren.crux.rainbow.core.model.RequestParam;
+import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
 
 import java.lang.reflect.Method;

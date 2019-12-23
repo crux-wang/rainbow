@@ -1,6 +1,7 @@
 package ren.crux.rainbow.core;
 
-import ren.crux.rainbow.common.Module;
+import ren.crux.rainbow.core.module.Context;
+import ren.crux.rainbow.core.module.Module;
 
 /**
  * @author wangzhihui
