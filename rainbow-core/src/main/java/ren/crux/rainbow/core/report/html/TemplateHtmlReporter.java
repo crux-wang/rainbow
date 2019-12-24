@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.report.Reporter;
 
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 public class TemplateHtmlReporter implements Reporter<String> {
+
+    public static final TemplateHtmlReporter INSTANCE = new TemplateHtmlReporter();
 
     public static final String DOCUMENT_TEMPLATE = "document-template.html";
     public static final String REQUEST_GROUP_TEMPLATE = "request-group-template.html";
@@ -47,10 +50,14 @@ public class TemplateHtmlReporter implements Reporter<String> {
         String template = getTemplate(DOCUMENT_TEMPLATE);
         String html = StringUtils.replaceEach(template,
                 new String[]{
+                        "${source}",
+                        "${packages}",
                         "${request-group-list-template}",
                         "${entry-list-template}",
                 },
                 new String[]{
+                        String.valueOf(document.getProperties().get(DefaultClassDocProvider.SOURCE_PATH)),
+                        Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.PACKAGES)),
                         reportRequestGroups(document.getRequestGroups()),
                         reportEntries(new LinkedList<>(document.getEntryMap().values()))
                 });
@@ -104,7 +111,6 @@ public class TemplateHtmlReporter implements Reporter<String> {
                         "${type.simpleName}",
                         "${type.type}",
                         "${type.type-id}",
-                        "${type.simpleName-id}",
                         "${returnType.name}",
                         "${returnType.simpleName}",
                         "${returnType.type}",
@@ -123,7 +129,7 @@ public class TemplateHtmlReporter implements Reporter<String> {
     }
 
     private String buildId(String type) {
-        return defaultString(StringUtils.replace(type, ".", "-"));
+        return defaultString(StringUtils.replaceEach(type, new String[]{".", "(", ")", ",", " "}, new String[]{"-", "_", "_", "-", "_"}));
     }
 
     private String reportRequests(List<Request> requests) {
@@ -250,21 +256,28 @@ public class TemplateHtmlReporter implements Reporter<String> {
     }
 
     private String report(Entry entry) {
+        List<EntryField> fields = entry.getFields();
+        if (entry.isInterfaceType()) {
+            Entry impl = entry.getImpl();
+            if (impl != null) {
+                fields = impl.getFields();
+            }
+        }
         String template = getTemplate(ENTRY_TEMPLATE);
         CommentText commentText = entry.getCommentText();
         template = StringUtils.replaceEach(template,
                 new String[]{
-                        "${name}",
+                        "${simpleName}",
                         "${type}",
                         "${type-id}",
                         "${entry-field-list-template}",
 
                 },
                 new String[]{
-                        entry.getName(),
+                        entry.getSimpleName(),
                         entry.getType(),
                         buildId(entry.getType()),
-                        reportEntryFields(entry.getFields())
+                        reportEntryFields(fields)
                 });
         return replace(template, commentText);
     }

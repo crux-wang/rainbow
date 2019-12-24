@@ -89,6 +89,7 @@ public class DocumentReaderImpl implements DocumentReader {
         Document document = new Document();
         document.setRequestGroups(requestGroups);
         document.setEntryMap(entryMap);
+        document.getProperties().putAll(context.getProperties());
         return Optional.of(document);
     }
 

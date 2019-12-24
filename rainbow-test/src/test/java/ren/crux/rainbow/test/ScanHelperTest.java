@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,10 @@ import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.rainbow.core.DocumentReader;
 import ren.crux.rainbow.core.DocumentReaderBuilder;
 import ren.crux.rainbow.core.RequestGroupProvider;
-import ren.crux.rainbow.core.report.JsonReporter;
+import ren.crux.rainbow.core.report.html.TemplateHtmlReporter;
+
+import java.io.File;
+import java.io.IOException;
 
 @SpringBootTest(classes = TestApplication.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,8 +39,8 @@ public class ScanHelperTest {
 
     @Test
     public void name() throws Exception {
-        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
-//        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
+//        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
+        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
         final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
         DefaultClassDocProvider classDocProvider = new DefaultClassDocProvider();
 //        classDocProvider.source(path);
@@ -68,7 +72,15 @@ public class ScanHelperTest {
                 .build();
 //        Document document = documentReader.read().orElseThrow(Exception::new);
 //        System.out.println(document);
-        documentReader.report(JsonReporter.INSTANCE).ifPresent(System.out::println);
+        documentReader.report(TemplateHtmlReporter.INSTANCE).ifPresent(html -> {
+            try {
+                File file = new File("test.html");
+                FileUtils.writeStringToFile(file, html, "utf8");
+//                Desktop.getDesktop().browse(file.toURI());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
 //
 //        Document document = new DefaultDocumentReader()

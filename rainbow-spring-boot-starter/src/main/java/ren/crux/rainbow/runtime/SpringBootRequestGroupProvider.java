@@ -32,7 +32,6 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
     public static Request process(Context context, RequestMappingInfo info, HandlerMethod handlerMethod) {
         PatternsRequestCondition p = info.getPatternsCondition();
         Method method = handlerMethod.getMethod();
-        String className = method.getDeclaringClass().getName();
         RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
         RequestMethod[] requestMethods = methodsCondition.getMethods().stream().map(m -> RequestMethod.valueOf(m.toString())).toArray(RequestMethod[]::new);
         Request request = new Request();
@@ -48,6 +47,7 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
             return requestParam;
         }).collect(Collectors.toList());
         request.setParams(params);
+        context.addEntryClassName(request.getReturnType());
         return request;
     }
 

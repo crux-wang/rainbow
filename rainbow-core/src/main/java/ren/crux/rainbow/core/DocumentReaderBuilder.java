@@ -1,17 +1,21 @@
 package ren.crux.rainbow.core;
 
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.FieldDoc;
 import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.ParamTag;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.interceptor.Interceptor;
+import ren.crux.rainbow.core.model.Entry;
+import ren.crux.rainbow.core.model.EntryField;
 import ren.crux.rainbow.core.model.EntryMethod;
-import ren.crux.rainbow.core.model.RequestParam;
+import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.module.Module;
 import ren.crux.rainbow.core.module.ModuleBuilder;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -149,10 +153,10 @@ public class DocumentReaderBuilder {
             }
         })
                 .end()
-                .requestParam().interceptor(new Interceptor<Pair<RequestParam, ParamTag>, RequestParam>() {
+                .entryField().interceptor(new Interceptor<Pair<Field, FieldDoc>, EntryField>() {
 
             @Override
-            public boolean before(Context context, Pair<RequestParam, ParamTag> source) {
+            public boolean before(Context context, Pair<Field, FieldDoc> source) {
                 if (StringUtils.equals("serialVersionUID", source.getLeft().getName())) {
                     return false;
                 }
@@ -160,7 +164,27 @@ public class DocumentReaderBuilder {
             }
         })
                 .end()
-                .requestGroup().interceptor(new)
+                .requestGroup().interceptor(new Interceptor<Pair<RequestGroup, ClassDoc>, RequestGroup>() {
+            @Override
+            public boolean before(Context context, Pair<RequestGroup, ClassDoc> source) {
+                if (StringUtils.equals("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController", source.getLeft().getType())) {
+                    return false;
+                }
+                return true;
+            }
+        }).end()
+                .entry().interceptor(new Interceptor<Pair<Class<?>, ClassDoc>, Entry>() {
+            @Override
+            public boolean before(Context context, Pair<Class<?>, ClassDoc> source) {
+                if (StringUtils.startsWithAny(source.getLeft().getTypeName(), "java.util", "java.lang", "javax.servlet", "org.springframework.web.servlet")) {
+                    return false;
+                }
+                if (StringUtils.equalsAny(source.getLeft().getTypeName(), "org.springframework.http.ResponseEntity", "org.springframework.http.HttpEntity")) {
+                    return false;
+                }
+                return true;
+            }
+        })
         ;
         modules(builder.build());
         return this;

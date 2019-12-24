@@ -77,7 +77,7 @@ public class RequestDocParser extends AbstractEnhanceParser<Pair<Request, Method
         for (int i = 0; i < params.size(); i++) {
             RequestParam param = params.get(i);
             ParamTag paramTag = paramTags[i];
-            param.setName(paramTag.name());
+            param.setName(paramTag.parameterName());
             pairs[i] = Pair.of(param, paramTag);
         }
         return pairs;
