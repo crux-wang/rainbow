@@ -21,11 +21,11 @@ public abstract class AbstractEnhanceParser<S, T> implements Parser<S, T> {
      */
     protected final CombinationInterceptor<S, T> combinationInterceptor;
 
-    protected AbstractEnhanceParser() {
+    public AbstractEnhanceParser() {
         this(new CombinationInterceptor<>(Collections.emptyList()));
     }
 
-    protected AbstractEnhanceParser(CombinationInterceptor<S, T> combinationInterceptor) {
+    public AbstractEnhanceParser(CombinationInterceptor<S, T> combinationInterceptor) {
         this.combinationInterceptor = combinationInterceptor;
     }
 

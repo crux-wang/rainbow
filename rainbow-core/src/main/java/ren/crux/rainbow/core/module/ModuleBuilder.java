@@ -1,72 +1,57 @@
+
 package ren.crux.rainbow.core.module;
 
-import com.sun.javadoc.Doc;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import com.sun.javadoc.*;
+import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.model.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 
-/**
- * 模块
- *
- * @author wangzhihui
- */
-public interface ModuleBuilder {
+public class ModuleBuilder {
 
-    /**
-     * 配置类拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor.CombinationInterceptorBuilder<Class<?>, Entry> clazz() {
-        return CombinationInterceptor.builder();
+    private String name;
+    private int order;
+    private InterceptorBuilder<Pair<Class<?>, ClassDoc>, Entry> entryInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Pair<Field, FieldDoc>, EntryField> entryFieldInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Pair<Method, MethodDoc>, EntryMethod> entryMethodInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<java.lang.annotation.Annotation, Annotation> annotationInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Doc, CommentText> commentTextInterceptorBuilder = new InterceptorBuilder<>(this);
+
+    private InterceptorBuilder<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroupInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Pair<Request, MethodDoc>, Request> requestInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Pair<RequestParam, ParamTag>, RequestParam> requestParamInterceptorBuilder = new InterceptorBuilder<>(this);
+
+    public InterceptorBuilder<Pair<Class<?>, ClassDoc>, Entry> entry() {
+        return entryInterceptorBuilder;
     }
 
-    /**
-     * 配置属性拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor.CombinationInterceptorBuilder<Field, EntryField> field() {
-        return CombinationInterceptor.builder();
+    public InterceptorBuilder<Pair<Field, FieldDoc>, EntryField> entryField() {
+        return entryFieldInterceptorBuilder;
     }
 
-    /**
-     * 配置方法拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor.CombinationInterceptorBuilder<Method, Request> method() {
-        return CombinationInterceptor.builder();
+    public InterceptorBuilder<Pair<Method, MethodDoc>, EntryMethod> entryMethod() {
+        return entryMethodInterceptorBuilder;
     }
 
-    /**
-     * 配置参数拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor.CombinationInterceptorBuilder<Parameter, RequestParam> parameter() {
-        return CombinationInterceptor.builder();
+    public InterceptorBuilder<java.lang.annotation.Annotation, Annotation> annotation() {
+        return annotationInterceptorBuilder;
     }
 
-    /**
-     * 配置注解拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor.CombinationInterceptorBuilder<java.lang.annotation.Annotation, Annotation> annotation() {
-        return CombinationInterceptor.builder();
+    public InterceptorBuilder<Doc, CommentText> commentText() {
+        return commentTextInterceptorBuilder;
     }
 
-    /**
-     * 配置注释拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor.CombinationInterceptorBuilder<Doc, CommentText> commentText() {
-        return CombinationInterceptor.builder();
+    public InterceptorBuilder<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroup() {
+        return requestGroupInterceptorBuilder;
+    }
+
+    public InterceptorBuilder<Pair<Request, MethodDoc>, Request> request() {
+        return requestInterceptorBuilder;
+    }
+
+    public InterceptorBuilder<Pair<RequestParam, ParamTag>, RequestParam> requestParam() {
+        return requestParamInterceptorBuilder;
     }
 
     /**
@@ -75,7 +60,11 @@ public interface ModuleBuilder {
      * @param name 模块名
      * @return 自身
      */
-    ModuleBuilder name(String name);
+
+    public ModuleBuilder name(String name) {
+        this.name = name;
+        return this;
+    }
 
     /**
      * 设置加载序号
@@ -83,13 +72,28 @@ public interface ModuleBuilder {
      * @param order 序号
      * @return 自身
      */
-    ModuleBuilder order(int order);
+
+    public ModuleBuilder order(int order) {
+        this.order = order;
+        return this;
+    }
 
     /**
      * 构建
      *
      * @return 模块
      */
-    Module build();
 
+    public Module build() {
+        return new ModuleImpl(name, order,
+                entryInterceptorBuilder.build(),
+                entryFieldInterceptorBuilder.build(),
+                entryMethodInterceptorBuilder.build(),
+                annotationInterceptorBuilder.build(),
+                commentTextInterceptorBuilder.build(),
+                requestGroupInterceptorBuilder.build(),
+                requestInterceptorBuilder.build(),
+                requestParamInterceptorBuilder.build()
+        );
+    }
 }

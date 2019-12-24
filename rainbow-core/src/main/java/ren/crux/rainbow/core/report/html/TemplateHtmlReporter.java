@@ -148,8 +148,8 @@ public class TemplateHtmlReporter implements Reporter<String> {
                 },
                 new String[]{
                         request.getName(),
-                        request.getType(),
-                        buildId(request.getType()),
+                        request.getSignature(),
+                        buildId(request.getSignature()),
                         ArrayUtils.toString(request.getPath()),
                         ArrayUtils.toString(request.getMethod()),
                         request.getReturnCommentText(),

@@ -2,6 +2,7 @@ package ren.crux.rainbow.core.parser;
 
 import com.sun.javadoc.MethodDoc;
 import org.apache.commons.lang3.tuple.Pair;
+import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.CommentText;
 import ren.crux.rainbow.core.model.EntryMethod;
 import ren.crux.rainbow.core.model.TagRef;
@@ -17,6 +18,12 @@ public class EntryMethodParser extends AbstractEnhanceParser<Pair<Method, Method
     private final CommentTextParser commentTextParser;
 
     public EntryMethodParser(AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        this.annotationParser = annotationParser;
+        this.commentTextParser = commentTextParser;
+    }
+
+    public EntryMethodParser(CombinationInterceptor<Pair<Method, MethodDoc>, EntryMethod> combinationInterceptor, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        super(combinationInterceptor);
         this.annotationParser = annotationParser;
         this.commentTextParser = commentTextParser;
     }

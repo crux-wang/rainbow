@@ -2,6 +2,7 @@ package ren.crux.rainbow.core.parser;
 
 import com.sun.javadoc.FieldDoc;
 import org.apache.commons.lang3.tuple.Pair;
+import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.EntryField;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
@@ -15,6 +16,12 @@ public class EntryFieldParser extends AbstractEnhanceParser<Pair<Field, FieldDoc
     private final CommentTextParser commentTextParser;
 
     public EntryFieldParser(AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        this.annotationParser = annotationParser;
+        this.commentTextParser = commentTextParser;
+    }
+
+    public EntryFieldParser(CombinationInterceptor<Pair<Field, FieldDoc>, EntryField> combinationInterceptor, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        super(combinationInterceptor);
         this.annotationParser = annotationParser;
         this.commentTextParser = commentTextParser;
     }

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Context {
 
     private final Map<String, Object> properties = new HashMap<>();
-    private final Map<String, Class<?>> implMap = new HashMap<>();
+    private final Map<String, String> implMap = new HashMap<>();
     private final Set<String> entryClassNames = new HashSet<>();
     private final ClassDocProvider classDocProvider;
 
@@ -81,7 +81,7 @@ public class Context {
             return Collections.emptyMap();
         }
         return Arrays.stream(classDoc.methods(true))
-                .collect(Collectors.toMap(Doc::name, md -> md));
+                .collect(Collectors.toMap(md -> StringUtils.replace(md.toString(), " ", ""), md -> md));
     }
 
     public Map<String, Object> getProperties() {
@@ -103,7 +103,15 @@ public class Context {
     }
 
     public Optional<Class<?>> impl(String source) {
-        return Optional.ofNullable(implMap.get(source));
+        String impl = implMap.get(source);
+        if (impl == null) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.ofNullable(Class.forName(impl));
+        } catch (ClassNotFoundException e) {
+            return Optional.empty();
+        }
     }
 
     public void addEntryClassName(String className) {

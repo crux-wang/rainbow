@@ -12,9 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.rainbow.core.DocumentReader;
-import ren.crux.rainbow.core.DocumentReaderBuilderImpl;
+import ren.crux.rainbow.core.DocumentReaderBuilder;
 import ren.crux.rainbow.core.RequestGroupProvider;
-import ren.crux.rainbow.core.model.Document;
+import ren.crux.rainbow.core.report.JsonReporter;
 
 @SpringBootTest(classes = TestApplication.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,7 +55,7 @@ public class ScanHelperTest {
 //            System.out.println(objectMapper.writeValueAsString(entry));
 //        }
 
-        DocumentReader documentReader = new DocumentReaderBuilderImpl()
+        DocumentReader documentReader = new DocumentReaderBuilder()
                 .with(classDocProvider)
                 .with(requestGroupProvider)
                 .cdp(DefaultClassDocProvider.class)
@@ -66,9 +66,9 @@ public class ScanHelperTest {
                 .impl("org.springframework.data.domain.Pageable", "org.springframework.data.domain.PageRequest")
                 .useDefaultModule()
                 .build();
-        Document document = documentReader.read().orElseThrow(Exception::new);
-        System.out.println(document);
-//        documentReader.report(JsonReporter.INSTANCE).ifPresent(System.out::println);
+//        Document document = documentReader.read().orElseThrow(Exception::new);
+//        System.out.println(document);
+        documentReader.report(JsonReporter.INSTANCE).ifPresent(System.out::println);
 
 //
 //        Document document = new DefaultDocumentReader()

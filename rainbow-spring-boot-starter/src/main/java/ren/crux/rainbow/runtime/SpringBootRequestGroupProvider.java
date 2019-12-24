@@ -1,5 +1,6 @@
 package ren.crux.rainbow.runtime;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -36,7 +37,7 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         RequestMethod[] requestMethods = methodsCondition.getMethods().stream().map(m -> RequestMethod.valueOf(m.toString())).toArray(RequestMethod[]::new);
         Request request = new Request();
         request.setName(method.getName());
-        request.setType(className + "." + method.getName());
+        request.setSignature(StringUtils.substringAfterLast(method.toGenericString(), " "));
         request.setReturnType(EntryUtils.build(method));
         request.setMethod(requestMethods);
         request.setPath(p.getPatterns().toArray(new String[0]));

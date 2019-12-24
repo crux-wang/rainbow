@@ -1,12 +1,12 @@
 package ren.crux.rainbow.core.module;
 
-import com.sun.javadoc.Doc;
+import com.sun.javadoc.*;
+import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Collections;
 
 public interface Module {
@@ -16,7 +16,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Class<?>, Entry> clazz() {
+    default CombinationInterceptor<Pair<Class<?>, ClassDoc>, Entry> entry() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -25,7 +25,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Field, EntryField> field() {
+    default CombinationInterceptor<Pair<Field, FieldDoc>, EntryField> entryField() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -34,16 +34,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Method, Request> method() {
-        return new CombinationInterceptor<>(Collections.emptyList());
-    }
-
-    /**
-     * 参数拦截器
-     *
-     * @return 拦截器构造器
-     */
-    default CombinationInterceptor<Parameter, RequestParam> parameter() {
+    default CombinationInterceptor<Pair<Method, MethodDoc>, EntryMethod> entryMethod() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -62,6 +53,33 @@ public interface Module {
      * @return 拦截器构造器
      */
     default CombinationInterceptor<Doc, CommentText> commentText() {
+        return new CombinationInterceptor<>(Collections.emptyList());
+    }
+
+    /**
+     * 请求拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Pair<Request, MethodDoc>, Request> request() {
+        return new CombinationInterceptor<>(Collections.emptyList());
+    }
+
+    /**
+     * 请求参数拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Pair<RequestParam, ParamTag>, RequestParam> requestParam() {
+        return new CombinationInterceptor<>(Collections.emptyList());
+    }
+
+    /**
+     * 请求组拦截器
+     *
+     * @return 拦截器构造器
+     */
+    default CombinationInterceptor<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroup() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 

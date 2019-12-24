@@ -5,6 +5,7 @@ import com.sun.javadoc.FieldDoc;
 import com.sun.javadoc.MethodDoc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.Entry;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
@@ -27,6 +28,14 @@ public class EntryParser extends AbstractEnhanceParser<Pair<Class<?>, ClassDoc>,
                        EntryMethodParser entryMethodParser,
                        AnnotationParser annotationParser,
                        CommentTextParser commentTextParser) {
+        this.entryFieldParser = entryFieldParser;
+        this.entryMethodParser = entryMethodParser;
+        this.annotationParser = annotationParser;
+        this.commentTextParser = commentTextParser;
+    }
+
+    public EntryParser(CombinationInterceptor<Pair<Class<?>, ClassDoc>, Entry> combinationInterceptor, EntryFieldParser entryFieldParser, EntryMethodParser entryMethodParser, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        super(combinationInterceptor);
         this.entryFieldParser = entryFieldParser;
         this.entryMethodParser = entryMethodParser;
         this.annotationParser = annotationParser;

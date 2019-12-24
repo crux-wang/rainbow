@@ -14,9 +14,9 @@ public class Request {
      */
     private String name;
     /**
-     * 类型 （方法全限定名）
+     * 方法签名
      */
-    private String type;
+    private String signature;
     /**
      * 注释
      */

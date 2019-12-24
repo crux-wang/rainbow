@@ -4,6 +4,7 @@ import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.CommentText;
 import ren.crux.rainbow.core.model.TagRef;
 import ren.crux.rainbow.core.module.Context;
@@ -14,6 +15,13 @@ import java.util.Optional;
 public class CommentTextParser extends AbstractEnhanceParser<Doc, CommentText> {
 
     public static final CommentTextParser INSTANCE = new CommentTextParser();
+
+    public CommentTextParser() {
+    }
+
+    public CommentTextParser(CombinationInterceptor<Doc, CommentText> combinationInterceptor) {
+        super(combinationInterceptor);
+    }
 
     private TagRefParser tagRefParser = new TagRefParser();
 
@@ -26,13 +34,14 @@ public class CommentTextParser extends AbstractEnhanceParser<Doc, CommentText> {
      */
     @Override
     protected Optional<CommentText> parse0(Context context, Doc source) {
-        CommentText commentText = new CommentText();
         if (source != null) {
+            CommentText commentText = new CommentText();
             commentText.setText(source.commentText());
             commentText.setInlineTags(tagRefParser.parse(context, source.inlineTags()));
             commentText.setTags(tagRefParser.parse(context, source.tags()));
+            return Optional.of(commentText);
         }
-        return Optional.of(commentText);
+        return Optional.empty();
     }
 
     private static class TagRefParser implements Parser<Tag, TagRef> {
