@@ -56,9 +56,10 @@ public class RequestDocParser extends AbstractEnhanceParser<Pair<Request, Method
         if (CollectionUtils.isNotEmpty(params)) {
             if (params.size() != methodDoc.paramTags().length) {
                 log.warn("param tag size not match! , ignored method : {}", request.getSignature());
+            } else {
+                List<RequestParam> requestParams = requestParamDocParser.parse(context, buildRequestParamMethodDocPairs(methodDoc, params));
+                request.setParams(requestParams);
             }
-            List<RequestParam> requestParams = requestParamDocParser.parse(context, buildRequestParamMethodDocPairs(methodDoc, params));
-            request.setParams(requestParams);
         }
         Tag[] tags = methodDoc.tags("@return");
         if (tags.length > 0) {

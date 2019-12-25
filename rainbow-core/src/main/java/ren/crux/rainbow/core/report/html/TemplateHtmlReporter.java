@@ -12,6 +12,7 @@ import ren.crux.rainbow.core.report.Reporter;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -30,11 +31,19 @@ public class TemplateHtmlReporter implements Reporter<String> {
     public static final String REQUEST_PARAM_GROUP_TEMPLATE = "request-param-group-template.html";
     public static final String ENTRY_TEMPLATE = "entry-template.html";
     public static final String ENTRY_FIELD_TEMPLATE = "entry-field-template.html";
-
+    private Function<String, String> function;
 
     protected static Cache<String, String> cache = CacheBuilder.newBuilder().build();
 
-    protected static String getTemplate(String name) {
+    public TemplateHtmlReporter getTemplateFun(Function<String, String> function) {
+        this.function = function;
+        return this;
+    }
+
+    protected String getTemplate(String name) {
+        if (function != null) {
+            return function.apply(name);
+        }
         try {
             return cache.get(name, () -> FileUtils.readFileToString(new File(Objects.requireNonNull(TemplateHtmlReporter.class.getClassLoader().getResource(name)).getFile()), "utf8"));
         } catch (ExecutionException e) {
@@ -56,7 +65,7 @@ public class TemplateHtmlReporter implements Reporter<String> {
                         "${entry-list-template}",
                 },
                 new String[]{
-                        String.valueOf(document.getProperties().get(DefaultClassDocProvider.SOURCE_PATH)),
+                        Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.SOURCE_PATH)),
                         Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.PACKAGES)),
                         reportRequestGroups(document.getRequestGroups()),
                         reportEntries(new LinkedList<>(document.getEntryMap().values()))

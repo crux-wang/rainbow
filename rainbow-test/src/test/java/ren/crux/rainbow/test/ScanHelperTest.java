@@ -39,9 +39,11 @@ public class ScanHelperTest {
 
     @Test
     public void name() throws Exception {
-//        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
-        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
-        final String[] packageNames = new String[]{"ren.crux.rainbow.test.demo"};
+        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
+        final String path2 = "/Users/wangzhihui/workspace/project/rainbow/rainbow-core/src/main/java/";
+        final String path3 = "/Users/wangzhihui/workspace/project/rainbow/rainbow-javadoc/src/main/java/";
+//        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
+        final String[] packageNames = new String[]{"ren.crux.rainbow"};
         DefaultClassDocProvider classDocProvider = new DefaultClassDocProvider();
 //        classDocProvider.source(path);
 //        classDocProvider.packages(packageNames);
@@ -63,7 +65,7 @@ public class ScanHelperTest {
                 .with(classDocProvider)
                 .with(requestGroupProvider)
                 .cdp(DefaultClassDocProvider.class)
-                .source(path)
+                .source(path, path2, path3)
                 .packages(packageNames)
                 .end()
                 .impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl")

@@ -19,7 +19,7 @@ public interface JavaDocReader<T> {
      * @param packageNames 包名列表
      * @return T
      */
-    Optional<T> read(String path, String[] packageNames);
+    Optional<T> read(String[] path, String[] packageNames);
 
     public static class Doclet {
 

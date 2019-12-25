@@ -15,14 +15,14 @@ public class DefaultClassDocProvider implements ClassDocProvider {
     public static final String SOURCE_PATH = "SOURCE_PATH";
     public static final String PACKAGES = "PACKAGES";
 
-    private String sourcePath;
+    private String[] sourcePath;
     private String[] packages;
     private CombinationFilter.CombinationFilterBuilder<ClassDoc, Context> builder = CombinationFilter.builder();
     private JavaDocReader<List<ClassDoc>> javaDocReader;
     private Map<String, ClassDoc> classDocMap;
     private DocumentReaderBuilder owner;
 
-    public DefaultClassDocProvider source(String sourcePath) {
+    public DefaultClassDocProvider source(String... sourcePath) {
         this.sourcePath = sourcePath;
         return this;
     }

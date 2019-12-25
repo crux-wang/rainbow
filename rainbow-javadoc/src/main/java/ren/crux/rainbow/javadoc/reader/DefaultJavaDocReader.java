@@ -21,7 +21,7 @@ public class DefaultJavaDocReader extends AbstractJavaDocReader<List<ClassDoc>> 
      * @return T
      */
     @Override
-    protected Optional<List<ClassDoc>> read0(String path, String[] packageNames, RootDoc rootDoc) {
+    protected Optional<List<ClassDoc>> read0(String[] path, String[] packageNames, RootDoc rootDoc) {
         ClassDoc[] classes = rootDoc.classes();
         if (classes != null) {
             return Optional.of(Arrays.stream(classes).collect(Collectors.toList()));
