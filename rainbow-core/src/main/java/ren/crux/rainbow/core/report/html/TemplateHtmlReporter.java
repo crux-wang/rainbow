@@ -138,7 +138,7 @@ public class TemplateHtmlReporter implements Reporter<String> {
     }
 
     private String buildId(String type) {
-        return defaultString(StringUtils.replaceEach(type, new String[]{".", "(", ")", ",", " "}, new String[]{"-", "_", "_", "-", "_"}));
+        return defaultString(StringUtils.replaceEach(type, new String[]{".", "(", ")", ",", " ", "<", ">"}, new String[]{"-", "_", "_", "-", "_", "_", "_"}));
     }
 
     private String reportRequests(List<Request> requests) {

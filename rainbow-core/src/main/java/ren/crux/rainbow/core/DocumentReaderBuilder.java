@@ -3,14 +3,12 @@ package ren.crux.rainbow.core;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.FieldDoc;
 import com.sun.javadoc.MethodDoc;
+import com.sun.javadoc.ParamTag;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.Entry;
-import ren.crux.rainbow.core.model.EntryField;
-import ren.crux.rainbow.core.model.EntryMethod;
-import ren.crux.rainbow.core.model.RequestGroup;
+import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.module.Module;
 import ren.crux.rainbow.core.module.ModuleBuilder;
@@ -157,7 +155,8 @@ public class DocumentReaderBuilder {
 
             @Override
             public boolean before(Context context, Pair<Field, FieldDoc> source) {
-                if (StringUtils.equals("serialVersionUID", source.getLeft().getName())) {
+                String name = source.getLeft().getName();
+                if (StringUtils.equalsAny(name, "serialVersionUID", "$VALUES")) {
                     return false;
                 }
                 return true;
@@ -183,6 +182,16 @@ public class DocumentReaderBuilder {
                     return false;
                 }
                 return true;
+            }
+        }).end()
+                .requestParam().interceptor(new Interceptor<Pair<RequestParam, ParamTag>, RequestParam>() {
+            @Override
+            public boolean before(Context context, Pair<RequestParam, ParamTag> source) {
+                String type = source.getLeft().getType().getType();
+                if (StringUtils.startsWithAny(type, "javax.servlet", "org.springframework.web.servlet")) {
+                    return false;
+                }
+                return false;
             }
         })
         ;
