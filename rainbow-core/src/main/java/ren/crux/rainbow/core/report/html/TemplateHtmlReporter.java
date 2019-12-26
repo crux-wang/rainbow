@@ -91,7 +91,7 @@ public class TemplateHtmlReporter implements Reporter<String> {
                 new String[]{
                         requestGroup.getName(),
                         requestGroup.getType(),
-                        ArrayUtils.toString(requestGroup.getPath()),
+                        StringUtils.joinWith(", ", requestGroup.getPath()),
                         reportRequests(requestGroup.getRequests())
                 });
         return replace(template, commentText);

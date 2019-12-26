@@ -1,7 +1,6 @@
 package ren.crux.rainbow.core.module;
 
-import com.sun.javadoc.*;
-import org.apache.commons.lang3.tuple.Pair;
+import com.sun.javadoc.Doc;
 import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.*;
 
@@ -16,7 +15,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Pair<Class<?>, ClassDoc>, Entry> entry() {
+    default CombinationInterceptor<Class<?>, Entry> entry() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -25,7 +24,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Pair<Field, FieldDoc>, EntryField> entryField() {
+    default CombinationInterceptor<Field, EntryField> entryField() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -34,7 +33,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Pair<Method, MethodDoc>, EntryMethod> entryMethod() {
+    default CombinationInterceptor<Method, EntryMethod> entryMethod() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -61,7 +60,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Pair<Request, MethodDoc>, Request> request() {
+    default CombinationInterceptor<Request, Request> request() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -70,7 +69,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Pair<RequestParam, ParamTag>, RequestParam> requestParam() {
+    default CombinationInterceptor<RequestParam, RequestParam> requestParam() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 
@@ -79,7 +78,7 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroup() {
+    default CombinationInterceptor<RequestGroup, RequestGroup> requestGroup() {
         return new CombinationInterceptor<>(Collections.emptyList());
     }
 

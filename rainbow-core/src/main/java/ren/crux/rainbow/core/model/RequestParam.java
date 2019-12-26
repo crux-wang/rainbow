@@ -12,6 +12,10 @@ import java.util.List;
 @Data
 public class RequestParam {
     /**
+     * 所在方法的签名
+     */
+    private String declaringSignature;
+    /**
      * 请求参数类型
      */
     private RequestParamType paramType;

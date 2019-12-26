@@ -2,10 +2,7 @@ package ren.crux.rainbow.core.parser;
 
 import ren.crux.rainbow.core.module.Context;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +34,20 @@ public interface Parser<S, T> {
             return Collections.emptyList();
         }
         return Arrays.stream(source).map(s -> parse(context, s)).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+    }
+
+    /**
+     * 批量解析
+     *
+     * @param context 上下文
+     * @param source  源
+     * @return 目标
+     */
+    default List<T> parse(Context context, Collection<S> source) {
+        if (source == null) {
+            return Collections.emptyList();
+        }
+        return source.stream().map(s -> parse(context, s)).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
     }
 
 }

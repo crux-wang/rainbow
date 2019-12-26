@@ -1,7 +1,6 @@
 package ren.crux.rainbow.core.module;
 
-import com.sun.javadoc.*;
-import org.apache.commons.lang3.tuple.Pair;
+import com.sun.javadoc.Doc;
 import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.*;
 
@@ -12,16 +11,16 @@ public class ModuleImpl implements Module {
 
     private final String name;
     private final int order;
-    private final CombinationInterceptor<Pair<Class<?>, ClassDoc>, Entry> clazzInterceptor;
-    private final CombinationInterceptor<Pair<Field, FieldDoc>, EntryField> fieldInterceptor;
-    private final CombinationInterceptor<Pair<Method, MethodDoc>, EntryMethod> methodInterceptor;
+    private final CombinationInterceptor<Class<?>, Entry> clazzInterceptor;
+    private final CombinationInterceptor<Field, EntryField> fieldInterceptor;
+    private final CombinationInterceptor<Method, EntryMethod> methodInterceptor;
     private final CombinationInterceptor<java.lang.annotation.Annotation, Annotation> annotationInterceptor;
     private final CombinationInterceptor<Doc, CommentText> commentTextInterceptor;
-    private CombinationInterceptor<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroupInterceptor;
-    private CombinationInterceptor<Pair<Request, MethodDoc>, Request> requestInterceptor;
-    private CombinationInterceptor<Pair<RequestParam, ParamTag>, RequestParam> requestParamInterceptor;
+    private CombinationInterceptor<RequestGroup, RequestGroup> requestGroupInterceptor;
+    private CombinationInterceptor<Request, Request> requestInterceptor;
+    private CombinationInterceptor<RequestParam, RequestParam> requestParamInterceptor;
 
-    public ModuleImpl(String name, int order, CombinationInterceptor<Pair<Class<?>, ClassDoc>, Entry> clazzInterceptor, CombinationInterceptor<Pair<Field, FieldDoc>, EntryField> fieldInterceptor, CombinationInterceptor<Pair<Method, MethodDoc>, EntryMethod> methodInterceptor, CombinationInterceptor<java.lang.annotation.Annotation, Annotation> annotationInterceptor, CombinationInterceptor<Doc, CommentText> commentTextInterceptor, CombinationInterceptor<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroupInterceptor, CombinationInterceptor<Pair<Request, MethodDoc>, Request> requestInterceptor, CombinationInterceptor<Pair<RequestParam, ParamTag>, RequestParam> requestParamInterceptor) {
+    public ModuleImpl(String name, int order, CombinationInterceptor<Class<?>, Entry> clazzInterceptor, CombinationInterceptor<Field, EntryField> fieldInterceptor, CombinationInterceptor<Method, EntryMethod> methodInterceptor, CombinationInterceptor<java.lang.annotation.Annotation, Annotation> annotationInterceptor, CombinationInterceptor<Doc, CommentText> commentTextInterceptor, CombinationInterceptor<RequestGroup, RequestGroup> requestGroupInterceptor, CombinationInterceptor<Request, Request> requestInterceptor, CombinationInterceptor<RequestParam, RequestParam> requestParamInterceptor) {
         this.name = name;
         this.order = order;
         this.clazzInterceptor = clazzInterceptor;
@@ -40,7 +39,7 @@ public class ModuleImpl implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public CombinationInterceptor<Pair<Class<?>, ClassDoc>, Entry> entry() {
+    public CombinationInterceptor<Class<?>, Entry> entry() {
         return clazzInterceptor;
     }
 
@@ -50,7 +49,7 @@ public class ModuleImpl implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public CombinationInterceptor<Pair<Field, FieldDoc>, EntryField> entryField() {
+    public CombinationInterceptor<Field, EntryField> entryField() {
         return fieldInterceptor;
     }
 
@@ -60,7 +59,7 @@ public class ModuleImpl implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public CombinationInterceptor<Pair<Method, MethodDoc>, EntryMethod> entryMethod() {
+    public CombinationInterceptor<Method, EntryMethod> entryMethod() {
         return methodInterceptor;
     }
 
@@ -91,7 +90,7 @@ public class ModuleImpl implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public CombinationInterceptor<Pair<Request, MethodDoc>, Request> request() {
+    public CombinationInterceptor<Request, Request> request() {
         return requestInterceptor;
     }
 
@@ -101,7 +100,7 @@ public class ModuleImpl implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public CombinationInterceptor<Pair<RequestParam, ParamTag>, RequestParam> requestParam() {
+    public CombinationInterceptor<RequestParam, RequestParam> requestParam() {
         return requestParamInterceptor;
     }
 
@@ -111,7 +110,7 @@ public class ModuleImpl implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public CombinationInterceptor<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroup() {
+    public CombinationInterceptor<RequestGroup, RequestGroup> requestGroup() {
         return requestGroupInterceptor;
     }
 

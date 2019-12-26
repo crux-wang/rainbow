@@ -1,8 +1,7 @@
 
 package ren.crux.rainbow.core.module;
 
-import com.sun.javadoc.*;
-import org.apache.commons.lang3.tuple.Pair;
+import com.sun.javadoc.Doc;
 import ren.crux.rainbow.core.model.*;
 
 import java.lang.reflect.Field;
@@ -12,25 +11,25 @@ public class ModuleBuilder {
 
     private String name;
     private int order;
-    private InterceptorBuilder<Pair<Class<?>, ClassDoc>, Entry> entryInterceptorBuilder = new InterceptorBuilder<>(this);
-    private InterceptorBuilder<Pair<Field, FieldDoc>, EntryField> entryFieldInterceptorBuilder = new InterceptorBuilder<>(this);
-    private InterceptorBuilder<Pair<Method, MethodDoc>, EntryMethod> entryMethodInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Class<?>, Entry> entryInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Field, EntryField> entryFieldInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Method, EntryMethod> entryMethodInterceptorBuilder = new InterceptorBuilder<>(this);
     private InterceptorBuilder<java.lang.annotation.Annotation, Annotation> annotationInterceptorBuilder = new InterceptorBuilder<>(this);
     private InterceptorBuilder<Doc, CommentText> commentTextInterceptorBuilder = new InterceptorBuilder<>(this);
 
-    private InterceptorBuilder<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroupInterceptorBuilder = new InterceptorBuilder<>(this);
-    private InterceptorBuilder<Pair<Request, MethodDoc>, Request> requestInterceptorBuilder = new InterceptorBuilder<>(this);
-    private InterceptorBuilder<Pair<RequestParam, ParamTag>, RequestParam> requestParamInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<RequestGroup, RequestGroup> requestGroupInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<Request, Request> requestInterceptorBuilder = new InterceptorBuilder<>(this);
+    private InterceptorBuilder<RequestParam, RequestParam> requestParamInterceptorBuilder = new InterceptorBuilder<>(this);
 
-    public InterceptorBuilder<Pair<Class<?>, ClassDoc>, Entry> entry() {
+    public InterceptorBuilder<Class<?>, Entry> entry() {
         return entryInterceptorBuilder;
     }
 
-    public InterceptorBuilder<Pair<Field, FieldDoc>, EntryField> entryField() {
+    public InterceptorBuilder<Field, EntryField> entryField() {
         return entryFieldInterceptorBuilder;
     }
 
-    public InterceptorBuilder<Pair<Method, MethodDoc>, EntryMethod> entryMethod() {
+    public InterceptorBuilder<Method, EntryMethod> entryMethod() {
         return entryMethodInterceptorBuilder;
     }
 
@@ -42,15 +41,15 @@ public class ModuleBuilder {
         return commentTextInterceptorBuilder;
     }
 
-    public InterceptorBuilder<Pair<RequestGroup, ClassDoc>, RequestGroup> requestGroup() {
+    public InterceptorBuilder<RequestGroup, RequestGroup> requestGroup() {
         return requestGroupInterceptorBuilder;
     }
 
-    public InterceptorBuilder<Pair<Request, MethodDoc>, Request> request() {
+    public InterceptorBuilder<Request, Request> request() {
         return requestInterceptorBuilder;
     }
 
-    public InterceptorBuilder<Pair<RequestParam, ParamTag>, RequestParam> requestParam() {
+    public InterceptorBuilder<RequestParam, RequestParam> requestParam() {
         return requestParamInterceptorBuilder;
     }
 
@@ -96,4 +95,16 @@ public class ModuleBuilder {
                 requestParamInterceptorBuilder.build()
         );
     }
+//
+//    public class EntryBuilder extends SubBuilder<ModuleBuilder> {
+//
+//        public EntryBuilder(ModuleBuilder superBuilder) {
+//            super(superBuilder);
+//        }
+//
+//        public EntryBuilder interceptor(Interceptor<Class<?>, Entry> interceptor) {
+//            entryInterceptorBuilder.interceptor(interceptor);
+//        }
+//
+//    }
 }

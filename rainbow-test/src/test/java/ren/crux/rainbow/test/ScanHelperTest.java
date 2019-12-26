@@ -54,7 +54,7 @@ public class ScanHelperTest {
 //        EntryFieldParser entryFieldParser = new EntryFieldParser(AnnotationParser.INSTANCE, CommentTextParser.INSTANCE);
 //        EntryMethodParser entryMethodParser = new EntryMethodParser(AnnotationParser.INSTANCE, CommentTextParser.INSTANCE);
 //        EntryParser entryParser = new EntryParser(entryFieldParser, entryMethodParser, AnnotationParser.INSTANCE, CommentTextParser.INSTANCE);
-//        Pair<Class<?>, ClassDoc> pair = Pair.of(SubTest.class, context.getClassDoc(SubTest.class.getTypeName()).orElse(null));
+//        Class<?> pair = Pair.of(SubTest.class, context.getClassDoc(SubTest.class.getTypeName()).orElse(null));
 //        Optional<Entry> optional = entryParser.parse(context, pair);
 //        if (optional.isPresent()) {
 //            Entry entry = optional.get();

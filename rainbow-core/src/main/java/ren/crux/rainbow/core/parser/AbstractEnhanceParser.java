@@ -30,6 +30,16 @@ public abstract class AbstractEnhanceParser<S, T> implements Parser<S, T> {
     }
 
     /**
+     * 过滤
+     *
+     * @param source 源
+     * @return 是否被过滤
+     */
+    protected boolean filter(S source) {
+        return source != null;
+    }
+
+    /**
      * 解析
      *
      * @param context 上下文
@@ -38,11 +48,13 @@ public abstract class AbstractEnhanceParser<S, T> implements Parser<S, T> {
      */
     @Override
     public Optional<T> parse(Context context, S source) {
-        if (combinationInterceptor.before(context, source)) {
-            Optional<T> optional = parse0(context, source);
-            if (optional.isPresent()) {
-                if (combinationInterceptor.after(context, optional.get())) {
-                    return optional;
+        if (filter(source)) {
+            if (combinationInterceptor.before(context, source)) {
+                Optional<T> optional = parse0(context, source);
+                if (optional.isPresent()) {
+                    if (combinationInterceptor.after(context, optional.get())) {
+                        return optional;
+                    }
                 }
             }
         }

@@ -18,6 +18,10 @@ public class Request {
      */
     private String signature;
     /**
+     * 所在类类型
+     */
+    private String declaringType;
+    /**
      * 注释
      */
     private CommentText commentText;

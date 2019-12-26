@@ -1,8 +1,7 @@
 package ren.crux.rainbow.core;
 
-import com.sun.javadoc.ClassDoc;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.model.Document;
 import ren.crux.rainbow.core.model.Entry;
 import ren.crux.rainbow.core.model.RequestGroup;
@@ -14,6 +13,7 @@ import ren.crux.rainbow.core.parser.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class DocumentReaderImpl implements DocumentReader {
 
     private final ClassDocProvider classDocProvider;
@@ -82,10 +82,17 @@ public class DocumentReaderImpl implements DocumentReader {
     public Optional<Document> read() {
         Context context = newContext();
         List<RequestGroup> requestGroups = requestGroupProvider.get(context);
-        requestGroups = requestGroupDocParser.parse(context, buildRequestGroupClassDocPairs(context, requestGroups));
+        requestGroups = requestGroupDocParser.parse(context, requestGroups);
         Set<String> entryClassNames = context.getEntryClassNames();
-        Pair<Class<?>, ClassDoc>[] classClassDocPairs = buildClassClassDocPairs(context, entryClassNames);
-        Map<String, Entry> entryMap = entryParser.parse(context, classClassDocPairs).stream().collect(Collectors.toMap(Entry::getType, e -> e));
+        List<Class<?>> entryClasses = map2Class(entryClassNames);
+        Map<String, Entry> entryMap = entryParser.parse(context, entryClasses).stream().collect(Collectors.toMap(Entry::getType, e -> e));
+        // 二次处理新出现的实体
+        entryClassNames = context.getEntryClassNames();
+        if (entryClassNames.removeAll(entryMap.keySet())) {
+            entryClasses = map2Class(entryClassNames);
+            Map<String, Entry> extraEntryMap = entryParser.parse(context, entryClasses).stream().collect(Collectors.toMap(Entry::getType, e -> e));
+            entryMap.putAll(extraEntryMap);
+        }
         Document document = new Document();
         document.setRequestGroups(requestGroups);
         document.setEntryMap(entryMap);
@@ -93,22 +100,14 @@ public class DocumentReaderImpl implements DocumentReader {
         return Optional.of(document);
     }
 
-    @SuppressWarnings("unchecked")
-    private Pair<Class<?>, ClassDoc>[] buildClassClassDocPairs(Context context, Collection<String> entryClassNames) {
-        return entryClassNames.stream()
-                .map(cln -> {
-                    try {
-                        Class<?> cls = Class.forName(cln);
-                        return Pair.of(cls, context.getClassDoc(cls.getTypeName()).orElse(null));
-                    } catch (ClassNotFoundException e) {
-                        return null;
-                    }
-                }).filter(Objects::nonNull).toArray(Pair[]::new);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Pair<RequestGroup, ClassDoc>[] buildRequestGroupClassDocPairs(Context context, List<RequestGroup> requestGroups) {
-        return requestGroups.stream()
-                .map(rg -> Pair.of(rg, context.getClassDoc(rg.getType()).orElse(null))).toArray(Pair[]::new);
+    List<Class<?>> map2Class(Collection<String> classNames) {
+        return classNames.stream().map(className -> {
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                log.error("class not found : {}", className, e);
+                return null;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 }

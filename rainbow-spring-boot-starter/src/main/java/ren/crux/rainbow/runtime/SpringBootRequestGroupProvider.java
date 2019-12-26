@@ -43,6 +43,7 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         Parameter[] parameters = method.getParameters();
         List<RequestParam> params = Arrays.stream(parameters).map(parameter -> {
             RequestParam requestParam = SpringWebHelper.process(parameter);
+            requestParam.setDeclaringSignature(request.getSignature());
             context.addEntryClassName(requestParam.getType());
             return requestParam;
         }).collect(Collectors.toList());

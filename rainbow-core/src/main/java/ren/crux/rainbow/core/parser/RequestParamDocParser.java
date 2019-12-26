@@ -1,7 +1,5 @@
 package ren.crux.rainbow.core.parser;
 
-import com.sun.javadoc.ParamTag;
-import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.model.CommentText;
 import ren.crux.rainbow.core.model.RequestParam;
@@ -9,12 +7,12 @@ import ren.crux.rainbow.core.module.Context;
 
 import java.util.Optional;
 
-public class RequestParamDocParser extends AbstractEnhanceParser<Pair<RequestParam, ParamTag>, RequestParam> {
+public class RequestParamDocParser extends AbstractEnhancer<RequestParam> {
 
     public RequestParamDocParser() {
     }
 
-    public RequestParamDocParser(CombinationInterceptor<Pair<RequestParam, ParamTag>, RequestParam> combinationInterceptor) {
+    public RequestParamDocParser(CombinationInterceptor<RequestParam, RequestParam> combinationInterceptor) {
         super(combinationInterceptor);
     }
 
@@ -26,15 +24,10 @@ public class RequestParamDocParser extends AbstractEnhanceParser<Pair<RequestPar
      * @return 目标
      */
     @Override
-    protected Optional<RequestParam> parse0(Context context, Pair<RequestParam, ParamTag> source) {
-        if (source == null || source.getLeft() == null) {
-            return Optional.empty();
-        }
-        RequestParam requestParam = source.getLeft();
-        ParamTag paramTag = source.getRight();
-        if (paramTag != null) {
-            requestParam.setCommentText(new CommentText(paramTag.parameterComment()));
-        }
-        return Optional.of(requestParam);
+    protected Optional<RequestParam> parse0(Context context, RequestParam source) {
+        context.getParamTag(source.getDeclaringSignature(), source.getName()).ifPresent(paramTag -> {
+            source.setCommentText(new CommentText(paramTag.parameterComment()));
+        });
+        return Optional.of(source);
     }
 }

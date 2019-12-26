@@ -1,12 +1,7 @@
 package ren.crux.rainbow.core;
 
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.FieldDoc;
-import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.ParamTag;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.module.Context;
@@ -141,21 +136,21 @@ public class DocumentReaderBuilder {
      */
     public DocumentReaderBuilder useDefaultModule() {
         ModuleBuilder builder = new ModuleBuilder();
-        builder.entryMethod().interceptor(new Interceptor<Pair<Method, MethodDoc>, EntryMethod>() {
+        builder.entryMethod().interceptor(new Interceptor<Method, EntryMethod>() {
             @Override
-            public boolean before(Context context, Pair<Method, MethodDoc> source) {
-                if (StringUtils.startsWithAny(source.getLeft().getName(), "get", "is")) {
+            public boolean before(Context context, Method source) {
+                if (StringUtils.startsWithAny(source.getName(), "get", "is")) {
                     return true;
                 }
                 return false;
             }
         })
                 .end()
-                .entryField().interceptor(new Interceptor<Pair<Field, FieldDoc>, EntryField>() {
+                .entryField().interceptor(new Interceptor<Field, EntryField>() {
 
             @Override
-            public boolean before(Context context, Pair<Field, FieldDoc> source) {
-                String name = source.getLeft().getName();
+            public boolean before(Context context, Field source) {
+                String name = source.getName();
                 if (StringUtils.equalsAny(name, "serialVersionUID", "$VALUES")) {
                     return false;
                 }
@@ -163,31 +158,31 @@ public class DocumentReaderBuilder {
             }
         })
                 .end()
-                .requestGroup().interceptor(new Interceptor<Pair<RequestGroup, ClassDoc>, RequestGroup>() {
+                .requestGroup().interceptor(new Interceptor<RequestGroup, RequestGroup>() {
             @Override
-            public boolean before(Context context, Pair<RequestGroup, ClassDoc> source) {
-                if (StringUtils.equals("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController", source.getLeft().getType())) {
+            public boolean before(Context context, RequestGroup source) {
+                if (StringUtils.equals("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController", source.getType())) {
                     return false;
                 }
                 return true;
             }
         }).end()
-                .entry().interceptor(new Interceptor<Pair<Class<?>, ClassDoc>, Entry>() {
+                .entry().interceptor(new Interceptor<Class<?>, Entry>() {
             @Override
-            public boolean before(Context context, Pair<Class<?>, ClassDoc> source) {
-                if (StringUtils.startsWithAny(source.getLeft().getTypeName(), "java.util", "java.lang", "javax.servlet", "org.springframework.web.servlet")) {
+            public boolean before(Context context, Class<?> source) {
+                if (StringUtils.startsWithAny(source.getTypeName(), "java.util", "java.lang", "javax.servlet", "org.springframework.web.servlet")) {
                     return false;
                 }
-                if (StringUtils.equalsAny(source.getLeft().getTypeName(), "org.springframework.http.ResponseEntity", "org.springframework.http.HttpEntity")) {
+                if (StringUtils.equalsAny(source.getTypeName(), "org.springframework.http.ResponseEntity", "org.springframework.http.HttpEntity")) {
                     return false;
                 }
                 return true;
             }
         }).end()
-                .requestParam().interceptor(new Interceptor<Pair<RequestParam, ParamTag>, RequestParam>() {
+                .requestParam().interceptor(new Interceptor<RequestParam, RequestParam>() {
             @Override
-            public boolean before(Context context, Pair<RequestParam, ParamTag> source) {
-                String type = source.getLeft().getType().getType();
+            public boolean before(Context context, RequestParam source) {
+                String type = source.getType().getType();
                 if (StringUtils.startsWithAny(type, "javax.servlet", "org.springframework.web.servlet")) {
                     return false;
                 }
