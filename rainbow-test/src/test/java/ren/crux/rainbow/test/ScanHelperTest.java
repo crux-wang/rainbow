@@ -6,12 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ren.crux.rainbow.core.DefaultClassDocProvider;
-import ren.crux.rainbow.core.DocumentReader;
-import ren.crux.rainbow.core.DocumentReaderBuilder;
-import ren.crux.rainbow.core.RequestGroupProvider;
+import ren.crux.rainbow.core.*;
 import ren.crux.rainbow.core.dict.TypeDict;
-import ren.crux.rainbow.core.report.html.TemplateHtmlReporter;
+import ren.crux.rainbow.core.report.JsonReporter;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +37,9 @@ public class ScanHelperTest {
                 .end()
                 .useDefaultModule()
                 .build();
-        documentReader.read().translate(new TypeDict().useDefault()).report(TemplateHtmlReporter.INSTANCE).ifPresent(html -> {
+        documentReader.read().translate(new TypeDict().useDefault()).ignored(DocumentStream.IgnoredType.annotation_attrs, DocumentStream.IgnoredType.tags).report(JsonReporter.INSTANCE).ifPresent(html -> {
             try {
-                File file = new File("test.html");
+                File file = new File("test.json");
                 FileUtils.writeStringToFile(file, html, "utf8");
 //                Desktop.getDesktop().browse(file.toURI());
             } catch (IOException e) {
