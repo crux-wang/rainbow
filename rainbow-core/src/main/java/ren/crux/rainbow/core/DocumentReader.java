@@ -1,6 +1,5 @@
 package ren.crux.rainbow.core;
 
-import ren.crux.rainbow.core.model.Document;
 import ren.crux.rainbow.core.report.Reporter;
 
 import java.util.Optional;
@@ -17,7 +16,7 @@ public interface DocumentReader {
      *
      * @return 文档
      */
-    Optional<Document> read();
+    DocumentStream read();
 
     /**
      * 汇报
@@ -27,7 +26,7 @@ public interface DocumentReader {
      * @return 汇报结果
      */
     default <T> Optional<T> report(Reporter<T> reporter) {
-        return read().flatMap(reporter::report);
+        return read().get().flatMap(reporter::report);
     }
 
 }

@@ -79,7 +79,7 @@ public class DocumentReaderImpl implements DocumentReader {
      * @return 文档
      */
     @Override
-    public Optional<Document> read() {
+    public DocumentStream read() {
         Context context = newContext();
         List<RequestGroup> requestGroups = requestGroupProvider.get(context);
         requestGroups = requestGroupDocParser.parse(context, requestGroups);
@@ -97,7 +97,7 @@ public class DocumentReaderImpl implements DocumentReader {
         document.setRequestGroups(requestGroups);
         document.setEntryMap(entryMap);
         document.getProperties().putAll(context.getProperties());
-        return Optional.of(document);
+        return new DocumentStream(document);
     }
 
     List<Class<?>> map2Class(Collection<String> classNames) {

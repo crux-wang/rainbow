@@ -20,7 +20,6 @@ public class DocumentReaderBuilder {
     protected Map<String, String> implMap = new HashMap<>();
     protected List<Module> modules = new LinkedList<>();
 
-
     /**
      * 设置 {@link ClassDocProvider}
      *
@@ -186,11 +185,13 @@ public class DocumentReaderBuilder {
                 if (StringUtils.startsWithAny(type, "javax.servlet", "org.springframework.web.servlet")) {
                     return false;
                 }
-                return false;
+                return true;
             }
         })
         ;
         modules(builder.build());
+        impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl");
+        impl("org.springframework.data.domain.Pageable", "org.springframework.data.domain.PageRequest");
         return this;
     }
 

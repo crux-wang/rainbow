@@ -176,7 +176,7 @@ public class Context {
         if (StringUtils.isNotBlank(className)) {
             className = StringUtils.substringBefore(className, "[");
             className = StringUtils.substringBefore(className, "<");
-            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char")) {
+            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char", "short")) {
                 return;
             }
             if (StringUtils.startsWithAny(className, "java.lang.", "java.util.")) {

@@ -13,6 +13,7 @@ public class TypeDesc {
     private TypeDesc[] actualParamTypes;
     private String simpleName;
     private String name;
+    private String format;
 
     public TypeDesc(String type, TypeDesc[] actualParamTypes) {
         this.type = type;
@@ -23,5 +24,12 @@ public class TypeDesc {
         this.type = type;
         this.actualParamTypes = actualParamTypes;
         this.simpleName = simpleName;
+    }
+
+    public TypeDesc(String type, TypeDesc[] actualParamTypes, String simpleName, String name) {
+        this.type = type;
+        this.actualParamTypes = actualParamTypes;
+        this.simpleName = simpleName;
+        this.name = name;
     }
 }

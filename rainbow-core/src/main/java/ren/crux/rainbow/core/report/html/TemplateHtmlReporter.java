@@ -120,25 +120,29 @@ public class TemplateHtmlReporter implements Reporter<String> {
                         "${type.simpleName}",
                         "${type.type}",
                         "${type.type-id}",
+                        "${type.format}",
                         "${returnType.name}",
                         "${returnType.simpleName}",
                         "${returnType.type}",
-                        "${returnType.type-id}"
+                        "${returnType.type-id}",
+                        "${returnType.format}"
                 },
                 new String[]{
                         type == null ? "" : defaultString(type.getName()),
                         type == null ? "" : defaultString(type.getSimpleName()),
                         type == null ? "" : defaultString(type.getType()),
                         type == null ? "" : buildId(type.getType()),
-                        type == null ? "" : defaultString(type.getName()),
+                        type == null ? "" : defaultString(type.getFormat()),
+                        type == null ? "" : defaultString(type.getType()),
                         type == null ? "" : defaultString(type.getSimpleName()),
                         type == null ? "" : defaultString(type.getType()),
                         type == null ? "" : buildId(type.getType()),
+                        type == null ? "" : defaultString(type.getFormat())
                 });
     }
 
     private String buildId(String type) {
-        return defaultString(StringUtils.replaceEach(type, new String[]{".", "(", ")", ",", " ", "<", ">"}, new String[]{"-", "_", "_", "-", "_", "_", "_"}));
+        return defaultString(StringUtils.replaceEach(type, new String[]{".", "(", ")", ",", " ", "<", ">", "[", "]"}, new String[]{"-", "_", "_", "-", "_", "_", "_", "_", "_"}));
     }
 
     private String reportRequests(List<Request> requests) {
@@ -280,7 +284,6 @@ public class TemplateHtmlReporter implements Reporter<String> {
                         "${type}",
                         "${type-id}",
                         "${entry-field-list-template}",
-
                 },
                 new String[]{
                         entry.getSimpleName(),
