@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import ren.crux.rainbow.core.RequestGroupProvider;
 
+/**
+ * @author wangzhihui
+ */
 @Configuration
 @ConditionalOnWebApplication
 public class RainbowAutoConfiguration {

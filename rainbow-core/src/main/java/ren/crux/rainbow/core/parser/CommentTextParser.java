@@ -4,23 +4,26 @@ import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.CommentText;
 import ren.crux.rainbow.core.model.TagRef;
 import ren.crux.rainbow.core.module.Context;
 
 import java.util.Optional;
 
+/**
+ * 注释解析器
+ *
+ * @author wangzhihui
+ */
 @Slf4j
 public class CommentTextParser extends AbstractEnhanceParser<Doc, CommentText> {
-
-    public static final CommentTextParser INSTANCE = new CommentTextParser();
 
     public CommentTextParser() {
     }
 
-    public CommentTextParser(CombinationInterceptor<Doc, CommentText> combinationInterceptor) {
-        super(combinationInterceptor);
+    public CommentTextParser(Interceptor<Doc, CommentText> interceptor) {
+        super(interceptor);
     }
 
     private TagRefParser tagRefParser = new TagRefParser();

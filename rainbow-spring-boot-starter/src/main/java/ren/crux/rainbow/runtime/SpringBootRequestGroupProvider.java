@@ -20,6 +20,11 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Spring boot 请求组提供者
+ *
+ * @author wangzhihui
+ */
 public class SpringBootRequestGroupProvider implements RequestGroupProvider {
 
     private final RequestMappingHandlerMapping mapping;

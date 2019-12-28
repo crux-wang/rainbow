@@ -1,21 +1,24 @@
 package ren.crux.rainbow.core.parser;
 
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
+/**
+ * 注解解析器
+ *
+ * @author wangzhihui
+ */
 public class AnnotationParser extends AbstractEnhanceParser<Annotation, ren.crux.rainbow.core.model.Annotation> {
-
-    public static final AnnotationParser INSTANCE = new AnnotationParser();
 
     public AnnotationParser() {
     }
 
-    public AnnotationParser(CombinationInterceptor<Annotation, ren.crux.rainbow.core.model.Annotation> combinationInterceptor) {
-        super(combinationInterceptor);
+    public AnnotationParser(Interceptor<Annotation, ren.crux.rainbow.core.model.Annotation> interceptor) {
+        super(interceptor);
     }
 
     /**

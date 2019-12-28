@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * 属性
+ *
+ * @author wangzhihui
  */
 @Data
 public class EntryField {

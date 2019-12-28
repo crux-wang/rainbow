@@ -9,6 +9,8 @@ import java.util.Map;
 
 /**
  * 文档
+ *
+ * @author wangzhihui
  */
 @Data
 public class Document {

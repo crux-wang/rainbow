@@ -5,8 +5,8 @@ import lombok.NonNull;
 import lombok.Singular;
 import ren.crux.rainbow.core.module.Context;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 组合解析器
@@ -35,7 +35,10 @@ public class CombinationInterceptor<S, T> implements Interceptor<S, T> {
     public CombinationInterceptor(int order, @NonNull List<Interceptor<S, T>> interceptors) {
         this.order = order;
         this.interceptors = interceptors;
-        this.interceptors.sort(Comparator.comparingInt(Interceptor::order));
+    }
+
+    public boolean isEmpty() {
+        return interceptors.isEmpty();
     }
 
     /**
@@ -70,5 +73,11 @@ public class CombinationInterceptor<S, T> implements Interceptor<S, T> {
     @Override
     public int order() {
         return order;
+    }
+
+    public void ifPresent(Consumer<CombinationInterceptor<S, T>> consumer) {
+        if (!isEmpty()) {
+            consumer.accept(this);
+        }
     }
 }

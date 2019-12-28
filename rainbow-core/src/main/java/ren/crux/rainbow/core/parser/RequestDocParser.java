@@ -5,9 +5,7 @@ import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
-import ren.crux.rainbow.core.model.CommentText;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.Request;
 import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.module.Context;
@@ -16,8 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+/**
+ * 请求文档解析器
+ *
+ * @author wangzhihui
+ */
 @Slf4j
 public class RequestDocParser extends AbstractEnhancer<Request> {
 
@@ -29,8 +31,8 @@ public class RequestDocParser extends AbstractEnhancer<Request> {
         this.requestParamDocParser = requestParamDocParser;
     }
 
-    public RequestDocParser(CombinationInterceptor<Request, Request> combinationInterceptor, CommentTextParser commentTextParser, RequestParamDocParser requestParamDocParser) {
-        super(combinationInterceptor);
+    public RequestDocParser(Interceptor<Request, Request> interceptor, CommentTextParser commentTextParser, RequestParamDocParser requestParamDocParser) {
+        super(interceptor);
         this.commentTextParser = commentTextParser;
         this.requestParamDocParser = requestParamDocParser;
     }
@@ -62,9 +64,6 @@ public class RequestDocParser extends AbstractEnhancer<Request> {
             if (tags.length > 0) {
                 source.setReturnCommentText(tags[0].text());
             }
-            CommentText commentText = source.getCommentText();
-            // 删除参数标签
-            commentText.setTags(commentText.getTags().stream().filter(t -> !StringUtils.equals("@param", t.getName())).collect(Collectors.toList()));
         });
         return Optional.of(source);
     }

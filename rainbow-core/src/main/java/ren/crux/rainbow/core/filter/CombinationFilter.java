@@ -3,6 +3,7 @@ package ren.crux.rainbow.core.filter;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
+import ren.crux.rainbow.core.module.Context;
 
 import java.util.List;
 
@@ -13,15 +14,15 @@ import java.util.List;
  * @author wangzhihui
  */
 @Builder(toBuilder = true)
-public class CombinationFilter<T, C> implements Filter<T, C> {
+public class CombinationFilter<T> implements Filter<T> {
 
     /**
      * 过滤器列表
      */
     @Singular
-    protected final List<Filter<T, C>> filters;
+    protected final List<Filter<T>> filters;
 
-    public CombinationFilter(@NonNull List<Filter<T, C>> filters) {
+    public CombinationFilter(@NonNull List<Filter<T>> filters) {
         this.filters = filters;
     }
 
@@ -33,7 +34,7 @@ public class CombinationFilter<T, C> implements Filter<T, C> {
      * @return 是否包含目标
      */
     @Override
-    public boolean include(C context, T t) {
+    public boolean include(Context context, T t) {
         return filters.isEmpty() || filters.stream().allMatch(i -> i.include(context, t));
     }
 }

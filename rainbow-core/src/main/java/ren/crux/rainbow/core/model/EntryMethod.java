@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * 实体方法 （无参方法）
+ *
+ * @author wangzhihui
  */
 @Data
 public class EntryMethod {

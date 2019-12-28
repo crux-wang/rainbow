@@ -4,20 +4,24 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.ProgramElementDoc;
 import ren.crux.rainbow.core.filter.CombinationFilter;
 import ren.crux.rainbow.core.module.Context;
+import ren.crux.rainbow.core.option.Option;
 import ren.crux.rainbow.javadoc.reader.DefaultJavaDocReader;
 import ren.crux.rainbow.javadoc.reader.JavaDocReader;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author wangzhihui
+ */
 public class DefaultClassDocProvider implements ClassDocProvider {
 
-    public static final String SOURCE_PATH = "SOURCE_PATH";
-    public static final String PACKAGES = "PACKAGES";
+    public static final Option<String[]> SOURCE_PATH = Option.valueOf("SOURCE_PATH");
+    public static final Option<String[]> PACKAGES = Option.valueOf("PACKAGES");
 
     private String[] sourcePath;
     private String[] packages;
-    private CombinationFilter.CombinationFilterBuilder<ClassDoc, Context> builder = CombinationFilter.builder();
+    private CombinationFilter.CombinationFilterBuilder<ClassDoc> builder = CombinationFilter.builder();
     private JavaDocReader<List<ClassDoc>> javaDocReader;
     private Map<String, ClassDoc> classDocMap;
     private DocumentReaderBuilder owner;
@@ -45,10 +49,10 @@ public class DefaultClassDocProvider implements ClassDocProvider {
     public void setUp(Context context) {
         if (javaDocReader == null) {
             Objects.requireNonNull(sourcePath);
-            context.property(SOURCE_PATH, sourcePath);
-            context.property(PACKAGES, packages);
+            context.setOption(SOURCE_PATH, sourcePath);
+            context.setOption(PACKAGES, packages);
             javaDocReader = new DefaultJavaDocReader();
-            CombinationFilter<ClassDoc, Context> filters = builder.build();
+            CombinationFilter<ClassDoc> filters = builder.build();
             classDocMap = javaDocReader.read(sourcePath, packages)
                     .orElse(Collections.emptyList())
                     .stream().filter(cd -> filters.include(context, cd))

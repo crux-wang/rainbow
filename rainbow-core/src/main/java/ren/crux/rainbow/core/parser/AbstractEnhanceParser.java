@@ -1,7 +1,7 @@
 package ren.crux.rainbow.core.parser;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.module.Context;
 
 import java.util.*;
@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 public abstract class AbstractEnhanceParser<S, T> implements Parser<S, T> {
 
     /**
-     * 组合拦截器
+     * 拦截器
      */
-    protected final CombinationInterceptor<S, T> combinationInterceptor;
+    protected final Interceptor<S, T> interceptor;
 
     public AbstractEnhanceParser() {
-        this(new CombinationInterceptor<>(Collections.emptyList()));
+        this(null);
     }
 
-    public AbstractEnhanceParser(CombinationInterceptor<S, T> combinationInterceptor) {
-        this.combinationInterceptor = combinationInterceptor;
+    public AbstractEnhanceParser(Interceptor<S, T> interceptor) {
+        this.interceptor = interceptor;
     }
 
     /**
@@ -49,10 +49,13 @@ public abstract class AbstractEnhanceParser<S, T> implements Parser<S, T> {
     @Override
     public Optional<T> parse(Context context, S source) {
         if (filter(source)) {
-            if (combinationInterceptor.before(context, source)) {
+            if (interceptor == null) {
+                return parse0(context, source);
+            }
+            if (interceptor.before(context, source)) {
                 Optional<T> optional = parse0(context, source);
                 if (optional.isPresent()) {
-                    if (combinationInterceptor.after(context, optional.get())) {
+                    if (interceptor.after(context, optional.get())) {
                         return optional;
                     }
                 }

@@ -1,13 +1,20 @@
 package ren.crux.rainbow.core.module;
 
 import com.sun.javadoc.Doc;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
+/**
+ * 模块
+ *
+ * @author wangzhihui
+ */
 public interface Module {
 
     /**
@@ -15,8 +22,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Class<?>, Entry> entry() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<Class<?>, Entry>> entry() {
+        return Optional.empty();
     }
 
     /**
@@ -24,8 +31,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Field, EntryField> entryField() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<Field, EntryField>> entryField() {
+        return Optional.empty();
     }
 
     /**
@@ -33,8 +40,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Method, EntryMethod> entryMethod() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<Method, EntryMethod>> entryMethod() {
+        return Optional.empty();
     }
 
     /**
@@ -42,8 +49,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<java.lang.annotation.Annotation, Annotation> annotation() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<java.lang.annotation.Annotation, Annotation>> annotation() {
+        return Optional.empty();
     }
 
     /**
@@ -51,8 +58,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Doc, CommentText> commentText() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<Doc, CommentText>> commentText() {
+        return Optional.empty();
     }
 
     /**
@@ -60,8 +67,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<Request, Request> request() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<Request, Request>> request() {
+        return Optional.empty();
     }
 
     /**
@@ -69,8 +76,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<RequestParam, RequestParam> requestParam() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<RequestParam, RequestParam>> requestParam() {
+        return Optional.empty();
     }
 
     /**
@@ -78,8 +85,8 @@ public interface Module {
      *
      * @return 拦截器构造器
      */
-    default CombinationInterceptor<RequestGroup, RequestGroup> requestGroup() {
-        return new CombinationInterceptor<>(Collections.emptyList());
+    default Optional<Interceptor<RequestGroup, RequestGroup>> requestGroup() {
+        return Optional.empty();
     }
 
     /**
@@ -94,6 +101,24 @@ public interface Module {
      *
      * @return 序号
      */
-    int order();
+    default int order() {
+        return 0;
+    }
 
+    /**
+     * 加载前初始化
+     *
+     * @param context 上下文
+     */
+    default void setUp(Context context) {
+    }
+
+    /**
+     * 接口实现映射
+     *
+     * @return 接口实现映射
+     */
+    default Map<String, String> implMap() {
+        return Collections.emptyMap();
+    }
 }

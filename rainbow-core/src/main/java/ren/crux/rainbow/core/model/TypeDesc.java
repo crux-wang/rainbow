@@ -3,6 +3,7 @@ package ren.crux.rainbow.core.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @NoArgsConstructor
@@ -31,5 +32,9 @@ public class TypeDesc {
         this.actualParamTypes = actualParamTypes;
         this.simpleName = simpleName;
         this.name = name;
+    }
+
+    public String getFormat() {
+        return StringUtils.defaultString(format, simpleName);
     }
 }

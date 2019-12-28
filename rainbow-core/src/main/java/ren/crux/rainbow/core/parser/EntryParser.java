@@ -1,7 +1,7 @@
 package ren.crux.rainbow.core.parser;
 
 import lombok.extern.slf4j.Slf4j;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.Entry;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
@@ -28,8 +28,8 @@ public class EntryParser extends AbstractEnhanceParser<Class<?>, Entry> {
         this.commentTextParser = commentTextParser;
     }
 
-    public EntryParser(CombinationInterceptor<Class<?>, Entry> combinationInterceptor, EntryFieldParser entryFieldParser, EntryMethodParser entryMethodParser, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
-        super(combinationInterceptor);
+    public EntryParser(Interceptor<Class<?>, Entry> interceptor, EntryFieldParser entryFieldParser, EntryMethodParser entryMethodParser, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        super(interceptor);
         this.entryFieldParser = entryFieldParser;
         this.entryMethodParser = entryMethodParser;
         this.annotationParser = annotationParser;
@@ -47,9 +47,7 @@ public class EntryParser extends AbstractEnhanceParser<Class<?>, Entry> {
     protected Optional<Entry> parse0(Context context, Class<?> source) {
         context.getClassDoc(source.getTypeName());
         Entry entry = new Entry();
-        entry.setInterfaceType(source.isInterface());
         entry.setEnumType(source.isEnum());
-        entry.setArrayType(source.isArray());
         entry.setType(source.getTypeName());
         entry.setSimpleName(source.getSimpleName());
         entry.setName(source.getCanonicalName());
@@ -63,8 +61,8 @@ public class EntryParser extends AbstractEnhanceParser<Class<?>, Entry> {
         if (methods.length > 0) {
             entry.getMethods().addAll(entryMethodParser.parse(context, methods));
         }
-        if (entry.isInterfaceType()) {
-            context.impl(entry.getType()).ifPresent(impl -> entry.setImpl(parse(context, impl).orElse(null)));
+        if (source.isInterface()) {
+            context.getImplClass(entry.getType()).ifPresent(impl -> entry.setImpl(parse(context, impl).orElse(null)));
         }
         return Optional.of(entry);
     }

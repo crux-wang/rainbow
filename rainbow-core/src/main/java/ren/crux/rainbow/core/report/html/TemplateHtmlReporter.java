@@ -65,8 +65,8 @@ public class TemplateHtmlReporter implements Reporter<String> {
                         "${entry-list-template}",
                 },
                 new String[]{
-                        Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.SOURCE_PATH)),
-                        Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.PACKAGES)),
+                        Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.SOURCE_PATH.getName())),
+                        Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.PACKAGES.getName())),
                         reportRequestGroups(document.getRequestGroups()),
                         reportEntries(new LinkedList<>(document.getEntryMap().values()))
                 });
@@ -270,11 +270,9 @@ public class TemplateHtmlReporter implements Reporter<String> {
 
     private String report(Entry entry) {
         List<EntryField> fields = entry.getFields();
-        if (entry.isInterfaceType()) {
-            Entry impl = entry.getImpl();
-            if (impl != null) {
-                fields = impl.getFields();
-            }
+        Entry impl = entry.getImpl();
+        if (impl != null) {
+            fields = impl.getFields();
         }
         String template = getTemplate(ENTRY_TEMPLATE);
         CommentText commentText = entry.getCommentText();

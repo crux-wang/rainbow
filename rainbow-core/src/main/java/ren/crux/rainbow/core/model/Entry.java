@@ -31,17 +31,9 @@ public class Entry {
      */
     private CommentText commentText;
     /**
-     * 是否是接口
-     */
-    private boolean interfaceType;
-    /**
      * 是否是枚举类
      */
     private boolean enumType;
-    /**
-     * 是否是数组
-     */
-    private boolean arrayType;
     /**
      * 接口实现
      */

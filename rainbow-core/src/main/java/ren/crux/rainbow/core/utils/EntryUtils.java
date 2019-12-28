@@ -47,12 +47,12 @@ public class EntryUtils {
 
     public static TypeDesc build(Field field) {
         Type genericType = field.getGenericType();
-        return new TypeDesc(genericType.getTypeName(), getActualTypeDesc(genericType), field.getType().getSimpleName());
+        return new TypeDesc(genericType.getTypeName(), getActualTypeDesc(genericType), field.getType().getSimpleName(), field.getType().getTypeName());
     }
 
     public static TypeDesc build(Parameter parameter) {
         Type parameterizedType = parameter.getParameterizedType();
-        return new TypeDesc(parameterizedType.getTypeName(), getActualTypeDesc(parameterizedType), parameter.getType().getSimpleName());
+        return new TypeDesc(parameterizedType.getTypeName(), getActualTypeDesc(parameterizedType), parameter.getType().getSimpleName(), parameter.getType().getTypeName());
     }
 
     public static TypeDesc build(Method method) {

@@ -13,6 +13,7 @@
         <module>rainbow-test</module>
         <module>rainbow-spring-boot-starter</module>
         <module>rainbow-javadoc</module>
+        <module>rainbow-editor</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,22 +1,23 @@
 package ren.crux.rainbow.core;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.module.Context;
+import ren.crux.rainbow.core.module.DefaultModule;
 import ren.crux.rainbow.core.module.Module;
-import ren.crux.rainbow.core.module.ModuleBuilder;
+import ren.crux.rainbow.core.module.ParserOptionModule;
+import ren.crux.rainbow.core.option.Option;
+import ren.crux.rainbow.core.option.RevisableConfig;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * @author wangzhihui
+ */
 public class DocumentReaderBuilder {
 
     protected ClassDocProvider classDocProvider;
     protected RequestGroupProvider requestGroupProvider;
-    protected Map<String, Object> properties = new HashMap<>();
+    private final RevisableConfig config = new RevisableConfig();
     protected Map<String, String> implMap = new HashMap<>();
     protected List<Module> modules = new LinkedList<>();
 
@@ -90,13 +91,12 @@ public class DocumentReaderBuilder {
     /**
      * 设置属性到上下文 {@link Context}
      *
-     * @param key   属性名
-     * @param value 属性值
+     * @param option 属性名
+     * @param value  属性值
      * @return 自身
      */
-
-    public DocumentReaderBuilder property(String key, Object value) {
-        properties.put(key, value);
+    public <T> DocumentReaderBuilder option(Option<T> option, T value) {
+        config.setOption(option, value);
         return this;
     }
 
@@ -134,64 +134,9 @@ public class DocumentReaderBuilder {
      * @return 自身
      */
     public DocumentReaderBuilder useDefaultModule() {
-        ModuleBuilder builder = new ModuleBuilder();
-        builder.entryMethod().interceptor(new Interceptor<Method, EntryMethod>() {
-            @Override
-            public boolean before(Context context, Method source) {
-                if (StringUtils.startsWithAny(source.getName(), "get", "is")) {
-                    return true;
-                }
-                return false;
-            }
-        })
-                .end()
-                .entryField().interceptor(new Interceptor<Field, EntryField>() {
-
-            @Override
-            public boolean before(Context context, Field source) {
-                String name = source.getName();
-                if (StringUtils.equalsAny(name, "serialVersionUID", "$VALUES")) {
-                    return false;
-                }
-                return true;
-            }
-        })
-                .end()
-                .requestGroup().interceptor(new Interceptor<RequestGroup, RequestGroup>() {
-            @Override
-            public boolean before(Context context, RequestGroup source) {
-                if (StringUtils.equals("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController", source.getType())) {
-                    return false;
-                }
-                return true;
-            }
-        }).end()
-                .entry().interceptor(new Interceptor<Class<?>, Entry>() {
-            @Override
-            public boolean before(Context context, Class<?> source) {
-                if (StringUtils.startsWithAny(source.getTypeName(), "java.util", "java.lang", "javax.servlet", "org.springframework.web.servlet")) {
-                    return false;
-                }
-                if (StringUtils.equalsAny(source.getTypeName(), "org.springframework.http.ResponseEntity", "org.springframework.http.HttpEntity")) {
-                    return false;
-                }
-                return true;
-            }
-        }).end()
-                .requestParam().interceptor(new Interceptor<RequestParam, RequestParam>() {
-            @Override
-            public boolean before(Context context, RequestParam source) {
-                String type = source.getType().getType();
-                if (StringUtils.startsWithAny(type, "javax.servlet", "org.springframework.web.servlet")) {
-                    return false;
-                }
-                return true;
-            }
-        })
-        ;
-        modules(builder.build());
-        impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl");
-        impl("org.springframework.data.domain.Pageable", "org.springframework.data.domain.PageRequest");
+        modules(DefaultModule.INSTANCE, ParserOptionModule.INSTANCE);
+//        impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl");
+//        impl("org.springframework.data.domain.Pageable", "org.springframework.data.domain.PageRequest");
         return this;
     }
 
@@ -202,6 +147,6 @@ public class DocumentReaderBuilder {
      * @return 文档阅读器
      */
     public DocumentReader build() {
-        return new DocumentReaderImpl(classDocProvider, requestGroupProvider, properties, implMap, modules);
+        return new DocumentReaderImpl(classDocProvider, requestGroupProvider, config, implMap, modules);
     }
 }

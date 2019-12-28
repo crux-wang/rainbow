@@ -1,7 +1,7 @@
 package ren.crux.rainbow.core.parser;
 
 import org.apache.commons.collections4.CollectionUtils;
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.Request;
 import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.core.module.Context;
@@ -9,6 +9,11 @@ import ren.crux.rainbow.core.module.Context;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 请求组文档解析器
+ *
+ * @author wangzhihui
+ */
 public class RequestGroupDocParser extends AbstractEnhancer<RequestGroup> {
 
     private final CommentTextParser commentTextParser;
@@ -19,8 +24,8 @@ public class RequestGroupDocParser extends AbstractEnhancer<RequestGroup> {
         this.requestDocParser = requestDocParser;
     }
 
-    public RequestGroupDocParser(CombinationInterceptor<RequestGroup, RequestGroup> combinationInterceptor, CommentTextParser commentTextParser, RequestDocParser requestDocParser) {
-        super(combinationInterceptor);
+    public RequestGroupDocParser(Interceptor<RequestGroup, RequestGroup> interceptor, CommentTextParser commentTextParser, RequestDocParser requestDocParser) {
+        super(interceptor);
         this.commentTextParser = commentTextParser;
         this.requestDocParser = requestDocParser;
     }

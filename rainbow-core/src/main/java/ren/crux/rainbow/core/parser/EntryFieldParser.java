@@ -1,6 +1,6 @@
 package ren.crux.rainbow.core.parser;
 
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.EntryField;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
@@ -8,6 +8,11 @@ import ren.crux.rainbow.core.utils.EntryUtils;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
+/**
+ * 实体属性解析器
+ *
+ * @author wangzhihui
+ */
 public class EntryFieldParser extends AbstractEnhanceParser<Field, EntryField> {
 
     private final AnnotationParser annotationParser;
@@ -18,8 +23,8 @@ public class EntryFieldParser extends AbstractEnhanceParser<Field, EntryField> {
         this.commentTextParser = commentTextParser;
     }
 
-    public EntryFieldParser(CombinationInterceptor<Field, EntryField> combinationInterceptor, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
-        super(combinationInterceptor);
+    public EntryFieldParser(Interceptor<Field, EntryField> interceptor, AnnotationParser annotationParser, CommentTextParser commentTextParser) {
+        super(interceptor);
         this.annotationParser = annotationParser;
         this.commentTextParser = commentTextParser;
     }

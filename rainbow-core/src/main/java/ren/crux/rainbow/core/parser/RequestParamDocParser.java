@@ -1,19 +1,24 @@
 package ren.crux.rainbow.core.parser;
 
-import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
+import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.CommentText;
 import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.module.Context;
 
 import java.util.Optional;
 
+/**
+ * 请求参数文档解析器
+ *
+ * @author wangzhihui
+ */
 public class RequestParamDocParser extends AbstractEnhancer<RequestParam> {
 
     public RequestParamDocParser() {
     }
 
-    public RequestParamDocParser(CombinationInterceptor<RequestParam, RequestParam> combinationInterceptor) {
-        super(combinationInterceptor);
+    public RequestParamDocParser(Interceptor<RequestParam, RequestParam> interceptor) {
+        super(interceptor);
     }
 
     /**

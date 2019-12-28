@@ -4,19 +4,29 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.sun.javadoc.*;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.ClassDocProvider;
 import ren.crux.rainbow.core.model.TypeDesc;
+import ren.crux.rainbow.core.option.Option;
+import ren.crux.rainbow.core.option.RevisableConfig;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+/**
+ * 上下文
+ *
+ * @author wangzhhui
+ */
+@Slf4j
 @Getter
 public class Context {
 
-    private final Map<String, Object> properties = new HashMap<>();
-    private final Map<String, String> implMap = new HashMap<>();
+    private final RevisableConfig config;
+    private final Map<String, String> implMap;
     private final Set<String> entryClassNames = new HashSet<>();
     private final ClassDocProvider classDocProvider;
     private final Cache<String, Map<String, FieldDoc>> fieldDocCache = CacheBuilder.newBuilder().build();
@@ -24,9 +34,16 @@ public class Context {
     private final Cache<String, Map<String, MethodDoc>> noArgsMethodDocCache = CacheBuilder.newBuilder().build();
     private final Map<String, Map<String, ParamTag>> paramTagCache = new HashMap<>();
 
-    public Context(ClassDocProvider classDocProvider) {
+    public Context(ClassDocProvider classDocProvider, Map<String, String> implMap) {
+        this(new RevisableConfig(), implMap, classDocProvider);
+    }
+
+    public Context(RevisableConfig config, Map<String, String> implMap, ClassDocProvider classDocProvider) {
+        this.config = config;
+        this.implMap = implMap;
         this.classDocProvider = classDocProvider;
     }
+
 
     public Optional<ClassDoc> getClassDoc(Class<?> cls) {
         return getClassDoc(cls.getTypeName());
@@ -142,25 +159,43 @@ public class Context {
         return methodDocCache;
     }
 
-    public Map<String, Object> getProperties() {
-        return properties;
+    public RevisableConfig getConfig() {
+        return config;
     }
 
     /**
      * 设置属性到上下文 {@link Context}
      *
-     * @param key   属性名
-     * @param value 属性值
+     * @param option 选项
+     * @param value  值
      */
-    public void property(String key, Object value) {
-        properties.put(key, value);
+    public <T> void setOption(Option<T> option, T value) {
+        config.setOption(option, value);
     }
 
-    public Object getProperty(String key) {
-        return properties.get(key);
+    /**
+     * 获取选项
+     *
+     * @param option 选项
+     * @param <T>    值类型
+     * @return 值
+     */
+    public <T> T getOption(Option<T> option) {
+        return config.getOption(option);
     }
 
-    public Optional<Class<?>> impl(String source) {
+    /**
+     * 是否含有某配置项
+     *
+     * @param option 配置项
+     * @return 是否含有某配置项
+     */
+    public <T> boolean hasOption(@NonNull Option<T> option) {
+        return config.hasOption(option);
+    }
+
+
+    public Optional<Class<?>> getImplClass(String source) {
         String impl = implMap.get(source);
         if (impl == null) {
             return Optional.empty();
@@ -176,7 +211,7 @@ public class Context {
         if (StringUtils.isNotBlank(className)) {
             className = StringUtils.substringBefore(className, "[");
             className = StringUtils.substringBefore(className, "<");
-            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char", "short")) {
+            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char", "short", "T", "E", "K", "V", "?")) {
                 return;
             }
             if (StringUtils.startsWithAny(className, "java.lang.", "java.util.")) {
