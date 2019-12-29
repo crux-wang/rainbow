@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ren.crux.rainbow.core.model.Document;
@@ -12,13 +13,10 @@ import ren.crux.rainbow.core.model.Request;
 import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.editor.model.DocsListUtils;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * EditorController
@@ -29,7 +27,7 @@ import java.util.UUID;
 @RequestMapping("/editor")
 public class EditorController {
 
-    private static final String DOCS_ID_COOKIES_KEY = "DOCS_ID";
+    private static final String DOCS_ID_SESSION_KEY = "DOCS_ID";
 
     private final Cache<String, Document> documentCache = CacheBuilder.newBuilder().build();
     private final ObjectMapper objectMapper;
@@ -39,28 +37,26 @@ public class EditorController {
     }
 
     @PostMapping("/load")
-    public Document load(HttpServletRequest request, HttpServletResponse response, MultipartFile file) throws IOException {
+    public void load(HttpServletRequest request, MultipartFile file) throws IOException {
         String json = IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8);
         Document document = objectMapper.readValue(json, Document.class);
-        String id = UUID.randomUUID().toString();
-        id = "test";
+        String id = StringUtils.substringBefore(file.getOriginalFilename(), ".");
         documentCache.put(id, document);
-        response.addCookie(new Cookie(DOCS_ID_COOKIES_KEY, id));
-        return DocsListUtils.form(document);
+        request.getSession().setAttribute(DOCS_ID_SESSION_KEY, id);
     }
 
     @GetMapping("/source")
-    public Document source(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId) {
+    public Document source(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId) {
         return documentCache.getIfPresent(docsId);
     }
 
     @GetMapping("/docs")
-    public Document docs(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId) {
+    public Document docs(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId) {
         return DocsListUtils.form(documentCache.getIfPresent(docsId));
     }
 
     @GetMapping("/groups/{idx}")
-    public RequestGroup requestGroup(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @PathVariable int idx) {
+    public RequestGroup requestGroup(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @PathVariable int idx) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -69,7 +65,7 @@ public class EditorController {
     }
 
     @PostMapping("/groups/{idx}")
-    public RequestGroup updateRequestGroup(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @PathVariable int idx, @RequestBody RequestGroup body) {
+    public RequestGroup updateRequestGroup(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @PathVariable int idx, @RequestBody RequestGroup body) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -82,7 +78,7 @@ public class EditorController {
     }
 
     @PostMapping("/groups")
-    public RequestGroup updateRequestGroup(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @RequestBody RequestGroup body) {
+    public RequestGroup addRequestGroup(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @RequestBody RequestGroup body) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -92,7 +88,7 @@ public class EditorController {
     }
 
     @GetMapping("/groups/{idx}/requests/{subIdx}")
-    public Request request(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @PathVariable int idx, @PathVariable int subIdx) {
+    public Request request(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @PathVariable int idx, @PathVariable int subIdx) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -101,7 +97,7 @@ public class EditorController {
     }
 
     @PostMapping("/groups/{idx}/requests/{subIdx}")
-    public Request updateRequest(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @PathVariable int idx, @PathVariable int subIdx, @RequestBody Request body) {
+    public Request updateRequest(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @PathVariable int idx, @PathVariable int subIdx, @RequestBody Request body) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -112,7 +108,7 @@ public class EditorController {
     }
 
     @PostMapping("/groups/{idx}/requests")
-    public Request updateRequest(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @PathVariable int idx, @RequestBody Request body) {
+    public Request addRequest(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @PathVariable int idx, @RequestBody Request body) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -124,7 +120,7 @@ public class EditorController {
 
 
     @GetMapping("/entries/{name}")
-    public Entry entry(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @PathVariable String name) {
+    public Entry entry(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @PathVariable String name) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
@@ -133,7 +129,7 @@ public class EditorController {
     }
 
     @GetMapping("/entries")
-    public Entry entry(@CookieValue(DOCS_ID_COOKIES_KEY) String docsId, @RequestBody Entry body) {
+    public Entry entry(@SessionAttribute(DOCS_ID_SESSION_KEY) String docsId, @RequestBody Entry body) {
         Document document = documentCache.getIfPresent(docsId);
         if (document == null) {
             return null;
