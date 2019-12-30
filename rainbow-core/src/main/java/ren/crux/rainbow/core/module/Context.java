@@ -207,6 +207,12 @@ public class Context {
         }
     }
 
+    public void addEntryClassName(Collection<String> classNames) {
+        if (classNames != null) {
+            entryClassNames.addAll(classNames);
+        }
+    }
+
     public void addEntryClassName(String className) {
         if (StringUtils.isNotBlank(className)) {
             className = StringUtils.substringBefore(className, "[");

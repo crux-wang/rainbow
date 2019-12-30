@@ -36,6 +36,15 @@ public interface ClassDocProvider {
     }
 
     /**
+     * 返回任意一个类文档描述
+     *
+     * @return 类文档描述
+     */
+    default Optional<ClassDoc> any() {
+        return Optional.empty();
+    }
+
+    /**
      * 获取类文档描述
      *
      * @param context   上下文

@@ -61,9 +61,4 @@ public class CommentText {
         }
         return Optional.empty();
     }
-
-    public CommentText clearTags() {
-        tags = null;
-        return this;
-    }
 }

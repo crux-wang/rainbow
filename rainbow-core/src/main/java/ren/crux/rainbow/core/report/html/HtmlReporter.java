@@ -1,36 +1,28 @@
 package ren.crux.rainbow.core.report.html;
 
-import ren.crux.rainbow.core.model.*;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.report.Reporter;
 
-import java.util.List;
+import java.io.File;
+import java.util.Map;
+import java.util.function.Function;
 
-public interface HtmlReporter extends Reporter<String> {
+public abstract class HtmlReporter implements Reporter<Map<String, File>> {
 
-    String reportRequestGroups(List<RequestGroup> requestGroups);
+    protected static Cache<String, String> cache = CacheBuilder.newBuilder().build();
+    protected final String dirPath;
+    protected Function<String, String> function;
 
-    String reportRequestGroup(RequestGroup requestGroup);
+    protected HtmlReporter(String dirPath) {
+        StringUtils.appendIfMissing(dirPath, "/");
+        this.dirPath = dirPath;
+    }
 
-    String reportRequests(List<Request> requests);
-
-    String report(Request request);
-
-    String reportRequestParamGroups(List<RequestParam> requestParams);
-
-    String reportRequestParams(List<RequestParam> requestParams);
-
-    String reportRequestParam(RequestParam requestParam);
-
-    String reportRequestMethods(RequestMethod[] method);
-
-    String reportPaths(String[] paths);
-
-    String reportEntries(List<Entry> entries);
-
-    String reportEntry(Entry entry);
-
-    String reportEntryFields(List<EntryField> entryFields);
-
-    String reportEntryField(EntryField entryField);
+    public HtmlReporter setTemplateProvider(Function<String, String> function) {
+        this.function = function;
+        return this;
+    }
 
 }

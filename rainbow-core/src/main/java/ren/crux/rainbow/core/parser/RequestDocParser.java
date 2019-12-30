@@ -75,6 +75,7 @@ public class RequestDocParser extends AbstractEnhancer<Request> {
             RequestParam param = params.get(i);
             ParamTag paramTag = paramTags[i];
             param.setName(paramTag.parameterName());
+            map.put(param.getName(), paramTag);
         }
         return map;
     }

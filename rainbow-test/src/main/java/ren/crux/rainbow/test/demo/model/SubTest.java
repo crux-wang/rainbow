@@ -16,6 +16,8 @@ import lombok.EqualsAndHashCode;
 @Data
 public class SubTest extends Test {
 
+    public String pubField;
+
     private String subTestId;
 
 }

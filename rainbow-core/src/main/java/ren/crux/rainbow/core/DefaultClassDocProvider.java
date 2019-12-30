@@ -25,6 +25,7 @@ public class DefaultClassDocProvider implements ClassDocProvider {
     private JavaDocReader<List<ClassDoc>> javaDocReader;
     private Map<String, ClassDoc> classDocMap;
     private DocumentReaderBuilder owner;
+    private ClassDoc classDoc;
 
     public DefaultClassDocProvider source(String... sourcePath) {
         this.sourcePath = sourcePath;
@@ -57,7 +58,24 @@ public class DefaultClassDocProvider implements ClassDocProvider {
                     .orElse(Collections.emptyList())
                     .stream().filter(cd -> filters.include(context, cd))
                     .collect(Collectors.toMap(ProgramElementDoc::qualifiedName, cd -> cd));
+            if (!classDocMap.isEmpty()) {
+                classDocMap.values().stream().findFirst().ifPresent(this::setClassDoc);
+            }
         }
+    }
+
+    private void setClassDoc(ClassDoc classDoc) {
+        this.classDoc = classDoc;
+    }
+
+    /**
+     * 返回任意一个类文档描述
+     *
+     * @return 类文档描述
+     */
+    @Override
+    public Optional<ClassDoc> any() {
+        return Optional.ofNullable(classDoc);
     }
 
     @Override

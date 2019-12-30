@@ -34,7 +34,7 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         this.mapping = mapping;
     }
 
-    public static Request process(Context context, RequestMappingInfo info, HandlerMethod handlerMethod) {
+    public static Request process(Context context, RequestGroup requestGroup, RequestMappingInfo info, HandlerMethod handlerMethod) {
         PatternsRequestCondition p = info.getPatternsCondition();
         Method method = handlerMethod.getMethod();
         RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
@@ -49,11 +49,12 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         List<RequestParam> params = Arrays.stream(parameters).map(parameter -> {
             RequestParam requestParam = SpringWebHelper.process(parameter);
             requestParam.setDeclaringSignature(request.getSignature());
-            context.addEntryClassName(requestParam.getType());
+            requestGroup.addEntryClassName(requestParam.getType());
             return requestParam;
         }).collect(Collectors.toList());
         request.setParams(params);
-        context.addEntryClassName(request.getReturnType());
+        requestGroup.addEntryClassName(request.getReturnType());
+        context.addEntryClassName(requestGroup.getEntryClassNames());
         return request;
     }
 
@@ -64,7 +65,6 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : map.entrySet()) {
             RequestMappingInfo info = entry.getKey();
             HandlerMethod handlerMethod = entry.getValue();
-            Request request = process(context, info, handlerMethod);
             Method method = handlerMethod.getMethod();
             String className = method.getDeclaringClass().getName();
             RequestGroup requestGroup = groupMap.get(className);
@@ -75,6 +75,7 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
                 requestGroup.setPath(SpringWebHelper.getRequestPath(className));
                 groupMap.put(className, requestGroup);
             }
+            Request request = process(context, requestGroup, info, handlerMethod);
             requestGroup.addRequest(request);
         }
         return new LinkedList<>(groupMap.values());

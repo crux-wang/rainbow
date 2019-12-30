@@ -1,5 +1,6 @@
 package ren.crux.rainbow.core.parser;
 
+import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -64,12 +65,16 @@ public class CommentTextParser extends AbstractEnhanceParser<Doc, CommentText> {
             TagRef ref = new TagRef();
             ref.setName(source.name());
             ref.setText(source.text());
-            if (StringUtils.contains(source.text(), ".")) {
-                try {
-                    Class<?> aClass = Class.forName(source.text());
-                    ref.setTarget(aClass.getTypeName());
-                } catch (ClassNotFoundException ignored) {
-                }
+            if (StringUtils.equalsAny(source.kind(), "@see", "@throws")) {
+                context.getClassDocProvider().any().ifPresent(classDoc -> {
+                    String className = source.text();
+                    className = StringUtils.substringBefore(className, " ");
+                    className = StringUtils.substringBefore(className, "#");
+                    ClassDoc aClass = classDoc.findClass(className);
+                    if (aClass != null) {
+                        ref.setTarget(aClass.qualifiedTypeName());
+                    }
+                });
             }
             return Optional.of(ref);
         }

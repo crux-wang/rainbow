@@ -154,25 +154,6 @@
         el.append(rqlhtml)
     }
 
-    function processRequests(requests) {
-        let html = "";
-        if (!requests) {
-            return "";
-        }
-        for (let req of requests) {
-            html += "            <div>" +
-                "                <h5 class=\"card-title\" title=\"\">" +
-                "                    " + wrap(req.method, "<span class=\"badge badge-light text-monospace\">", "</span>", ",") + "&nbsp; &nbsp;&nbsp;<code>/test/get</code>&nbsp;,&nbsp;&nbsp;<code>/test/get-2</code>&nbsp;" +
-                "                    &nbsp;&nbsp;&nbsp;&nbsp;<small class=\"comment-text\">//&nbsp;测试</small>" +
-                "                </h5>" +
-                "                <p class=\"comment-text\"></p>" +
-                "            </div>" +
-                "            <hr>";
-
-        }
-        return html;
-    }
-
     function wrap(array, left, right, separator) {
         if (!array) {
             return "";

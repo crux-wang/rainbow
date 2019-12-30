@@ -1,28 +1,27 @@
 package ren.crux.rainbow.core.report.html;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.rainbow.core.model.*;
-import ren.crux.rainbow.core.report.Reporter;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
-public class TemplateHtmlReporter implements Reporter<String> {
+public class TemplateHtmlReporter extends HtmlReporter {
 
-    public static final TemplateHtmlReporter INSTANCE = new TemplateHtmlReporter();
+    public static final TemplateHtmlReporter INSTANCE = new TemplateHtmlReporter("/tmp/");
 
     public static final String DOCUMENT_TEMPLATE = "document-template.html";
     public static final String REQUEST_GROUP_TEMPLATE = "request-group-template.html";
+    public static final String REQUEST_GROUP_ITEM_TEMPLATE = "request-group-item-template.html";
     public static final String REQUEST_TEMPLATE = "request-template.html";
     public static final String METHOD_PATH_LINE_TEMPLATE = "method-path-line-template.html";
     public static final String METHOD_TEMPLATE = "method-template.html";
@@ -31,13 +30,10 @@ public class TemplateHtmlReporter implements Reporter<String> {
     public static final String REQUEST_PARAM_GROUP_TEMPLATE = "request-param-group-template.html";
     public static final String ENTRY_TEMPLATE = "entry-template.html";
     public static final String ENTRY_FIELD_TEMPLATE = "entry-field-template.html";
-    private Function<String, String> function;
 
-    protected static Cache<String, String> cache = CacheBuilder.newBuilder().build();
 
-    public TemplateHtmlReporter getTemplateFun(Function<String, String> function) {
-        this.function = function;
-        return this;
+    protected TemplateHtmlReporter(String dirPath) {
+        super(dirPath);
     }
 
     protected String getTemplate(String name) {
@@ -52,47 +48,86 @@ public class TemplateHtmlReporter implements Reporter<String> {
     }
 
     @Override
-    public Optional<String> report(Document document) {
+    public Optional<Map<String, File>> report(Document document) {
         if (document == null) {
             return Optional.empty();
         }
         String template = getTemplate(DOCUMENT_TEMPLATE);
-        String html = StringUtils.replaceEach(template,
+        String home = StringUtils.replaceEach(template,
                 new String[]{
                         "${source}",
                         "${packages}",
                         "${request-group-list-template}",
-                        "${entry-list-template}",
                 },
                 new String[]{
                         Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.SOURCE_PATH.getName())),
                         Arrays.toString((String[]) document.getProperties().get(DefaultClassDocProvider.PACKAGES.getName())),
                         reportRequestGroups(document.getRequestGroups()),
-                        reportEntries(new LinkedList<>(document.getEntryMap().values()))
                 });
-        return Optional.of(html);
+        Map<String, File> map = new HashMap<>();
+        map.put("index.html", writeStringToFile("index.html", home));
+
+        for (RequestGroup requestGroup : document.getRequestGroups()) {
+            String fileName = "rg-" + buildId(requestGroup.getType()) + ".html";
+            map.put(fileName, writeStringToFile(fileName, report(document, requestGroup)));
+        }
+        if (map.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(map);
+        }
+    }
+
+    private String buildId(String type) {
+        return StringUtils.replaceEach(type, new String[]{".", "$"}, new String[]{"-", "_"});
+    }
+
+    private File writeStringToFile(String name, String content) {
+        File file = new File(dirPath + name);
+        try {
+            FileUtils.writeStringToFile(file, content, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
     }
 
     private String reportRequestGroups(List<RequestGroup> requestGroups) {
         StringBuilder sb = new StringBuilder();
         for (RequestGroup requestGroup : requestGroups) {
-            sb.append(report(requestGroup));
+            sb.append(reportRequestGroupItem(requestGroup));
         }
         return sb.toString();
     }
 
-    private String report(RequestGroup requestGroup) {
+    private String reportRequestGroupItem(RequestGroup requestGroup) {
+        String template = getTemplate(REQUEST_GROUP_ITEM_TEMPLATE);
+        CommentText commentText = requestGroup.getCommentText();
+        template = StringUtils.replaceEach(template,
+                new String[]{
+                        "${name}", "${type}", "${path-list-template}", "${link}"},
+                new String[]{
+                        requestGroup.getName(),
+                        requestGroup.getType(),
+                        reportPaths(requestGroup.getPath()),
+                        "rg-" + buildId(requestGroup.getType()) + ".html"
+                });
+        return replace(template, commentText);
+    }
+
+    private String report(Document document, RequestGroup requestGroup) {
         String template = getTemplate(REQUEST_GROUP_TEMPLATE);
         CommentText commentText = requestGroup.getCommentText();
         template = StringUtils.replaceEach(template,
                 new String[]{
-                        "${name}", "${type}", "${path}",
-                        "${request-list-template}"},
+                        "${name}", "${type}", "${path-list-template}",
+                        "${request-list-template}", "${entry-list-template}"},
                 new String[]{
                         requestGroup.getName(),
                         requestGroup.getType(),
-                        StringUtils.joinWith(", ", requestGroup.getPath()),
-                        reportRequests(requestGroup.getRequests())
+                        reportPaths(requestGroup.getPath()),
+                        reportRequests(requestGroup.getRequests()),
+                        reportEntries(document, requestGroup.getEntryClassNames())
                 });
         return replace(template, commentText);
     }
@@ -141,25 +176,22 @@ public class TemplateHtmlReporter implements Reporter<String> {
                 });
     }
 
-    private String buildId(String type) {
-        return defaultString(StringUtils.replaceEach(type, new String[]{".", "(", ")", ",", " ", "<", ">", "[", "]"}, new String[]{"-", "_", "_", "-", "_", "_", "_", "_", "_"}));
-    }
-
     private String reportRequests(List<Request> requests) {
         StringBuilder result = new StringBuilder();
-        for (Request request : requests) {
-            result.append(report(request));
+        for (int i = 0; i < requests.size(); i++) {
+            result.append(report(i, requests.get(i)));
+
         }
         return result.toString();
     }
 
-    private String report(Request request) {
+    private String report(int idx, Request request) {
         String template = getTemplate(REQUEST_TEMPLATE);
         CommentText commentText = request.getCommentText();
         TypeDesc returnType = request.getReturnType();
         template = StringUtils.replaceEach(template,
                 new String[]{
-                        "${name}", "${type}", "${type-id}", "${path}",
+                        "${name}", "${type-id}", "${path}",
                         "${method}",
                         "${returnCommentText}",
                         "${method-path-list-template}",
@@ -167,8 +199,7 @@ public class TemplateHtmlReporter implements Reporter<String> {
                 },
                 new String[]{
                         request.getName(),
-                        request.getSignature(),
-                        buildId(request.getSignature()),
+                        "req-" + idx,
                         ArrayUtils.toString(request.getPath()),
                         ArrayUtils.toString(request.getMethod()),
                         request.getReturnCommentText(),
@@ -260,11 +291,14 @@ public class TemplateHtmlReporter implements Reporter<String> {
         return sb.toString();
     }
 
-    private String reportEntries(List<Entry> entries) {
-        StringBuilder sb = new StringBuilder();
-        for (Entry entry : entries) {
-            sb.append(report(entry));
+    private String reportEntries(Document document, Set<String> entryClassNames) {
+        if (entryClassNames == null) {
+            return "";
         }
+        StringBuilder sb = new StringBuilder();
+        entryClassNames.stream().map(n -> document.getEntryMap().get(n)).filter(Objects::nonNull).forEach(entry -> {
+            sb.append(report(entry));
+        });
         return sb.toString();
     }
 

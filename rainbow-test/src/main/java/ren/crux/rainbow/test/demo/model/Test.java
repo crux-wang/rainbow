@@ -10,8 +10,13 @@ import java.util.Map;
  * <p>
  * 测试专用
  * 包含内嵌链接 {@link User} 以及 linkplain 形式 {@linkplain Article article}
+ * {@link User#getEmail()} link 方法测试
+ * {@link SubTest#pubField} link 属性测试
  *
  * @author wangzhihui
+ * @see SubTest#exp()   @see 标签方法测试
+ * @see SubTest#pubField  @see 标签属性测试
+ * @see SubTest  @see 标签测试
  * @since 1.0
  */
 @Data
@@ -66,4 +71,12 @@ public class Test {
      */
     private Map<String, List<Test>> stringTestListMap;
 
+    /**
+     * 异常文档注释测试
+     *
+     * @throws Exception 异常
+     */
+    public void exp() throws Exception {
+
+    }
 }
