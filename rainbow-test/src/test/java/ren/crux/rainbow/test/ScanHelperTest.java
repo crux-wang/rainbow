@@ -10,10 +10,11 @@ import ren.crux.rainbow.core.DocumentReader;
 import ren.crux.rainbow.core.DocumentReaderBuilder;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.module.ParserOptionModule;
-import ren.crux.rainbow.core.report.html.TemplateHtmlReporter;
+import ren.crux.rainbow.core.report.MarkdownReport;
 import ren.crux.rainbow.runtime.SpringWebModule;
 
-import static ren.crux.rainbow.core.module.ParserOptionModule.IgnoredOption.*;
+import static ren.crux.rainbow.core.module.ParserOptionModule.IgnoredOption.signature;
+import static ren.crux.rainbow.core.module.ParserOptionModule.IgnoredOption.tags;
 
 @SpringBootTest(classes = TestApplication.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,10 +39,12 @@ public class ScanHelperTest {
                 .source(path)
                 .packages(packageNames)
                 .end()
-                .option(ParserOptionModule.IGNORED_OPTION, new ParserOptionModule.IgnoredOption[]{annotation_attrs, tags, signature})
+                .option(ParserOptionModule.IGNORED_OPTION, new ParserOptionModule.IgnoredOption[]{tags, signature})
                 .useDefaultModule()
                 .modules(SpringWebModule.INSTANCE)
                 .build();
+
+
 //        documentReader.read().report(JsonReporter.INSTANCE).ifPresent(html -> {
 //            try {
 //                File file = new File("test.json");
@@ -52,6 +55,6 @@ public class ScanHelperTest {
 //            }
 //        });
 
-        documentReader.read().report(TemplateHtmlReporter.INSTANCE).ifPresent(System.out::println);
+        documentReader.read().report(MarkdownReport.INSTANCE).ifPresent(System.out::println);
     }
 }
