@@ -85,6 +85,16 @@ public class DocumentReaderImpl implements DocumentReader {
             Map<String, Entry> extraEntryMap = entryParser.parse(context, entryClasses).stream().collect(Collectors.toMap(Entry::getType, e -> e));
             entryMap.putAll(extraEntryMap);
         }
+        for (RequestGroup requestGroup : requestGroups) {
+            if (requestGroup.getEntryClassNames() != null) {
+                Set<String> entryFieldClassNames = new HashSet<>();
+                for (String entryClassName : requestGroup.getEntryClassNames()) {
+                    entryFieldClassNames.addAll(context.getEntryFieldClassNames().get(entryClassName));
+                }
+                requestGroup.getEntryClassNames().addAll(entryFieldClassNames);
+            }
+        }
+
         Document document = new Document();
         document.setRequestGroups(requestGroups);
         document.setEntryMap(entryMap);

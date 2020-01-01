@@ -42,7 +42,7 @@ public class EntryFieldParser extends AbstractEnhanceParser<Field, EntryField> {
         EntryField entryField = new EntryField();
         entryField.setName(source.getName());
         entryField.setType(EntryUtils.build(source));
-        context.addEntryClassName(entryField.getType());
+        context.addEntryFieldClassName(declaringClass.getTypeName(), entryField.getType());
         entryField.setAnnotations(annotationParser.parse(context, source.getAnnotations()));
         context.getClassFieldDoc(declaringClass, source.getName()).flatMap(fieldDoc -> commentTextParser.parse(context, fieldDoc)).ifPresent(entryField::setCommentText);
         return Optional.of(entryField);

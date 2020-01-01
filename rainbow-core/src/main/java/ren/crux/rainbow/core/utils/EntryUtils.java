@@ -6,10 +6,7 @@ import ren.crux.rainbow.core.model.Annotation;
 import ren.crux.rainbow.core.model.TypeDesc;
 
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wangzhihui
@@ -72,6 +69,13 @@ public class EntryUtils {
                     Type rawType = ((ParameterizedType) typ).getRawType();
                     typeDesc.setType(rawType.getTypeName());
                     typeDesc.setSimpleName(StringUtils.substringAfterLast(rawType.getTypeName(), "."));
+                } else {
+                    typeDesc.setType(typ.getTypeName());
+                    if (typ.getTypeName().contains(".")) {
+                        typeDesc.setSimpleName(StringUtils.substringAfterLast(typ.getTypeName(), "."));
+                    } else {
+                        typeDesc.setSimpleName(typ.getTypeName());
+                    }
                 }
                 return typeDesc;
             }).toArray(TypeDesc[]::new);
@@ -89,4 +93,34 @@ public class EntryUtils {
         return null;
     }
 
+    public static void addEntryClassName(Set<String> entryClassNames, Collection<String> classNames) {
+        if (classNames != null) {
+            entryClassNames.addAll(classNames);
+        }
+    }
+
+    public static void addEntryClassName(Set<String> entryClassNames, String className) {
+        if (StringUtils.isNotBlank(className)) {
+            className = StringUtils.substringBefore(className, "[");
+            className = StringUtils.substringBefore(className, "<");
+            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char", "short", "T", "E", "K", "V", "?")) {
+                return;
+            }
+            if (StringUtils.startsWithAny(className, "java.lang.", "java.util.")) {
+                return;
+            }
+            entryClassNames.add(className);
+        }
+    }
+
+    public static void addEntryClassName(Set<String> entryClassNames, TypeDesc typeDesc) {
+        if (typeDesc != null) {
+            addEntryClassName(entryClassNames, typeDesc.getType());
+            if (typeDesc.getActualParamTypes() != null) {
+                for (TypeDesc actualParamType : typeDesc.getActualParamTypes()) {
+                    addEntryClassName(entryClassNames, actualParamType);
+                }
+            }
+        }
+    }
 }

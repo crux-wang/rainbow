@@ -2,6 +2,8 @@ package ren.crux.rainbow.core.module;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 import com.sun.javadoc.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,6 +13,7 @@ import ren.crux.rainbow.core.ClassDocProvider;
 import ren.crux.rainbow.core.model.TypeDesc;
 import ren.crux.rainbow.core.option.Option;
 import ren.crux.rainbow.core.option.RevisableConfig;
+import ren.crux.rainbow.core.utils.EntryUtils;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -33,6 +36,7 @@ public class Context {
     private final Map<String, MethodDoc> methodDocCache = new HashMap<>();
     private final Cache<String, Map<String, MethodDoc>> noArgsMethodDocCache = CacheBuilder.newBuilder().build();
     private final Map<String, Map<String, ParamTag>> paramTagCache = new HashMap<>();
+    private final SetMultimap<String, String> entryFieldClassNames = HashMultimap.create();
 
     public Context(ClassDocProvider classDocProvider, Map<String, String> implMap) {
         this(new RevisableConfig(), implMap, classDocProvider);
@@ -208,33 +212,21 @@ public class Context {
     }
 
     public void addEntryClassName(Collection<String> classNames) {
-        if (classNames != null) {
-            entryClassNames.addAll(classNames);
-        }
+        EntryUtils.addEntryClassName(entryClassNames, classNames);
     }
 
     public void addEntryClassName(String className) {
-        if (StringUtils.isNotBlank(className)) {
-            className = StringUtils.substringBefore(className, "[");
-            className = StringUtils.substringBefore(className, "<");
-            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char", "short", "T", "E", "K", "V", "?")) {
-                return;
-            }
-            if (StringUtils.startsWithAny(className, "java.lang.", "java.util.")) {
-                return;
-            }
-            entryClassNames.add(className);
-        }
+        EntryUtils.addEntryClassName(entryClassNames, className);
     }
 
     public void addEntryClassName(TypeDesc typeDesc) {
-        if (typeDesc != null) {
-            addEntryClassName(typeDesc.getType());
-            if (typeDesc.getActualParamTypes() != null) {
-                for (TypeDesc actualParamType : typeDesc.getActualParamTypes()) {
-                    addEntryClassName(actualParamType);
-                }
-            }
-        }
+        EntryUtils.addEntryClassName(entryClassNames, typeDesc);
+    }
+
+    public void addEntryFieldClassName(String entryType, TypeDesc typeDesc) {
+        Set<String> classNames = new HashSet<>();
+        EntryUtils.addEntryClassName(classNames, typeDesc);
+        EntryUtils.addEntryClassName(entryClassNames, classNames);
+        entryFieldClassNames.putAll(entryType, classNames);
     }
 }

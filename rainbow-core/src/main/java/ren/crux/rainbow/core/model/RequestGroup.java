@@ -2,7 +2,7 @@ package ren.crux.rainbow.core.model;
 
 import lombok.Data;
 import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
+import ren.crux.rainbow.core.utils.EntryUtils;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -49,31 +49,17 @@ public class RequestGroup {
     }
 
     public void addEntryClassName(String className) {
-        if (StringUtils.isNotBlank(className)) {
-            className = StringUtils.substringBefore(className, "[");
-            className = StringUtils.substringBefore(className, "<");
-            if (StringUtils.equalsAny(className, "void", "int", "long", "float", "double", "byte", "boolean", "char", "short", "T", "E", "K", "V", "?")) {
-                return;
-            }
-            if (StringUtils.startsWithAny(className, "java.lang.", "java.util.")) {
-                return;
-            }
-            if (entryClassNames == null) {
-                entryClassNames = new HashSet<>();
-            }
-            entryClassNames.add(className);
+        if (entryClassNames == null) {
+            entryClassNames = new HashSet<>();
         }
+        EntryUtils.addEntryClassName(entryClassNames, className);
     }
 
     public void addEntryClassName(TypeDesc typeDesc) {
-        if (typeDesc != null) {
-            addEntryClassName(typeDesc.getType());
-            if (typeDesc.getActualParamTypes() != null) {
-                for (TypeDesc actualParamType : typeDesc.getActualParamTypes()) {
-                    addEntryClassName(actualParamType);
-                }
-            }
+        if (entryClassNames == null) {
+            entryClassNames = new HashSet<>();
         }
+        EntryUtils.addEntryClassName(entryClassNames, typeDesc);
     }
 
 }

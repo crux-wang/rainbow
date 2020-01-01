@@ -2,6 +2,7 @@ package ren.crux.rainbow.core.report;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.*;
 
@@ -11,6 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * markdown 格式
+ *
+ * @author wangzhihui
+ */
 public class MarkdownReport implements Reporter<Map<String, File>> {
 
     public static final MarkdownReport INSTANCE = new MarkdownReport();
@@ -104,7 +110,7 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                             sb.append("|  name | type | required | default | comment text | other |\n| ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |\n");
                             for (RequestParam pm : pms) {
                                 sb.append("| ").append(pm.getName())
-                                        .append(" | ").append(pm.getType().getFormat())
+                                        .append(" | ").append(formatType(pm.getType()))
                                         .append(" | ").append(pm.isRequired() ? "Y" : "N")
                                         .append(" | ").append(StringUtils.defaultString(pm.getDefaultValue()))
                                         .append(" | ").append(pm.getCommentText() == null ? "-" : pm.getCommentText().inline())
@@ -120,9 +126,17 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                                     .append(requestBody.getType().getFormat()).append("\n\n");
                         }
                     }
-                    sb.append("**RESPONSE**\n\n")
-                            .append(request.getReturnType().getFormat()).append("  //  ").append(StringUtils.defaultString(request.getReturnCommentText()))
-                            .append("\n\n");
+                    sb.append("**RESPONSE**\n\n");
+                    String returnType = formatType(request.getReturnType());
+                    if (StringUtils.equals("void", returnType)) {
+                        sb.append("None");
+                    } else {
+                        sb.append(returnType);
+                    }
+                    String returnCommentText = StringUtils.defaultString(request.getReturnCommentText());
+                    if (StringUtils.isNotBlank(returnCommentText)) {
+                        sb.append("  //  ").append(returnCommentText).append("\n\n");
+                    }
                 }
             }
             Set<String> entryClassNames = requestGroup.getEntryClassNames();
@@ -141,7 +155,7 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                             sb.append("|  name | type | comment text | other |\n| ------------ | ------------ | ------------ | ------------ |\n");
                             for (EntryField field : fields) {
                                 sb.append("| ").append(field.getName())
-                                        .append(" | ").append(field.getType().getFormat())
+                                        .append(" | ").append(formatType(field.getType()))
                                         .append(" | ").append(field.getCommentText() == null ? "-" : field.getCommentText().inline())
                                         .append(" | ").append(formatAnnotations(field.getAnnotations()))
                                         .append(" |\n");
@@ -177,11 +191,24 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                     attribute.remove("flags");
                 }
                 if (!attribute.isEmpty()) {
-                    str.append("(").append(attribute).append(")");
+                    if (attribute.size() == 1 && attribute.containsKey("value")) {
+                        Object value = attribute.get("value");
+                        str.append("(").append(value).append(")");
+                    } else {
+                        str.append("(").append(attribute).append(")");
+                    }
                 }
             }
             str.append(" ; ");
         }
         return str.toString();
+    }
+
+    private String formatType(TypeDesc type) {
+        String name = type.getSimpleName();
+        if (ArrayUtils.isNotEmpty(type.getActualParamTypes())) {
+            return name + " < " + Arrays.stream(type.getActualParamTypes()).map(this::formatType).collect(Collectors.joining(", ")) + " > ";
+        }
+        return name;
     }
 }
