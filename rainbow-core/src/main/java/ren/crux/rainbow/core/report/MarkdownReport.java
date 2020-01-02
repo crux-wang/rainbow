@@ -21,6 +21,13 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
 
     public static final MarkdownReport INSTANCE = new MarkdownReport();
 
+    private boolean ignoredRequestAttr = true;
+
+    public MarkdownReport ignoredRequestAttr(boolean ignoredRequestAttr) {
+        this.ignoredRequestAttr = ignoredRequestAttr;
+        return this;
+    }
+
     private final String dirPath;
 
     public MarkdownReport(String dirPath) {
@@ -103,6 +110,9 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                         Map<RequestParamType, List<RequestParam>> group = params.stream().collect(Collectors.groupingBy(RequestParam::getParamType));
                         for (Map.Entry<RequestParamType, List<RequestParam>> entry : group.entrySet()) {
                             if (entry.getKey() == RequestParamType.request_body) {
+                                continue;
+                            }
+                            if (ignoredRequestAttr && entry.getKey() == RequestParamType.request_attribute) {
                                 continue;
                             }
                             List<RequestParam> pms = entry.getValue();
