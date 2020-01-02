@@ -41,7 +41,8 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         RequestMethod[] requestMethods = methodsCondition.getMethods().stream().map(m -> RequestMethod.valueOf(m.toString())).toArray(RequestMethod[]::new);
         Request request = new Request();
         request.setName(method.getName());
-        request.setSignature(StringUtils.substringAfterLast(method.toGenericString(), " "));
+        String genericString = method.toGenericString();
+        request.setSignature(StringUtils.substringAfterLast(StringUtils.substringBefore(method.toGenericString(), ")") + ")", " "));
         request.setReturnType(EntryUtils.build(method));
         request.setMethod(requestMethods);
         request.setPath(p.getPatterns().toArray(new String[0]));

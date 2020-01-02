@@ -29,9 +29,10 @@ public class UserController {
      * @param id   用户 ID
      * @param user 用户资料
      * @return 用户资料
+     * @throws Exception 异常
      */
     @PostMapping("/{id}")
-    public User update(@PathVariable String id, @RequestBody User user) {
+    public User update(@PathVariable String id, @RequestBody User user) throws Exception {
         user.setId(id);
         return user;
     }

@@ -25,10 +25,10 @@ public class ScanHelperTest {
 
     @Test
     public void name() throws Exception {
-//        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
+        final String path = "/Users/wangzhihui/workspace/project/rainbow/rainbow-test/src/main/java/";
 //        final String path2 = "/Users/wangzhihui/workspace/project/rainbow/rainbow-core/src/main/java/";
 //        final String path3 = "/Users/wangzhihui/workspace/project/rainbow/rainbow-javadoc/src/main/java/";
-        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
+//        final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
         final String[] packageNames = new String[]{"ren.crux.rainbow"};
         DefaultClassDocProvider classDocProvider = new DefaultClassDocProvider();
         DocumentReader documentReader = new DocumentReaderBuilder()
