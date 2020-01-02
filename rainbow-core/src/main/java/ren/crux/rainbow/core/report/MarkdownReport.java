@@ -145,8 +145,10 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                     }
                     String returnCommentText = StringUtils.defaultString(request.getReturnCommentText());
                     if (StringUtils.isNotBlank(returnCommentText)) {
-                        sb.append("  //  ").append(returnCommentText).append("\n\n");
+                        sb.append("  //  ").append(returnCommentText);
                     }
+                    ;
+                    sb.append("\n\n");
                 }
             }
             Set<String> entryClassNames = requestGroup.getEntryClassNames();
