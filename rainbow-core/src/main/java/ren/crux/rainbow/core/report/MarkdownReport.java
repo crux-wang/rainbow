@@ -98,7 +98,7 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                     if (request.getPath() == null) {
                         sb.append("``");
                     } else {
-                        for (String path : requestGroup.getPath()) {
+                        for (String path : request.getPath()) {
                             sb.append("`").append(path).append("` ");
                         }
                     }
