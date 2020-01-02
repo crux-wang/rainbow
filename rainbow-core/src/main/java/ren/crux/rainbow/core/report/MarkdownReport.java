@@ -133,7 +133,11 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                         if (CollectionUtils.isNotEmpty(body)) {
                             RequestParam requestBody = body.get(0);
                             sb.append("**REQUEST BODY**\n\n")
-                                    .append(requestBody.getType().getFormat()).append("\n\n");
+                                    .append(formatType(requestBody.getType()));
+                            if (requestBody.getCommentText() != null) {
+                                sb.append(requestBody.getCommentText().inline());
+                            }
+                            sb.append("\n\n");
                         }
                     }
                     sb.append("**RESPONSE**\n\n");
