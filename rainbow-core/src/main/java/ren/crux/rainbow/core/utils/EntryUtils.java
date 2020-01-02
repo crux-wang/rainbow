@@ -123,4 +123,9 @@ public class EntryUtils {
             }
         }
     }
+
+    public static String sign(Method method) {
+        String methodStr = method.toString();
+        return StringUtils.substringBetween(StringUtils.substringAfter(methodStr, " "), " ", "(") + "(" + StringUtils.substringBetween(methodStr, "(", ")") + ")";
+    }
 }

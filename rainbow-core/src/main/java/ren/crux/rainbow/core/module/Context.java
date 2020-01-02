@@ -147,6 +147,7 @@ public class Context {
     public void addPublicMethodDocs(ClassDoc classDoc) {
         Map<String, MethodDoc> map = Arrays.stream(classDoc.methods(true))
                 .collect(Collectors.toMap(md -> StringUtils.replace(md.toString(), " ", ""), md -> md));
+        map.keySet().forEach(System.out::println);
         methodDocCache.putAll(map);
     }
 

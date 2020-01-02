@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.*;
 import ren.crux.rainbow.test.demo.model.SubTest;
 import ren.crux.rainbow.test.demo.model.Test;
 
+import java.util.List;
+
 /**
  * 测试专用
  * <p>
@@ -37,7 +39,7 @@ public class TestController {
     }
 
     @GetMapping("/subtest")
-    public SubTest subtest() {
+    public SubTest subtest(List<String> list) {
         return null;
     }
 }
