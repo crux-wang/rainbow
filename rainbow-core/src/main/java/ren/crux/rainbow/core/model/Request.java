@@ -2,7 +2,10 @@ package ren.crux.rainbow.core.model;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 请求
@@ -45,5 +48,23 @@ public class Request {
      * 返回值注释
      */
     private String returnCommentText;
+    /**
+     * 额外字段
+     */
+    private Map<String, Object> extra;
 
+
+    public void putExtra(String key, Object value) {
+        if (extra == null) {
+            extra = new HashMap<>();
+        }
+        extra.put(key, value);
+    }
+
+    public Optional<Object> getExtra(String key) {
+        if (extra == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(extra.get(key));
+    }
 }

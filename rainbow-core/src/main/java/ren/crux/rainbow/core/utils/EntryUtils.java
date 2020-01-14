@@ -1,9 +1,13 @@
 package ren.crux.rainbow.core.utils;
 
+import com.sun.javadoc.FieldDoc;
+import com.sun.javadoc.MethodDoc;
+import com.sun.javadoc.ParamTag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.model.Annotation;
+import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.model.TypeDesc;
+import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -13,34 +17,6 @@ import java.util.*;
  */
 @Slf4j
 public class EntryUtils {
-
-    public static List<Field> getAllFields(Class<?> cls) {
-        List<Field> fields = new LinkedList<>();
-        while (cls != null && !Object.class.equals(cls)) {
-            Field[] declaredFields = cls.getDeclaredFields();
-            fields.addAll(Arrays.asList(declaredFields));
-            cls = cls.getSuperclass();
-        }
-        return fields;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Annotation process(java.lang.annotation.Annotation annotation) {
-        Class<? extends java.lang.annotation.Annotation> annotationType = annotation.annotationType();
-        Annotation annotationDetail = new Annotation();
-        annotationDetail.setName(annotationType.getSimpleName());
-        annotationDetail.setType(annotationType.getCanonicalName());
-        InvocationHandler invocationHandler = Proxy.getInvocationHandler(annotation);
-        try {
-            Field field = invocationHandler.getClass().getDeclaredField("memberValues");
-            field.setAccessible(true);
-            Map<String, Object> memberValues = (Map<String, Object>) field.get(invocationHandler);
-            annotationDetail.setAttribute(memberValues);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return annotationDetail;
-    }
 
     public static TypeDesc build(Field field) {
         Type genericType = field.getGenericType();
@@ -59,8 +35,9 @@ public class EntryUtils {
     }
 
     public static TypeDesc[] getActualTypeDesc(Type type) {
-        Type[] actualTypeArguments = getActualTypeArguments(type);
-        if (actualTypeArguments != null) {
+        Optional<Type[]> optional = JavaDocHelper.getActualTypeArguments(type);
+        if (optional.isPresent()) {
+            Type[] actualTypeArguments = optional.get();
             return Arrays.stream(actualTypeArguments).map(typ -> {
                 TypeDesc typeDesc = new TypeDesc();
                 typeDesc.setName(typ.getTypeName());
@@ -79,16 +56,6 @@ public class EntryUtils {
                 }
                 return typeDesc;
             }).toArray(TypeDesc[]::new);
-        }
-        return null;
-    }
-
-    public static Type[] getActualTypeArguments(Type type) {
-        if (type instanceof ParameterizedType) {
-            Type[] actualTypeArguments = ((ParameterizedType) (type)).getActualTypeArguments();
-            if (actualTypeArguments != null) {
-                return Arrays.stream(actualTypeArguments).toArray(Type[]::new);
-            }
         }
         return null;
     }
@@ -124,8 +91,54 @@ public class EntryUtils {
         }
     }
 
-    public static String sign(Method method) {
-        String methodStr = method.toString();
-        return StringUtils.substringBetween(StringUtils.substringAfter(methodStr, " "), " ", "(") + "(" + StringUtils.substringBetween(methodStr, "(", ")") + ")";
+    public static TypeDesc build(FieldDoc fieldDoc) {
+        return build(fieldDoc.type());
+    }
+
+    public static TypeDesc build(MethodDoc methodDoc) {
+        return build(methodDoc.returnType());
+    }
+
+    public static TypeDesc build(com.sun.javadoc.Type type) {
+        return new TypeDesc(type.typeName(), getActualTypeDesc(type), type.simpleTypeName(), type.qualifiedTypeName());
+    }
+
+    public static TypeDesc[] getActualTypeDesc(com.sun.javadoc.Type type) {
+        Optional<com.sun.javadoc.Type[]> optional = JavaDocHelper.getActualTypeArguments(type);
+        if (optional.isPresent()) {
+            com.sun.javadoc.Type[] actualTypeArguments = optional.get();
+            return Arrays.stream(actualTypeArguments).map(typ -> {
+                TypeDesc typeDesc = new TypeDesc();
+                typeDesc.setName(typ.typeName());
+                typeDesc.setActualParamTypes(getActualTypeDesc(typ));
+                if (typeDesc.getActualParamTypes() != null) {
+                    Type rawType = ((ParameterizedType) typ).getRawType();
+                    typeDesc.setType(rawType.getTypeName());
+                    typeDesc.setSimpleName(StringUtils.substringAfterLast(rawType.getTypeName(), "."));
+                } else {
+                    typeDesc.setType(typ.typeName());
+                    if (typ.typeName().contains(".")) {
+                        typeDesc.setSimpleName(StringUtils.substringAfterLast(typ.typeName(), "."));
+                    } else {
+                        typeDesc.setSimpleName(typ.typeName());
+                    }
+                }
+                return typeDesc;
+            }).toArray(TypeDesc[]::new);
+        }
+        return null;
+    }
+
+
+    public static Map<String, ParamTag> buildParamMap(MethodDoc methodDoc, List<RequestParam> params) {
+        Map<String, ParamTag> map = new HashMap<>(params.size());
+        ParamTag[] paramTags = methodDoc.paramTags();
+        for (int i = 0; i < params.size(); i++) {
+            RequestParam param = params.get(i);
+            ParamTag paramTag = paramTags[i];
+            param.setName(paramTag.parameterName());
+            map.put(param.getName(), paramTag);
+        }
+        return map;
     }
 }

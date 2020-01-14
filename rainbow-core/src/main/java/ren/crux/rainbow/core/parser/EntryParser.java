@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.model.Entry;
 import ren.crux.rainbow.core.module.Context;
-import ren.crux.rainbow.core.utils.EntryUtils;
+import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -53,7 +53,7 @@ public class EntryParser extends AbstractEnhanceParser<Class<?>, Entry> {
         entry.setName(source.getCanonicalName());
         entry.setAnnotations(annotationParser.parse(context, source.getAnnotations()));
         context.getClassDoc(source).flatMap(classDoc -> commentTextParser.parse(context, classDoc)).ifPresent(entry::setCommentText);
-        Field[] fields = EntryUtils.getAllFields(source).toArray(new Field[0]);
+        Field[] fields = JavaDocHelper.getAllField(source).values().toArray(new Field[0]);
         if (fields.length > 0) {
             entry.getFields().addAll(entryFieldParser.parse(context, fields));
         }

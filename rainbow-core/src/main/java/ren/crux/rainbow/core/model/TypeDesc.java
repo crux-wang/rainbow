@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Objects;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +36,19 @@ public class TypeDesc {
         this.actualParamTypes = actualParamTypes;
         this.simpleName = simpleName;
         this.name = name;
+    }
+
+    public Type[] asOriginActualParamTypes() {
+        if (actualParamTypes == null) {
+            return null;
+        }
+        return Arrays.stream(actualParamTypes).map(TypeDesc::getType).map(className -> {
+            try {
+                return (Type) Class.forName(className);
+            } catch (ClassNotFoundException ignored) {
+                return null;
+            }
+        }).filter(Objects::nonNull).toArray(Type[]::new);
     }
 
     public String getFormat() {

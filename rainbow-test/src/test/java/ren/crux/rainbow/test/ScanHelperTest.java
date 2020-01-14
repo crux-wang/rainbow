@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.rainbow.core.DocumentReader;
@@ -11,7 +13,13 @@ import ren.crux.rainbow.core.DocumentReaderBuilder;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.module.ParserOptionModule;
 import ren.crux.rainbow.core.report.MarkdownReport;
+import ren.crux.rainbow.core.report.mock.Mockers;
+import ren.crux.rainbow.runtime.MockerSupport;
 import ren.crux.rainbow.runtime.SpringWebModule;
+import ren.crux.rainbow.test.demo.model.Article;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 import static ren.crux.rainbow.core.module.ParserOptionModule.IgnoredOption.signature;
 import static ren.crux.rainbow.core.module.ParserOptionModule.IgnoredOption.tags;
@@ -54,7 +62,17 @@ public class ScanHelperTest {
 //                e.printStackTrace();
 //            }
 //        });
+        MarkdownReport markdownReport = new MarkdownReport();
+        markdownReport.getMockers().register(Page.class, MockerSupport.PAGE);
+        markdownReport.getMockers().register(Pageable.class, MockerSupport.PAGEABLE);
+        documentReader.read().report(markdownReport).ifPresent(System.out::println);
+    }
 
-        documentReader.read().report(MarkdownReport.INSTANCE).ifPresent(System.out::println);
+    @Test
+    public void name2() {
+        Mockers mockers = new Mockers();
+        mockers.mock(List.class, new Type[]{Article.class}).ifPresent(System.out::println);
+        mockers.mock(Article[].class).ifPresent(System.out::println);
+        mockers.mock(Article.class).ifPresent(System.out::println);
     }
 }

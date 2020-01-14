@@ -2,7 +2,7 @@ package ren.crux.rainbow.core.parser;
 
 import ren.crux.rainbow.core.interceptor.Interceptor;
 import ren.crux.rainbow.core.module.Context;
-import ren.crux.rainbow.core.utils.EntryUtils;
+import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
@@ -30,6 +30,11 @@ public class AnnotationParser extends AbstractEnhanceParser<Annotation, ren.crux
      */
     @Override
     public Optional<ren.crux.rainbow.core.model.Annotation> parse0(Context context, Annotation source) {
-        return Optional.of(EntryUtils.process(source));
+        ren.crux.rainbow.core.model.Annotation annotationDetail = new ren.crux.rainbow.core.model.Annotation();
+        Class<? extends Annotation> type = source.annotationType();
+        annotationDetail.setName(type.getName());
+        annotationDetail.setType(type.getCanonicalName());
+        annotationDetail.setAttribute(JavaDocHelper.getAttributes(source));
+        return Optional.of(annotationDetail);
     }
 }

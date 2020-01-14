@@ -30,7 +30,7 @@ public interface JavaDocReader<T> {
             return true;
         }
 
-        static RootDoc getRootDoc() {
+        public static RootDoc getRootDoc() {
             return Objects.requireNonNull(rootDoc);
         }
     }

@@ -1,10 +1,7 @@
 package ren.crux.rainbow.core.report;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import ren.crux.rainbow.core.model.Document;
 
 import java.util.Optional;
@@ -16,10 +13,7 @@ public class JsonReporter implements Reporter<String> {
     private final ObjectMapper objectMapper;
 
     public JsonReporter() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        this.objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+       this.objectMapper = JsonHelper.getObjectMapper();
     }
 
     public JsonReporter(ObjectMapper objectMapper) {

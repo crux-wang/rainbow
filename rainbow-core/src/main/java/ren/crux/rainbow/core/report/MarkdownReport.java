@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.model.*;
+import ren.crux.rainbow.core.report.mock.Mockers;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +24,15 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
 
     private boolean ignoredRequestAttr = true;
 
+    private Mockers mockers = new Mockers();
+
     public MarkdownReport ignoredRequestAttr(boolean ignoredRequestAttr) {
         this.ignoredRequestAttr = ignoredRequestAttr;
         return this;
+    }
+
+    public Mockers getMockers() {
+        return mockers;
     }
 
     private final String dirPath;
@@ -141,7 +148,8 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                         }
                     }
                     sb.append("**RESPONSE**\n\n");
-                    String returnType = formatType(request.getReturnType());
+                    TypeDesc returnTypeDesc = request.getReturnType();
+                    String returnType = formatType(returnTypeDesc);
                     if (StringUtils.equals("void", returnType)) {
                         sb.append("None");
                     } else {
@@ -151,7 +159,10 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                     if (StringUtils.isNotBlank(returnCommentText)) {
                         sb.append("  //  ").append(returnCommentText);
                     }
-                    ;
+                    sb.append("\n\n***EXAMPLE***\n\n");
+                    request.getExtra("@example").map(JsonHelper::writeValueAsString).ifPresent(example -> {
+                        sb.append("```json\n").append(example).append("\n```");
+                    });
                     sb.append("\n\n");
                 }
             }
@@ -176,8 +187,21 @@ public class MarkdownReport implements Reporter<Map<String, File>> {
                                         .append(" | ").append(formatAnnotations(field.getAnnotations()))
                                         .append(" |\n");
                             }
+                            sb.append("\n***EXAMPLE***\n\n");
+                            try {
+                                String t = entry.getType();
+                                if (entry.getImpl() != null) {
+                                    t = entry.getImpl().getType();
+                                }
+                                String example = mockers.mock(Class.forName(t)).map(JsonHelper::writeValueAsString).orElse(">MOCK FAIL");
+                                sb.append("```json\n").append(example).append("\n```");
+                            } catch (ClassNotFoundException e) {
+                                sb.append(">").append(e.getMessage());
+                            }
+                            sb.append("\n");
                         }
                     }
+
                     sb.append("\n");
                 }
             }
