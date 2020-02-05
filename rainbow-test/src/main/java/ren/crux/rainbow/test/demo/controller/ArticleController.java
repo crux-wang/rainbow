@@ -8,6 +8,8 @@ import ren.crux.rainbow.test.demo.model.Article;
 
 /**
  * 文章模块
+ *
+ * @author wangzhihui
  */
 @RestController
 @RequestMapping("/article")
@@ -15,7 +17,7 @@ public class ArticleController {
     /**
      * 新建文章
      *
-     * @param userId  当前文章ID
+     * @param userId  当前用户ID
      * @param article 文章详情
      * @return 文章详情
      */
