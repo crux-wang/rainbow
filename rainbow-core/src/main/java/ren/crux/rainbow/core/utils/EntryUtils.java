@@ -5,9 +5,9 @@ import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.ParamTag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.model.RequestParam;
-import ren.crux.rainbow.core.model.TypeDesc;
 import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
+import ren.crux.raonbow.common.model.RequestParam;
+import ren.crux.raonbow.common.model.TypeDesc;
 
 import java.lang.reflect.*;
 import java.util.*;

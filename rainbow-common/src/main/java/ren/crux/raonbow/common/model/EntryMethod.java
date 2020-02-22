@@ -1,28 +1,32 @@
-package ren.crux.rainbow.core.model;
+package ren.crux.raonbow.common.model;
 
 import lombok.Data;
 
 import java.util.List;
 
 /**
- * 属性
+ * 实体方法 （无参方法）
  *
  * @author wangzhihui
  */
 @Data
-public class EntryField {
+public class EntryMethod {
     /**
      * 名称
      */
     private String name;
     /**
-     * 类型
+     * 返回值类型
      */
-    private TypeDesc type;
+    private TypeDesc returnType;
     /**
      * 注释
      */
     private CommentText commentText;
+    /**
+     * 返回值注释
+     */
+    private String returnCommentText;
     /**
      * 注解列表
      */

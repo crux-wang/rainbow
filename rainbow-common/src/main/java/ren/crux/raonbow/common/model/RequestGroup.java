@@ -1,8 +1,7 @@
-package ren.crux.rainbow.core.model;
+package ren.crux.raonbow.common.model;
 
 import lombok.Data;
 import lombok.NonNull;
-import ren.crux.rainbow.core.utils.EntryUtils;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -39,7 +38,7 @@ public class RequestGroup {
     /**
      * 此请求组所用到的实体类型
      */
-    private Set<String> entryClassNames;
+    private Set<String> entryClassNames = new HashSet<>();
 
     public void addRequest(@NonNull Request request) {
         if (requests == null) {
@@ -47,19 +46,4 @@ public class RequestGroup {
         }
         requests.add(request);
     }
-
-    public void addEntryClassName(String className) {
-        if (entryClassNames == null) {
-            entryClassNames = new HashSet<>();
-        }
-        EntryUtils.addEntryClassName(entryClassNames, className);
-    }
-
-    public void addEntryClassName(TypeDesc typeDesc) {
-        if (entryClassNames == null) {
-            entryClassNames = new HashSet<>();
-        }
-        EntryUtils.addEntryClassName(entryClassNames, typeDesc);
-    }
-
 }

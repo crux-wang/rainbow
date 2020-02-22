@@ -2,9 +2,9 @@ package ren.crux.rainbow.core.parser;
 
 import org.apache.commons.collections4.CollectionUtils;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.Request;
-import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.core.module.Context;
+import ren.crux.raonbow.common.model.Request;
+import ren.crux.raonbow.common.model.RequestGroup;
 
 import java.util.List;
 import java.util.Optional;

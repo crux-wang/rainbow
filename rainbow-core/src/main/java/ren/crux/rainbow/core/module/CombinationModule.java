@@ -4,7 +4,7 @@ import com.sun.javadoc.Doc;
 import lombok.NonNull;
 import ren.crux.rainbow.core.interceptor.CombinationInterceptor;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.*;
+import ren.crux.raonbow.common.model.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -26,7 +26,7 @@ public class CombinationModule implements Module {
     private CombinationInterceptor<Class<?>, Entry> entryCombinationInterceptor;
     private CombinationInterceptor<Field, EntryField> entryFieldCombinationInterceptor;
     private CombinationInterceptor<Method, EntryMethod> entryMethodCombinationInterceptor;
-    private CombinationInterceptor<Annotation, ren.crux.rainbow.core.model.Annotation> annotationAnnotationCombinationInterceptor;
+    private CombinationInterceptor<Annotation, ren.crux.raonbow.common.model.Annotation> annotationAnnotationCombinationInterceptor;
     private CombinationInterceptor<Doc, CommentText> commentTextCombinationInterceptor;
     private CombinationInterceptor<Request, Request> requestCombinationInterceptor;
     private CombinationInterceptor<RequestParam, RequestParam> requestParamCombinationInterceptor;
@@ -74,7 +74,7 @@ public class CombinationModule implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public Optional<Interceptor<Annotation, ren.crux.rainbow.core.model.Annotation>> annotation() {
+    public Optional<Interceptor<Annotation, ren.crux.raonbow.common.model.Annotation>> annotation() {
         return Optional.ofNullable(annotationAnnotationCombinationInterceptor);
     }
 
@@ -148,7 +148,7 @@ public class CombinationModule implements Module {
         CombinationInterceptor.CombinationInterceptorBuilder<Class<?>, Entry> entryCombinationInterceptorBuilder = CombinationInterceptor.builder();
         CombinationInterceptor.CombinationInterceptorBuilder<Field, EntryField> entryFieldCombinationInterceptorBuilder = CombinationInterceptor.builder();
         CombinationInterceptor.CombinationInterceptorBuilder<Method, EntryMethod> entryMethodCombinationInterceptorBuilder = CombinationInterceptor.builder();
-        CombinationInterceptor.CombinationInterceptorBuilder<Annotation, ren.crux.rainbow.core.model.Annotation> annotationAnnotationCombinationInterceptorBuilder = CombinationInterceptor.builder();
+        CombinationInterceptor.CombinationInterceptorBuilder<Annotation, ren.crux.raonbow.common.model.Annotation> annotationAnnotationCombinationInterceptorBuilder = CombinationInterceptor.builder();
         CombinationInterceptor.CombinationInterceptorBuilder<Doc, CommentText> commentTextCombinationInterceptorBuilder = CombinationInterceptor.builder();
         CombinationInterceptor.CombinationInterceptorBuilder<Request, Request> requestCombinationInterceptorBuilder = CombinationInterceptor.builder();
         CombinationInterceptor.CombinationInterceptorBuilder<RequestParam, RequestParam> requestParamCombinationInterceptorBuilder = CombinationInterceptor.builder();
@@ -187,7 +187,7 @@ public class CombinationModule implements Module {
         this.entryMethodCombinationInterceptor = entryMethodCombinationInterceptor;
     }
 
-    private void setAnnotationAnnotationCombinationInterceptor(CombinationInterceptor<Annotation, ren.crux.rainbow.core.model.Annotation> annotationAnnotationCombinationInterceptor) {
+    private void setAnnotationAnnotationCombinationInterceptor(CombinationInterceptor<Annotation, ren.crux.raonbow.common.model.Annotation> annotationAnnotationCombinationInterceptor) {
         this.annotationAnnotationCombinationInterceptor = annotationAnnotationCombinationInterceptor;
     }
 

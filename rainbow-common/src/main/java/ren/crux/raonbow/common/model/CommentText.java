@@ -1,4 +1,4 @@
-package ren.crux.rainbow.core.model;
+package ren.crux.raonbow.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -2,10 +2,10 @@ package ren.crux.rainbow.core.module;
 
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.Entry;
-import ren.crux.rainbow.core.model.EntryField;
-import ren.crux.rainbow.core.model.EntryMethod;
-import ren.crux.rainbow.core.model.RequestParam;
+import ren.crux.raonbow.common.model.Entry;
+import ren.crux.raonbow.common.model.EntryField;
+import ren.crux.raonbow.common.model.EntryMethod;
+import ren.crux.raonbow.common.model.RequestParam;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

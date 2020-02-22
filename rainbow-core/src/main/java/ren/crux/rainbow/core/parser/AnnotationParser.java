@@ -12,12 +12,12 @@ import java.util.Optional;
  *
  * @author wangzhihui
  */
-public class AnnotationParser extends AbstractEnhanceParser<Annotation, ren.crux.rainbow.core.model.Annotation> {
+public class AnnotationParser extends AbstractEnhanceParser<Annotation, ren.crux.raonbow.common.model.Annotation> {
 
     public AnnotationParser() {
     }
 
-    public AnnotationParser(Interceptor<Annotation, ren.crux.rainbow.core.model.Annotation> interceptor) {
+    public AnnotationParser(Interceptor<Annotation, ren.crux.raonbow.common.model.Annotation> interceptor) {
         super(interceptor);
     }
 
@@ -29,10 +29,10 @@ public class AnnotationParser extends AbstractEnhanceParser<Annotation, ren.crux
      * @return 目标
      */
     @Override
-    public Optional<ren.crux.rainbow.core.model.Annotation> parse0(Context context, Annotation source) {
-        ren.crux.rainbow.core.model.Annotation annotationDetail = new ren.crux.rainbow.core.model.Annotation();
+    public Optional<ren.crux.raonbow.common.model.Annotation> parse0(Context context, Annotation source) {
+        ren.crux.raonbow.common.model.Annotation annotationDetail = new ren.crux.raonbow.common.model.Annotation();
         Class<? extends Annotation> type = source.annotationType();
-        annotationDetail.setName(type.getName());
+        annotationDetail.setName(type.getSimpleName());
         annotationDetail.setType(type.getCanonicalName());
         annotationDetail.setAttribute(JavaDocHelper.getAttributes(source));
         return Optional.of(annotationDetail);

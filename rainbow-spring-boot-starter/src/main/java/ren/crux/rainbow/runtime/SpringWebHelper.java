@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import ren.crux.rainbow.core.model.RequestParam;
-import ren.crux.rainbow.core.model.RequestParamType;
 import ren.crux.rainbow.core.utils.EntryUtils;
+import ren.crux.raonbow.common.model.RequestParam;
+import ren.crux.raonbow.common.model.RequestParamType;
 
 import java.lang.reflect.Parameter;
 

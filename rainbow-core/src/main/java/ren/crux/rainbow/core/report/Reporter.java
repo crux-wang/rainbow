@@ -1,6 +1,6 @@
 package ren.crux.rainbow.core.report;
 
-import ren.crux.rainbow.core.model.Document;
+import ren.crux.raonbow.common.model.Document;
 
 import java.util.Optional;
 

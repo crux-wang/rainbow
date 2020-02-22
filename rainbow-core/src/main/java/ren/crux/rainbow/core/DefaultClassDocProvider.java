@@ -18,14 +18,20 @@ public class DefaultClassDocProvider implements ClassDocProvider {
 
     public static final Option<String[]> SOURCE_PATH = Option.valueOf("SOURCE_PATH");
     public static final Option<String[]> PACKAGES = Option.valueOf("PACKAGES");
+    public static final Option<Boolean> DEBUG_LOG = Option.valueOf("DEBUG_LOG");
 
     private String[] sourcePath;
     private String[] packages;
+    private boolean debugLog;
     private CombinationFilter.CombinationFilterBuilder<ClassDoc> builder = CombinationFilter.builder();
     private JavaDocReader<List<ClassDoc>> javaDocReader;
     private Map<String, ClassDoc> classDocMap;
-    private DocumentReaderBuilder owner;
     private ClassDoc classDoc;
+
+    public DefaultClassDocProvider enableDebugLog() {
+        this.debugLog = true;
+        return this;
+    }
 
     public DefaultClassDocProvider source(String... sourcePath) {
         this.sourcePath = sourcePath;
@@ -52,6 +58,7 @@ public class DefaultClassDocProvider implements ClassDocProvider {
             Objects.requireNonNull(sourcePath);
             context.setOption(SOURCE_PATH, sourcePath);
             context.setOption(PACKAGES, packages);
+            context.setOption(DEBUG_LOG, debugLog);
             javaDocReader = new DefaultJavaDocReader();
             CombinationFilter<ClassDoc> filters = builder.build();
             classDocMap = javaDocReader.read(sourcePath, packages)
@@ -83,13 +90,4 @@ public class DefaultClassDocProvider implements ClassDocProvider {
         return Optional.ofNullable(classDocMap).map(m -> m.get(className));
     }
 
-    @Override
-    public void owner(DocumentReaderBuilder reader) {
-        owner = reader;
-    }
-
-    @Override
-    public DocumentReaderBuilder end() {
-        return owner;
-    }
 }

@@ -10,10 +10,10 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import ren.crux.rainbow.core.ClassDocProvider;
-import ren.crux.rainbow.core.model.TypeDesc;
 import ren.crux.rainbow.core.option.Option;
 import ren.crux.rainbow.core.option.RevisableConfig;
 import ren.crux.rainbow.core.utils.EntryUtils;
+import ren.crux.raonbow.common.model.TypeDesc;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;

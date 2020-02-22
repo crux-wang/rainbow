@@ -1,4 +1,4 @@
-package ren.crux.rainbow.core.model;
+package ren.crux.raonbow.common.model;
 
 /**
  * 请求方法

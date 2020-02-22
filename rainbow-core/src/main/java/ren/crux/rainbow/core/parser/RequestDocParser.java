@@ -6,9 +6,9 @@ import com.sun.javadoc.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.Request;
-import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.module.Context;
+import ren.crux.raonbow.common.model.Request;
+import ren.crux.raonbow.common.model.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;

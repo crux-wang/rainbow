@@ -1,9 +1,9 @@
 package ren.crux.rainbow.core.parser;
 
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.CommentText;
-import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.module.Context;
+import ren.crux.raonbow.common.model.CommentText;
+import ren.crux.raonbow.common.model.RequestParam;
 
 import java.util.Optional;
 

@@ -1,11 +1,11 @@
 package ren.crux.rainbow.core.parser;
 
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.CommentText;
-import ren.crux.rainbow.core.model.EntryMethod;
-import ren.crux.rainbow.core.model.TagRef;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
+import ren.crux.raonbow.common.model.CommentText;
+import ren.crux.raonbow.common.model.EntryMethod;
+import ren.crux.raonbow.common.model.TagRef;
 
 import java.lang.reflect.Method;
 import java.util.Optional;

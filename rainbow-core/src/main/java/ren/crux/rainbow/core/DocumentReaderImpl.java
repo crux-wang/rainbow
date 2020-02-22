@@ -2,14 +2,14 @@ package ren.crux.rainbow.core;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import ren.crux.rainbow.core.model.Document;
-import ren.crux.rainbow.core.model.Entry;
-import ren.crux.rainbow.core.model.RequestGroup;
 import ren.crux.rainbow.core.module.CombinationModule;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.module.Module;
 import ren.crux.rainbow.core.option.RevisableConfig;
 import ren.crux.rainbow.core.parser.*;
+import ren.crux.raonbow.common.model.Document;
+import ren.crux.raonbow.common.model.Entry;
+import ren.crux.raonbow.common.model.RequestGroup;
 
 import java.util.*;
 import java.util.stream.Collectors;

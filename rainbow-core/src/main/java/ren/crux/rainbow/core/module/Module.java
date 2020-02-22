@@ -2,7 +2,7 @@ package ren.crux.rainbow.core.module;
 
 import com.sun.javadoc.Doc;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.*;
+import ren.crux.raonbow.common.model.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -122,9 +122,16 @@ public class DataMockerContext {
         return subMockerContext;
     }
 
+    @SuppressWarnings("unchecked")
     public <E extends Annotation> E getAnnotation(Class<E> annotation) {
         return (E) annotations.get(annotation);
     }
+
+    @SuppressWarnings("unchecked")
+    public <E extends Annotation> E getAnnotation(String annotationClassName) {
+        return (E) annotations.values().stream().filter(annotation -> annotation.annotationType().getCanonicalName().equals(annotationClassName)).findFirst().orElse(null);
+    }
+
 
     public Optional<Type> getActualTypeArgument(int idx) {
         if (idx < actualTypeArguments.size()) {

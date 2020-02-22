@@ -4,11 +4,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.http.HttpEntity;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.Entry;
-import ren.crux.rainbow.core.model.RequestGroup;
-import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.module.Module;
+import ren.crux.raonbow.common.model.Entry;
+import ren.crux.raonbow.common.model.RequestGroup;
+import ren.crux.raonbow.common.model.RequestParam;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class SpringWebModule implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public Optional<Interceptor<Annotation, ren.crux.rainbow.core.model.Annotation>> annotation() {
+    public Optional<Interceptor<Annotation, ren.crux.raonbow.common.model.Annotation>> annotation() {
         return Optional.empty();
     }
 

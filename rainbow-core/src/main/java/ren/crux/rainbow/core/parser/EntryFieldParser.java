@@ -1,9 +1,9 @@
 package ren.crux.rainbow.core.parser;
 
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.EntryField;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.utils.EntryUtils;
+import ren.crux.raonbow.common.model.EntryField;
 
 import java.lang.reflect.Field;
 import java.util.Optional;

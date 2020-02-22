@@ -2,9 +2,9 @@ package ren.crux.rainbow.core.parser;
 
 import lombok.extern.slf4j.Slf4j;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.Entry;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
+import ren.crux.raonbow.common.model.Entry;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

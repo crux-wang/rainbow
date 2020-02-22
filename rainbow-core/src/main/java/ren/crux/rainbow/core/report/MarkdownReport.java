@@ -4,8 +4,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.report.mock.Mockers;
+import ren.crux.raonbow.common.model.*;
 
 import java.io.File;
 import java.io.IOException;

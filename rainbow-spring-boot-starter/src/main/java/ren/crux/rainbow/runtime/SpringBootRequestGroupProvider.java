@@ -8,14 +8,14 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import ren.crux.rainbow.core.RequestGroupProvider;
-import ren.crux.rainbow.core.model.Request;
-import ren.crux.rainbow.core.model.RequestGroup;
-import ren.crux.rainbow.core.model.RequestMethod;
-import ren.crux.rainbow.core.model.RequestParam;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.report.mock.Mockers;
 import ren.crux.rainbow.core.utils.EntryUtils;
 import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
+import ren.crux.raonbow.common.model.Request;
+import ren.crux.raonbow.common.model.RequestGroup;
+import ren.crux.raonbow.common.model.RequestMethod;
+import ren.crux.raonbow.common.model.RequestParam;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -53,11 +53,11 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         List<RequestParam> params = Arrays.stream(parameters).map(parameter -> {
             RequestParam requestParam = SpringWebHelper.process(parameter);
             requestParam.setDeclaringSignature(request.getSignature());
-            requestGroup.addEntryClassName(requestParam.getType());
+            EntryUtils.addEntryClassName(requestGroup.getEntryClassNames(), requestParam.getType());
             return requestParam;
         }).collect(Collectors.toList());
         request.setParams(params);
-        requestGroup.addEntryClassName(request.getReturnType());
+        EntryUtils.addEntryClassName(requestGroup.getEntryClassNames(), request.getReturnType());
         mockers.mock(method.getReturnType(), request.getReturnType().asOriginActualParamTypes()).ifPresent(eg -> request.putExtra("@example", eg));
         context.addEntryClassName(requestGroup.getEntryClassNames());
         return request;

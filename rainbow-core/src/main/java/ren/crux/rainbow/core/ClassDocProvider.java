@@ -1,7 +1,6 @@
 package ren.crux.rainbow.core;
 
 import com.sun.javadoc.ClassDoc;
-import lombok.NonNull;
 import ren.crux.rainbow.core.module.Context;
 
 import java.util.Optional;
@@ -12,20 +11,6 @@ import java.util.Optional;
  * @author wangzhihui
  */
 public interface ClassDocProvider {
-
-    /**
-     * 设置所属的 {@link DocumentReader}
-     *
-     * @param reader 文档阅读器
-     */
-    void owner(@NonNull DocumentReaderBuilder reader);
-
-    /**
-     * 配置结束
-     *
-     * @return 所属的 {@link DocumentReaderBuilder}
-     */
-    @NonNull DocumentReaderBuilder end();
 
     /**
      * 设置上下文

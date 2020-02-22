@@ -1,23 +1,23 @@
 package ren.crux.rainbow.test;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.rainbow.core.DocumentReader;
 import ren.crux.rainbow.core.DocumentReaderBuilder;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.module.ParserOptionModule;
-import ren.crux.rainbow.core.report.JsonReporter;
+import ren.crux.rainbow.core.report.MarkdownReport;
 import ren.crux.rainbow.core.report.mock.Mockers;
+import ren.crux.rainbow.runtime.MockerSupport;
 import ren.crux.rainbow.runtime.SpringWebModule;
 import ren.crux.rainbow.test.demo.model.Article;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -38,32 +38,30 @@ public class ScanHelperTest {
 //        final String path3 = "/Users/wangzhihui/workspace/project/rainbow/rainbow-javadoc/src/main/java/";
         final String path = "D:\\workspace\\github\\rainbow\\rainbow-test\\src\\main\\java\\";
         final String[] packageNames = new String[]{"ren.crux.rainbow"};
-        DefaultClassDocProvider classDocProvider = new DefaultClassDocProvider();
+        DefaultClassDocProvider classDocProvider = new DefaultClassDocProvider()
+                //                .source(path, path2, path3)
+                .source(path)
+                .packages(packageNames);
         DocumentReader documentReader = new DocumentReaderBuilder()
                 .with(classDocProvider)
                 .with(requestGroupProvider)
-                .cdp(DefaultClassDocProvider.class)
-//                .source(path, path2, path3)
-                .source(path)
-                .packages(packageNames)
-                .end()
                 .option(ParserOptionModule.IGNORED_OPTION, new ParserOptionModule.IgnoredOption[]{tags, signature})
                 .useDefaultModule()
                 .modules(SpringWebModule.INSTANCE)
                 .build();
-        documentReader.read().report(JsonReporter.INSTANCE).ifPresent(html -> {
-            try {
-                File file = new File("test.json");
-                FileUtils.writeStringToFile(file, html, "utf8");
-//                Desktop.getDesktop().browse(file.toURI());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-//        MarkdownReport markdownReport = new MarkdownReport();
-//        markdownReport.getMockers().register(Page.class, MockerSupport.PAGE);
-//        markdownReport.getMockers().register(Pageable.class, MockerSupport.PAGEABLE);
-//        documentReader.read().report(markdownReport).ifPresent(System.out::println);
+//        documentReader.read().report(JsonReporter.INSTANCE).ifPresent(html -> {
+//            try {
+//                File file = new File("test.json");
+//                FileUtils.writeStringToFile(file, html, "utf8");
+////                Desktop.getDesktop().browse(file.toURI());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+        MarkdownReport markdownReport = new MarkdownReport();
+        markdownReport.getMockers().register(Page.class, MockerSupport.PAGE);
+        markdownReport.getMockers().register(Pageable.class, MockerSupport.PAGEABLE);
+        documentReader.read().report(markdownReport).ifPresent(System.out::println);
     }
 
     @Test

@@ -17,6 +17,10 @@
             <artifactId>rainbow-javadoc</artifactId>
         </dependency>
         <dependency>
+            <groupId>ren.crux</groupId>
+            <artifactId>rainbow-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>

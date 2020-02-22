@@ -29,7 +29,6 @@ public class DocumentReaderBuilder {
      */
     public DocumentReaderBuilder with(ClassDocProvider classDocProvider) {
         this.classDocProvider = classDocProvider;
-        this.classDocProvider.owner(this);
         return this;
     }
 
@@ -45,35 +44,10 @@ public class DocumentReaderBuilder {
     }
 
     /**
-     * 设置 {@link ClassDocProvider}
-     *
-     * @param tClass 实现类
-     * @return 自身
-     */
-    @SuppressWarnings("unchecked")
-
-    public <T extends ClassDocProvider> T cdp(Class<T> tClass) {
-        return (T) classDocProvider;
-    }
-
-    /**
-     * 设置 {@link RequestGroupProvider}
-     *
-     * @param tClass 实现类
-     * @return 自身
-     */
-    @SuppressWarnings("unchecked")
-
-    public <T extends RequestGroupProvider> T rgp(Class<T> tClass) {
-        return (T) requestGroupProvider;
-    }
-
-    /**
      * 获取 {@link ClassDocProvider}
      *
      * @return {@link ClassDocProvider}
      */
-
     public ClassDocProvider cdp() {
         return classDocProvider;
     }
@@ -107,7 +81,6 @@ public class DocumentReaderBuilder {
      * @param impl   实现类类名
      * @return 自身
      */
-
     public DocumentReaderBuilder impl(String source, String impl) {
         implMap.put(source, impl);
         return this;
@@ -119,7 +92,6 @@ public class DocumentReaderBuilder {
      * @param modules 模块
      * @return 自身
      */
-
     public DocumentReaderBuilder modules(Module... modules) {
         if (ArrayUtils.isNotEmpty(modules)) {
             this.modules.addAll(Arrays.asList(modules));

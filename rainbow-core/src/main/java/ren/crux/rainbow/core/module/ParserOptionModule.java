@@ -2,8 +2,8 @@ package ren.crux.rainbow.core.module;
 
 import com.sun.javadoc.Doc;
 import ren.crux.rainbow.core.interceptor.Interceptor;
-import ren.crux.rainbow.core.model.*;
 import ren.crux.rainbow.core.option.Option;
+import ren.crux.raonbow.common.model.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -73,15 +73,15 @@ public class ParserOptionModule implements Module {
      * @return 拦截器构造器
      */
     @Override
-    public Optional<Interceptor<Annotation, ren.crux.rainbow.core.model.Annotation>> annotation() {
-        return Optional.of(new Interceptor<Annotation, ren.crux.rainbow.core.model.Annotation>() {
+    public Optional<Interceptor<Annotation, ren.crux.raonbow.common.model.Annotation>> annotation() {
+        return Optional.of(new Interceptor<Annotation, ren.crux.raonbow.common.model.Annotation>() {
             @Override
             public boolean before(Context context, Annotation source) {
                 return !ignoredOptions.contains(IgnoredOption.annotation);
             }
 
             @Override
-            public boolean after(Context context, ren.crux.rainbow.core.model.Annotation target) {
+            public boolean after(Context context, ren.crux.raonbow.common.model.Annotation target) {
                 if (ignoredOptions.contains(IgnoredOption.annotation_attrs)) {
                     target.setAttribute(null);
                 }

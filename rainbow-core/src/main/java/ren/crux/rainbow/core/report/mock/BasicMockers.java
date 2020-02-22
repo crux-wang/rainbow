@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.validation.constraints.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -228,6 +229,7 @@ public class BasicMockers {
         public Optional<String> mock(DataMockerContext context) {
             Size size = context.getAnnotation(Size.class);
             Email email = context.getAnnotation(Email.class);
+            Annotation url = context.getAnnotation("org.hibernate.validator.constraints.URL");
             NotBlank notBlank = context.getAnnotation(NotBlank.class);
             int min = 2;
             int max = 16;
@@ -260,6 +262,8 @@ public class BasicMockers {
                 String domain = RandomStringUtils.random(domainLen, true, true);
                 String tld = RandomStringUtils.random(tldLen, true, false);
                 return Optional.of(userName + "@" + domain + "." + tld);
+            } else if (url != null) {
+                return Optional.of("http://staging-cnbj2-fds.api.xiaomi.net/haoda-material/c50881fb-9286-4bc5-a896-53b500a93987.png");
             }
             return Optional.of(RandomStringUtils.random(len, true, true));
         }
