@@ -1,7 +1,6 @@
 package ren.crux.rainbow.core.dict;
 
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.JSDataType;
 import ren.crux.rainbow.core.model.TypeDesc;
 
 import java.util.HashMap;

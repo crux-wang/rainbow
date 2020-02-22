@@ -7,7 +7,6 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import ren.crux.rainbow.core.DocumentReader;
 import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.model.Request;
 import ren.crux.rainbow.core.model.RequestGroup;
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
 public class SpringBootRequestGroupProvider implements RequestGroupProvider {
 
     private final RequestMappingHandlerMapping mapping;
-    private DocumentReader owner;
     private Mockers mockers = new Mockers();
 
     public SpringBootRequestGroupProvider(RequestMappingHandlerMapping mapping) {
@@ -88,14 +86,4 @@ public class SpringBootRequestGroupProvider implements RequestGroupProvider {
         return new LinkedList<>(groupMap.values());
     }
 
-
-    @Override
-    public void owner(DocumentReader reader) {
-        owner = reader;
-    }
-
-    @Override
-    public DocumentReader end() {
-        return owner;
-    }
 }

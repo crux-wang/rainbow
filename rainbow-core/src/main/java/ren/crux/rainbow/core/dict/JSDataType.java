@@ -1,4 +1,4 @@
-package ren.crux.rainbow.core;
+package ren.crux.rainbow.core.dict;
 
 public enum JSDataType {
     String,
