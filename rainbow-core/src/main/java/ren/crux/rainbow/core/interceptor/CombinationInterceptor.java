@@ -58,11 +58,12 @@ public class CombinationInterceptor<S, T> implements Interceptor<S, T> {
      *
      * @param context 上下文
      * @param target  目标
+     * @param source  源
      * @return 是否继续
      */
     @Override
-    public boolean after(Context context, T target) {
-        return interceptors.isEmpty() || interceptors.stream().allMatch(i -> i.after(context, target));
+    public boolean after(Context context, S source, T target) {
+        return interceptors.isEmpty() || interceptors.stream().allMatch(i -> i.after(context, source, target));
     }
 
     /**

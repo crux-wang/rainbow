@@ -3,7 +3,6 @@ package ren.crux.rainbow.core.report.html;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import ren.crux.rainbow.core.DefaultClassDocProvider;
 import ren.crux.raonbow.common.model.*;
 
 import java.io.File;

@@ -7,7 +7,6 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import ren.crux.rainbow.core.RequestGroupProvider;
 import ren.crux.rainbow.core.module.Context;
 import ren.crux.rainbow.core.report.mock.Mockers;
 import ren.crux.rainbow.core.utils.EntryUtils;

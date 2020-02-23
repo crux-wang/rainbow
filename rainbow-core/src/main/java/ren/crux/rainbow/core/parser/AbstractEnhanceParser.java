@@ -55,7 +55,7 @@ public abstract class AbstractEnhanceParser<S, T> implements Parser<S, T> {
             if (interceptor.before(context, source)) {
                 Optional<T> optional = parse0(context, source);
                 if (optional.isPresent()) {
-                    if (interceptor.after(context, optional.get())) {
+                    if (interceptor.after(context, source, optional.get())) {
                         return optional;
                     }
                 }

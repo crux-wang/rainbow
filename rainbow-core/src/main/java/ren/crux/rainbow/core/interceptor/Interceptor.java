@@ -26,10 +26,11 @@ public interface Interceptor<S, T> {
      * 之后
      *
      * @param context 上下文
+     * @param source  源
      * @param target  目标
      * @return 是否继续
      */
-    default boolean after(Context context, T target) {
+    default boolean after(Context context, S source, T target) {
         return true;
     }
 

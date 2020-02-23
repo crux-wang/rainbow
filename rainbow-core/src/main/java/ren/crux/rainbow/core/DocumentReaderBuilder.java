@@ -1,10 +1,9 @@
 package ren.crux.rainbow.core;
 
+import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
 import ren.crux.rainbow.core.module.Context;
-import ren.crux.rainbow.core.module.DefaultModule;
 import ren.crux.rainbow.core.module.Module;
-import ren.crux.rainbow.core.module.ParserOptionModule;
 import ren.crux.rainbow.core.option.Option;
 import ren.crux.rainbow.core.option.RevisableConfig;
 
@@ -15,51 +14,18 @@ import java.util.*;
  */
 public class DocumentReaderBuilder {
 
-    protected ClassDocProvider classDocProvider;
-    protected RequestGroupProvider requestGroupProvider;
     private final RevisableConfig config = new RevisableConfig();
-    protected Map<String, String> implMap = new HashMap<>();
-    protected List<Module> modules = new LinkedList<>();
+    private Map<String, String> implMap = new HashMap<>();
+    private List<Module> modules = new LinkedList<>();
+    private QdoxBuilder qdoxBuilder = new QdoxBuilder(this);
 
     /**
-     * 设置 {@link ClassDocProvider}
+     * 配置输入信息
      *
-     * @param classDocProvider 类文档提供者
-     * @return 自身
+     * @return qdox 构建器
      */
-    public DocumentReaderBuilder with(ClassDocProvider classDocProvider) {
-        this.classDocProvider = classDocProvider;
-        return this;
-    }
-
-    /**
-     * 设置 {@link RequestGroupProvider}
-     *
-     * @param requestGroupProvider 请求组提供者
-     * @return 自身
-     */
-    public DocumentReaderBuilder with(RequestGroupProvider requestGroupProvider) {
-        this.requestGroupProvider = requestGroupProvider;
-        return this;
-    }
-
-    /**
-     * 获取 {@link ClassDocProvider}
-     *
-     * @return {@link ClassDocProvider}
-     */
-    public ClassDocProvider cdp() {
-        return classDocProvider;
-    }
-
-    /**
-     * 获取 {@link RequestGroupProvider}
-     *
-     * @return {@link RequestGroupProvider}
-     */
-
-    public RequestGroupProvider rgp() {
-        return requestGroupProvider;
+    public QdoxBuilder input() {
+        return qdoxBuilder;
     }
 
     /**
@@ -69,7 +35,7 @@ public class DocumentReaderBuilder {
      * @param value  属性值
      * @return 自身
      */
-    public <T> DocumentReaderBuilder option(Option<T> option, T value) {
+    public <T> DocumentReaderBuilder option(@NonNull Option<T> option, T value) {
         config.setOption(option, value);
         return this;
     }
@@ -81,7 +47,7 @@ public class DocumentReaderBuilder {
      * @param impl   实现类类名
      * @return 自身
      */
-    public DocumentReaderBuilder impl(String source, String impl) {
+    public DocumentReaderBuilder impl(@NonNull String source, @NonNull String impl) {
         implMap.put(source, impl);
         return this;
     }
@@ -100,25 +66,7 @@ public class DocumentReaderBuilder {
         return this;
     }
 
-    /**
-     * 使用默认模块
-     *
-     * @return 自身
-     */
-    public DocumentReaderBuilder useDefaultModule() {
-        modules(DefaultModule.INSTANCE, ParserOptionModule.INSTANCE);
-//        impl("org.springframework.data.domain.Page", "org.springframework.data.domain.PageImpl");
-//        impl("org.springframework.data.domain.Pageable", "org.springframework.data.domain.PageRequest");
-        return this;
-    }
-
-
-    /**
-     * 构建
-     *
-     * @return 文档阅读器
-     */
     public DocumentReader build() {
-        return new DocumentReaderImpl(classDocProvider, requestGroupProvider, config, implMap, modules);
+        return new DocumentReader(qdoxBuilder.build(), config, implMap, modules);
     }
 }
