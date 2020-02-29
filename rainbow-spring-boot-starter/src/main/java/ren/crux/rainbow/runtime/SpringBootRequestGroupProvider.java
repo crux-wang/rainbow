@@ -1,88 +1,88 @@
-package ren.crux.rainbow.runtime;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import ren.crux.rainbow.core.module.Context;
-import ren.crux.rainbow.core.report.mock.Mockers;
-import ren.crux.rainbow.core.utils.EntryUtils;
-import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
-import ren.crux.raonbow.common.model.Request;
-import ren.crux.raonbow.common.model.RequestGroup;
-import ren.crux.raonbow.common.model.RequestMethod;
-import ren.crux.raonbow.common.model.RequestParam;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.*;
-import java.util.stream.Collectors;
-
-/**
- * Spring boot 请求组提供者
- *
- * @author wangzhihui
- */
-public class SpringBootRequestGroupProvider implements RequestGroupProvider {
-
-    private final RequestMappingHandlerMapping mapping;
-    private Mockers mockers = new Mockers();
-
-    public SpringBootRequestGroupProvider(RequestMappingHandlerMapping mapping) {
-        this.mapping = mapping;
-        mockers.register(Page.class, MockerSupport.PAGE);
-        mockers.register(Pageable.class, MockerSupport.PAGEABLE);
-    }
-
-    public Request process(Context context, RequestGroup requestGroup, RequestMappingInfo info, HandlerMethod handlerMethod) {
-        PatternsRequestCondition p = info.getPatternsCondition();
-        Method method = handlerMethod.getMethod();
-        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
-        RequestMethod[] requestMethods = methodsCondition.getMethods().stream().map(m -> RequestMethod.valueOf(m.toString())).toArray(RequestMethod[]::new);
-        Request request = new Request();
-        request.setName(method.getName());
-        request.setSignature(JavaDocHelper.sign(method));
-        request.setReturnType(EntryUtils.build(method));
-        request.setMethod(requestMethods);
-        request.setPath(p.getPatterns().toArray(new String[0]));
-        Parameter[] parameters = method.getParameters();
-        List<RequestParam> params = Arrays.stream(parameters).map(parameter -> {
-            RequestParam requestParam = SpringWebHelper.process(parameter);
-            requestParam.setDeclaringSignature(request.getSignature());
-            EntryUtils.addEntryClassName(requestGroup.getEntryClassNames(), requestParam.getType());
-            return requestParam;
-        }).collect(Collectors.toList());
-        request.setParams(params);
-        EntryUtils.addEntryClassName(requestGroup.getEntryClassNames(), request.getReturnType());
-        mockers.mock(method.getReturnType(), request.getReturnType().asOriginActualParamTypes()).ifPresent(eg -> request.putExtra("@example", eg));
-        context.addEntryClassName(requestGroup.getEntryClassNames());
-        return request;
-    }
-
-    @Override
-    public List<RequestGroup> get(Context context) {
-        Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
-        Map<String, RequestGroup> groupMap = new HashMap<>();
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : map.entrySet()) {
-            RequestMappingInfo info = entry.getKey();
-            HandlerMethod handlerMethod = entry.getValue();
-            Method method = handlerMethod.getMethod();
-            String className = method.getDeclaringClass().getName();
-            RequestGroup requestGroup = groupMap.get(className);
-            if (requestGroup == null) {
-                requestGroup = new RequestGroup();
-                requestGroup.setName(method.getDeclaringClass().getSimpleName());
-                requestGroup.setType(className);
-                requestGroup.setPath(SpringWebHelper.getRequestPath(className));
-                groupMap.put(className, requestGroup);
-            }
-            Request request = process(context, requestGroup, info, handlerMethod);
-            requestGroup.addRequest(request);
-        }
-        return new LinkedList<>(groupMap.values());
-    }
-
-}
+//package ren.crux.rainbow.runtime;
+//
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Pageable;
+//import org.springframework.web.method.HandlerMethod;
+//import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+//import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
+//import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+//import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+//import ren.crux.rainbow.core.module.Context;
+//import ren.crux.rainbow.core.report.mock.Mockers;
+//import ren.crux.rainbow.core.utils.EntryUtils;
+//import ren.crux.rainbow.javadoc.utils.JavaDocHelper;
+//import ren.crux.raonbow.common.model.Request;
+//import ren.crux.raonbow.common.model.RequestGroup;
+//import ren.crux.raonbow.common.model.RequestMethod;
+//import ren.crux.raonbow.common.model.RequestParam;
+//
+//import java.lang.reflect.Method;
+//import java.lang.reflect.Parameter;
+//import java.util.*;
+//import java.util.stream.Collectors;
+//
+///**
+// * Spring boot 请求组提供者
+// *
+// * @author wangzhihui
+// */
+//public class SpringBootRequestGroupProvider implements RequestGroupProvider {
+//
+//    private final RequestMappingHandlerMapping mapping;
+//    private Mockers mockers = new Mockers();
+//
+//    public SpringBootRequestGroupProvider(RequestMappingHandlerMapping mapping) {
+//        this.mapping = mapping;
+//        mockers.register(Page.class, MockerSupport.PAGE);
+//        mockers.register(Pageable.class, MockerSupport.PAGEABLE);
+//    }
+//
+//    public Request process(Context context, RequestGroup requestGroup, RequestMappingInfo info, HandlerMethod handlerMethod) {
+//        PatternsRequestCondition p = info.getPatternsCondition();
+//        Method method = handlerMethod.getMethod();
+//        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
+//        RequestMethod[] requestMethods = methodsCondition.getMethods().stream().map(m -> RequestMethod.valueOf(m.toString())).toArray(RequestMethod[]::new);
+//        Request request = new Request();
+//        request.setName(method.getName());
+//        request.setSignature(JavaDocHelper.sign(method));
+//        request.setReturnType(EntryUtils.build(method));
+//        request.setMethod(requestMethods);
+//        request.setPath(p.getPatterns().toArray(new String[0]));
+//        Parameter[] parameters = method.getParameters();
+//        List<RequestParam> params = Arrays.stream(parameters).map(parameter -> {
+//            RequestParam requestParam = SpringWebHelper.process(parameter);
+//            requestParam.setDeclaringSignature(request.getSignature());
+//            EntryUtils.addEntryClassName(requestGroup.getEntryClassNames(), requestParam.getType());
+//            return requestParam;
+//        }).collect(Collectors.toList());
+//        request.setParams(params);
+//        EntryUtils.addEntryClassName(requestGroup.getEntryClassNames(), request.getReturnType());
+//        mockers.mock(method.getReturnType(), request.getReturnType().asOriginActualParamTypes()).ifPresent(eg -> request.putExtra("@example", eg));
+//        context.addEntryClassName(requestGroup.getEntryClassNames());
+//        return request;
+//    }
+//
+//    @Override
+//    public List<RequestGroup> get(Context context) {
+//        Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
+//        Map<String, RequestGroup> groupMap = new HashMap<>();
+//        for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : map.entrySet()) {
+//            RequestMappingInfo info = entry.getKey();
+//            HandlerMethod handlerMethod = entry.getValue();
+//            Method method = handlerMethod.getMethod();
+//            String className = method.getDeclaringClass().getName();
+//            RequestGroup requestGroup = groupMap.get(className);
+//            if (requestGroup == null) {
+//                requestGroup = new RequestGroup();
+//                requestGroup.setName(method.getDeclaringClass().getSimpleName());
+//                requestGroup.setType(className);
+//                requestGroup.setPath(SpringWebHelper.getRequestPath(className));
+//                groupMap.put(className, requestGroup);
+//            }
+//            Request request = process(context, requestGroup, info, handlerMethod);
+//            requestGroup.addRequest(request);
+//        }
+//        return new LinkedList<>(groupMap.values());
+//    }
+//
+//}
