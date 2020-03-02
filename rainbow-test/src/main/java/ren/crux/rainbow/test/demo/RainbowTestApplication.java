@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import ren.crux.rainbow.swagger2.data.RainbowSpringDataRestConfiguration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -27,6 +29,7 @@ public class RainbowTestApplication {
 
     @Configuration
     @EnableSwagger2
+    @Import(RainbowSpringDataRestConfiguration.class)
     public class SwaggerConfig {
         @Bean
         public Docket api() {

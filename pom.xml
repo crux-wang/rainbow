@@ -9,10 +9,10 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>rainbow-core</module>
+        <module>rainbow-swagger2</module>
         <module>rainbow-test</module>
-        <module>rainbow-spring-boot-starter</module>
-        <module>rainbow-mocker</module>
+        <module>rainbow-openapi3</module>
+        <module>rainbow-common</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,22 +36,17 @@
             </dependency>
             <dependency>
                 <groupId>ren.crux</groupId>
-                <artifactId>rainbow-javadoc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ren.crux</groupId>
                 <artifactId>rainbow-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ren.crux</groupId>
-                <artifactId>rainbow-core</artifactId>
+                <artifactId>rainbow-swagger2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ren.crux</groupId>
-                <artifactId>rainbow-spring-boot-starter</artifactId>
+                <artifactId>rainbow-openapi3</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -60,19 +55,34 @@
                 <version>4.4</version>
             </dependency>
             <dependency>
-                <groupId>io.swagger.core.v3</groupId>
-                <artifactId>swagger-integration</artifactId>
-                <version>2.0.7</version>
+                <groupId>org.springframework.plugin</groupId>
+                <artifactId>spring-plugin-core</artifactId>
+                <version>1.2.0.RELEASE</version>
             </dependency>
             <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-core</artifactId>
-                <version>2.0.0-rc2</version>
+                <groupId>org.springframework.plugin</groupId>
+                <artifactId>spring-plugin-metadata</artifactId>
+                <version>1.2.0.RELEASE</version>
             </dependency>
             <dependency>
-                <groupId>com.thoughtworks.qdox</groupId>
-                <artifactId>qdox</artifactId>
-                <version>2.0.0</version>
+                <groupId>com.github.therapi</groupId>
+                <artifactId>therapi-runtime-javadoc</artifactId>
+                <version>0.9.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-core</artifactId>
+                <version>1.1.49</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-webmvc-core</artifactId>
+                <version>1.2.32</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
