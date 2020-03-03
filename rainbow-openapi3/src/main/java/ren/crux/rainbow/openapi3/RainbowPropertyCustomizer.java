@@ -1,11 +1,13 @@
 package ren.crux.rainbow.openapi3;
 
-import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.v3.core.converter.AnnotatedType;
-import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.StringSchema;
 import org.springdoc.core.customizers.PropertyCustomizer;
 import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.Email;
+import java.lang.annotation.Annotation;
 
 
 /**
@@ -22,7 +24,22 @@ public class RainbowPropertyCustomizer implements PropertyCustomizer {
      */
     @Override
     public Schema customize(Schema property, AnnotatedType type) {
-        JavaType javaType = Json.mapper().constructType(type.getType());
+        Annotation[] ctxAnnotations = type.getCtxAnnotations();
+        if (ctxAnnotations != null) {
+            for (Annotation annotation : ctxAnnotations) {
+                switch (annotation.annotationType().getName()) {
+                    case "org.hibernate.validator.constraints.URL":
+                        property.format("url");
+                        break;
+                    case "javax.validation.constraints.Email":
+                        property.format("mail");
+                        if (property instanceof StringSchema) {
+                            property.setPattern(((Email) annotation).regexp());
+                        }
+                        break;
+                }
+            }
+        }
         return property;
     }
 }

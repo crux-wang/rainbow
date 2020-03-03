@@ -5,9 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 用户
@@ -22,8 +21,7 @@ public class User {
      * 昵称
      */
     @NotNull
-    @Max(10)
-    @Min(2)
+    @Size(min = 2, max = 10)
     private String nickname;
     /**
      * 头像

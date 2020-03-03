@@ -19,6 +19,8 @@
 package ren.crux.rainbow.swagger2.data;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,9 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
  * RainbowSpringDataRestConfiguration
  */
 public class RainbowSpringDataRestConfiguration {
+
+    @Autowired
+    private SpringDataWebProperties springDataWebProperties;
 
     @Bean
     public AlternateTypeRuleConvention pageableConvention(final TypeResolver resolver) {
@@ -57,15 +62,15 @@ public class RainbowSpringDataRestConfiguration {
     }
 
     private Type pageableMixin() {
+        SpringDataWebProperties.Pageable pageable = springDataWebProperties.getPageable();
         return new AlternateTypeBuilder()
                 .fullyQualifiedClassName(
                         String.format("%s.generated.%s",
                                 Pageable.class.getPackage().getName(),
                                 Pageable.class.getSimpleName()))
                 .withProperties(newArrayList(
-                        property(Integer.class, "page"),
-                        property(Integer.class, "limit"),
-                        property(String.class, "sort")
+                        property(Integer.class, pageable.getPageParameter()),
+                        property(Integer.class, pageable.getSizeParameter())
                 ))
                 .build();
     }

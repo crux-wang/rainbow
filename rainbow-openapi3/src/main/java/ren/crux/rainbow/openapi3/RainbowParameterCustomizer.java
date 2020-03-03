@@ -2,6 +2,7 @@ package ren.crux.rainbow.openapi3;
 
 import io.swagger.v3.oas.models.parameters.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.ParameterCustomizer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,9 @@ public class RainbowParameterCustomizer implements ParameterCustomizer {
             int parameterIndex = ReflectUtils.getParameterIndex(parameter);
             RuntimeJavadocUtils.getParamComment(method, parameterIndex)
                     .ifPresent(parameterModel::description);
+            if (StringUtils.equals("org.springframework.data.domain.Pageable", parameter.getType().getName())) {
+                parameterModel.deprecated(true);
+            }
         }
         return parameterModel;
     }
