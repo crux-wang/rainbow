@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class RainbowTestApplicationTest {
+public class RainbowExampleApplication {
 
     @Autowired
     private DocumentationCache documentationCache;

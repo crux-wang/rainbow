@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import ren.crux.rainbow.swagger2.data.RainbowSpringDataRestConfiguration;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -15,24 +16,24 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * RainbowTestApplication
+ * RainbowExampleApplication
  *
  * @author wangzhihui
  **/
 @SpringBootApplication
 @ComponentScan(basePackages = "ren.crux.rainbow")
-public class RainbowTestApplication {
+public class RainbowExampleApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RainbowTestApplication.class, args);
+        SpringApplication.run(RainbowExampleApplication.class, args);
     }
 
     @Configuration
     @EnableSwagger2
-    @Import(RainbowSpringDataRestConfiguration.class)
+    @Import({RainbowSpringDataRestConfiguration.class, BeanValidatorPluginsConfiguration.class})
     public class SwaggerConfig {
         @Bean
-        public Docket api() {
+        public Docket docket() {
             return new Docket(DocumentationType.SWAGGER_2)
                     .forCodeGeneration(true)
                     .useDefaultResponseMessages(false)

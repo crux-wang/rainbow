@@ -40,7 +40,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
  */
 public class RainbowSpringDataRestConfiguration {
 
-    @Autowired
+    @Autowired(required = false)
     private SpringDataWebProperties springDataWebProperties;
 
     @Bean
@@ -62,6 +62,9 @@ public class RainbowSpringDataRestConfiguration {
     }
 
     private Type pageableMixin() {
+        if (springDataWebProperties == null) {
+            springDataWebProperties = new SpringDataWebProperties();
+        }
         SpringDataWebProperties.Pageable pageable = springDataWebProperties.getPageable();
         return new AlternateTypeBuilder()
                 .fullyQualifiedClassName(
